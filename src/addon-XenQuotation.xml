@@ -1,21 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenQuotation" title="XenQuotation" version_string="1.0.0" version_id="10" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
+<addon addon_id="XenQuotation" title="XenQuotation" version_string="1.0.0" version_id="11" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
   <admin_templates/>
   <code_events/>
-  <code_event_listeners/>
+  <code_event_listeners>
+    <listener event_id="navigation_tabs" execute_order="10" callback_class="XenQuotation_Event_NavigationTabs" callback_method="listen" active="1" description="Adds the quotes navigation tab."/>
+  </code_event_listeners>
   <cron/>
   <email_templates/>
   <optiongroups/>
   <permissions>
-    <permission_groups/>
-    <permissions/>
-    <interface_groups/>
+    <permission_groups>
+      <permission_group permission_group_id="quote"/>
+    </permission_groups>
+    <permissions>
+      <permission permission_group_id="quote" permission_id="approveUnapprove" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="50"/>
+      <permission permission_group_id="quote" permission_id="deleteAny" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="20"/>
+      <permission permission_group_id="quote" permission_id="deleteOwn" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="50"/>
+      <permission permission_group_id="quote" permission_id="editAny" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="60"/>
+      <permission permission_group_id="quote" permission_id="editOwn" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="40"/>
+      <permission permission_group_id="quote" permission_id="hardDeleteAny" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="40"/>
+      <permission permission_group_id="quote" permission_id="like" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="20"/>
+      <permission permission_group_id="quote" permission_id="post" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="30"/>
+      <permission permission_group_id="quote" permission_id="undelete" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="10"/>
+      <permission permission_group_id="quote" permission_id="view" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="10"/>
+      <permission permission_group_id="quote" permission_id="viewDeleted" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="30"/>
+    </permissions>
+    <interface_groups>
+      <interface_group interface_group_id="xenQuotationModeratorPermissions" display_order="1510"/>
+      <interface_group interface_group_id="xenQuotationPermissions" display_order="1500"/>
+    </interface_groups>
   </permissions>
-  <phrases/>
-  <route_prefixes/>
+  <phrases>
+    <phrase title="permission_group_quote" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
+    <phrase title="permission_interface_xenQuotationModeratorPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Moderator Permissions]]></phrase>
+    <phrase title="permission_interface_xenQuotationPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
+    <phrase title="permission_quote_approveUnapprove" version_id="10" version_string="1.0.0"><![CDATA[Approve / unapprove quotations]]></phrase>
+    <phrase title="permission_quote_deleteAny" version_id="10" version_string="1.0.0"><![CDATA[Delete quotations added by anyone]]></phrase>
+    <phrase title="permission_quote_deleteOwn" version_id="10" version_string="1.0.0"><![CDATA[Delete quotations added by self]]></phrase>
+    <phrase title="permission_quote_editAny" version_id="0" version_string=""><![CDATA[Edit quotations added by anyone]]></phrase>
+    <phrase title="permission_quote_editOwn" version_id="10" version_string="1.0.0"><![CDATA[Edit quotations added by self]]></phrase>
+    <phrase title="permission_quote_hardDeleteAny" version_id="10" version_string="1.0.0"><![CDATA[Hard-delete quotations added by anyone]]></phrase>
+    <phrase title="permission_quote_like" version_id="10" version_string="1.0.0"><![CDATA[Like quotations]]></phrase>
+    <phrase title="permission_quote_post" version_id="10" version_string="1.0.0"><![CDATA[Post new quotations]]></phrase>
+    <phrase title="permission_quote_undelete" version_id="10" version_string="1.0.0"><![CDATA[Undelete quotations]]></phrase>
+    <phrase title="permission_quote_view" version_id="10" version_string="1.0.0"><![CDATA[View quotations]]></phrase>
+    <phrase title="permission_quote_viewDeleted" version_id="10" version_string="1.0.0"><![CDATA[View deleted quotations]]></phrase>
+    <phrase title="xenquote_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[Add a New Quotation]]></phrase>
+    <phrase title="xenquote_add_a_quotation" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Add a Quotation]]></phrase>
+    <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
+    <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
+    <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
+    <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
+    <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
+    <phrase title="xenquote_viewing_a_quote" version_id="10" version_string="1.0.0"><![CDATA[Viewing a quote]]></phrase>
+    <phrase title="xenquote_your_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Added By You]]></phrase>
+    <phrase title="xenquote_you_may_not_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[You may not add a new quotation]]></phrase>
+  </phrases>
+  <route_prefixes>
+    <route_type type="public">
+      <prefix original_prefix="quotes" class="XenQuotation_Routes_Prefix_Quotes" build_link="data_only"/>
+    </route_type>
+  </route_prefixes>
   <style_properties/>
-  <templates/>
+  <templates>
+    <template title="xenquote_navigation_tab" version_id="10" version_string="1.0.0"><![CDATA[<ul class="secondaryContent blockLinksList">
+<xen:hook name="navigation_tabs_quotes">
+	<xen:if is="{$canAddQuote}"><li><a href="{xen:link 'quotes/create-quote'}">{xen:phrase xenquote_add_a_quotation}</a></li></xen:if>
+	<li><a href="{xen:link 'quotes'}">{xen:phrase xenquote_all_quotations}</a></li>
+	<xen:if is="{$visitor.user_id}"><li><a href="{xen:link 'quotes', '', 'user={$visitor.user_id}'}">{xen:phrase xenquote_your_quotes}</a></li></xen:if>
+	<xen:if is="{$canSearch}"><li><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li></xen:if>
+</xen:hook>
+</ul>]]></template>
+    <template title="xenquote_quotation_list.css" version_id="10" version_string="1.0.0"><![CDATA[]]></template>
+    <template title="xenquote_quote_create" version_id="10" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>]]></template>
+    <template title="xenquote_quote_list" version_id="10" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_quotations}{xen:helper pagenumber, $page}</xen:title>
+<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
+<xen:description>{xen:phrase xenquote_list_of_quotations_by_members_of_x, 'board_title={$xenOptions.boardTitle}'}</xen:description>
+
+<xen:if is="{$canCreateQuotation}">
+	<xen:topctrl>
+		<a href="{xen:link quotes/create-quote}" class="callToAction"><span>{xen:phrase xenquote_add_a_new_quotation}</span></a>
+	</xen:topctrl>
+</xen:if>
+
+<xen:require css="xenquote_quotation_list.css" />]]></template>
+    <template title="xenquote_quote_list_item" version_id="0" version_string=""><![CDATA[]]></template>
+  </templates>
 </addon>
