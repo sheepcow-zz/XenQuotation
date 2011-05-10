@@ -2,15 +2,124 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
 	<key>documents</key>
-	<array/>
+	<array>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>XenQuotation</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation</string>
+		</dict>
+	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>198</integer>
 	<key>metaData</key>
-	<dict/>
+	<dict>
+		<key>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>77</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>65</integer>
+		</dict>
+		<key>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/Event/NavigationTabs.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>48</integer>
+				<key>line</key>
+				<integer>34</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>3</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>34</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>48</integer>
+				<key>line</key>
+				<integer>34</integer>
+			</dict>
+		</dict>
+		<key>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/Installation.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>8</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/Model/Quote.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>22</integer>
+				<key>line</key>
+				<integer>22</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>2</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>22</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>32</integer>
+				<key>line</key>
+				<integer>22</integer>
+			</dict>
+		</dict>
+	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/Installation.php</string>
+		<string>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
+		<string>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/Event/NavigationTabs.php</string>
+		<string>../../../../Ben/Desktop/XenQuotation/XenQuotation/src/XenQuotation/Model/Quote.php</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{250, 16}, {871, 663}}</string>
+	<string>{{324, 36}, {871, 663}}</string>
 </dict>
 </plist>

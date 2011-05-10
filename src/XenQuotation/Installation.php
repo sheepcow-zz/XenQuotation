@@ -4,7 +4,7 @@
  * This is the installation class. It is called by the XenForo
  * application when the add-on is upgraded or (un)installed.
  */
-class FhTools_XenQuotation_Installation
+class XenQuotation_Installation
 {
 	
 	/**
@@ -17,7 +17,7 @@ class FhTools_XenQuotation_Installation
 		$db = XenForo_Application::get('db');
 		
 		$db->query(
-			"CREATE TABLE IF NOT EXISTS `fht_quotation` (
+			"CREATE TABLE IF NOT EXISTS `xq_quotation` (
 			  `quote_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 			  `author_user_id` int(10) unsigned NOT NULL DEFAULT '0',
 			  `author_username` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -35,6 +35,25 @@ class FhTools_XenQuotation_Installation
 			  PRIMARY KEY (`quote_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1"
 		);
+		
+		/*
+		 * Set up the quotes content type
+		 */
+	
+		$db->query(
+			"REPLACE INTO `xf_content_type_field`
+			(`content_type`, `field_name`, `field_value`)
+			VALUES
+			('quote', 'like_handler_class', 'XenQuotation_LikeHandler_Quote'),
+			('quote', 'search_handler_class', 'XenQuotation_Search_DataHandler_Quote'),
+			('quote', 'alert_handler_class', 'XenQuotation_AlertHandler_Quote')"
+		);
+	
+		/*
+		 * Rebuild the content type fields cache
+		 */
+	
+		XenForo_Model::create('XenForo_Model_ContentType')->rebuildContentTypeCache();
 	}
 	
 	/**
@@ -46,7 +65,7 @@ class FhTools_XenQuotation_Installation
 		$db = XenForo_Application::get('db');
 		
 		// remove the table from the database
-		$db->query("DROP TABLE IF EXISTS fht_quotation");
+		$db->query("DROP TABLE IF EXISTS xq_quotation");
 	}
 	
 }

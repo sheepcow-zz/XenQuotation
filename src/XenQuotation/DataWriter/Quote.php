@@ -4,14 +4,14 @@
  * The DataWriter class deals with validating and writing
  * quotes to the database.
  */
-class FhTools_Quotation_DataWriter_Quote
+class Quotation_DataWriter_Quote
 {
 	protected $_existingDataErrorPhrase = 'fhtq_requested_quote_not_found';
 	
 	protected function _getFields()
 	{
 		return array(
-			'fht_quotation' => array(
+			'xq_quotation' => array(
 				'quote_id'				=> array('type' => self::TYPE_UINT, 'autoIncrement' => true),
 				'author_user_id'		=> array('type' => self::TYPE_UINT, 'default' => 0),
 				'author_username'		=> array('type' => self::TYPE_STRING, 'default' => ''),
@@ -40,7 +40,7 @@ class FhTools_Quotation_DataWriter_Quote
 		}
 
 		return array(
-			'fht_quote' => $this->getModelFromCache('FhTools_Quotation_Model_Quote')->getQuoteById(
+			'xq_quote' => $this->getModelFromCache('Quotation_Model_Quote')->getQuoteById(
 				$quoteId, array('quoteStates' => array('new', 'approved', 'rejected'))
 			)
 		);
