@@ -7,6 +7,7 @@
   <code_events/>
   <code_event_listeners>
     <listener event_id="navigation_tabs" execute_order="10" callback_class="XenQuotation_Event_NavigationTabs" callback_method="listen" active="1" description="Adds the quotes navigation tab."/>
+    <listener event_id="template_hook" execute_order="10" callback_class="XenQuotation_Event_TemplateHook" callback_method="listen" active="1" description="Adds a tab to allow searching quotations."/>
   </code_event_listeners>
   <cron/>
   <email_templates/>
@@ -50,9 +51,12 @@
     <phrase title="permission_quote_viewDeleted" version_id="10" version_string="1.0.0"><![CDATA[View deleted quotations]]></phrase>
     <phrase title="xenquote_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[Add a New Quotation]]></phrase>
     <phrase title="xenquote_add_a_quotation" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Add a Quotation]]></phrase>
+    <phrase title="xenquote_add_quotation" version_id="11" version_string="1.0.0"><![CDATA[Add Quotation]]></phrase>
     <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
+    <phrase title="xenquote_attributed_to" version_id="11" version_string="1.0.0"><![CDATA[Attributed To]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
     <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
+    <phrase title="xenquote_quotation" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
     <phrase title="xenquote_viewing_a_quote" version_id="10" version_string="1.0.0"><![CDATA[Viewing a quote]]></phrase>
@@ -75,7 +79,48 @@
 </xen:hook>
 </ul>]]></template>
     <template title="xenquote_quotation_list.css" version_id="10" version_string="1.0.0"><![CDATA[]]></template>
-    <template title="xenquote_quote_create" version_id="10" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>]]></template>
+    <template title="xenquote_quote_create" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>
+
+<xen:container var="$head.robots">
+	<meta name="robots" content="noindex" />
+</xen:container>
+
+<form action="{xen:link 'quotes/create-quote'}" method="post"
+	class="xenForm Preview AutoValidator"
+	data-previewUrl="{xen:link 'quotes/preview'}"
+	data-redirect="on">
+
+	<xen:if is="{$visitor.user_id} == 0">
+		<dl class="ctrlUnit">
+			<dt><label for="ctrl_guestUsername">{xen:phrase name}:</label></dt>
+			<dd><input type="text" name="_guestUsername" value="{$visitor.username}" class="textCtrl" /></dd>
+		</dl>
+	</xen:if>
+
+	<xen:include template="helper_captcha_unit" />
+
+	<dl class="ctrlUnit">
+		<dt><label for="ctrl_attributedTo">{xen:phrase xenquote_attributed_to}:</label></dt>
+		<dd><input type="text" name="_attributedTo" value="" class="textCtrl" /></dd>
+	</dl>
+
+	<fieldset>
+		<dl class="ctrlUnit fullWidth surplusLabel">
+			<dt><label for="ctrl_quotation">{xen:phrase xenquote_quotation}:</label></dt>
+			<dd>{xen:raw $editorTemplate}</dd>
+		</dl>
+	</fieldset>
+
+	<dl class="ctrlUnit submitUnit">
+		<dt></dt>
+		<dd>
+			<input type="submit" value="{xen:phrase xenquote_add_quotation}" accesskey="s" class="button primary" />
+			<input type="button" value="{xen:phrase preview}..." class="button PreviewButton JsOnly" />
+		</dd>
+	</dl>
+
+	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
+</form>]]></template>
     <template title="xenquote_quote_list" version_id="10" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_quotations}{xen:helper pagenumber, $page}</xen:title>
 <xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
 <xen:description>{xen:phrase xenquote_list_of_quotations_by_members_of_x, 'board_title={$xenOptions.boardTitle}'}</xen:description>
@@ -88,5 +133,55 @@
 
 <xen:require css="xenquote_quotation_list.css" />]]></template>
     <template title="xenquote_quote_list_item" version_id="0" version_string=""><![CDATA[]]></template>
+    <template title="xenquote_search_form_quote" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_search_quotations}</xen:title>
+
+<xen:navigation>
+	<xen:breadcrumb href="{xen:link full:search}">{xen:phrase search}</xen:breadcrumb>
+</xen:navigation>
+
+<form action="{xen:link 'search/search'}" method="post" class="xenForm AutoValidator"
+	data-optInOut="optIn"
+	data-redirect="true">
+
+	<xen:include template="search_form_tabs" />
+	
+	<dl class="ctrlUnit">
+		<dt><label for="ctrl_keywords">{xen:phrase keywords}:</label></dt>
+		<dd>
+			<ul>
+				<li><input type="search" name="keywords" value="{$search.keywords}" results="0" class="textCtrl" id="ctrl_keywords" autofocus="true" /></li>
+			</ul>
+		</dd>
+	</dl>
+
+	<dl class="ctrlUnit">
+		<dt><label for="ctrl_users">{xen:phrase posted_by_member}:</label></dt>
+		<dd>
+			<ul>
+				<li>
+					<input type="text" name="users" value="{$search.users}" class="textCtrl AutoComplete" id="ctrl_users" />
+					<p class="explain">{xen:phrase separate_names_with_comma}</p>
+				</li>
+				<li><label><input type="checkbox" name="user_content" value="thread" {xen:checked '{$search.user_content} == "thread"'} /> {xen:phrase search_threads_started_by_this_member_only}</label></li>
+			</ul>
+		</dd>
+	</dl>
+
+	<dl class="ctrlUnit">
+		<dt><label for="ctrl_date">{xen:phrase newer_than}:</label></dt>
+		<dd>
+			<input type="date" name="date" value="{$search.date}" class="textCtrl" id="ctrl_date" />
+		</dd>
+	</dl>
+
+	<dl class="ctrlUnit submitUnit">
+		<dt></dt>
+		<dd><input type="submit" value="{xen:phrase search}" accesskey="s" class="button primary" /></dd>
+	</dl>
+
+	<input type="hidden" name="type" value="quote" />
+	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
+</form>]]></template>
+    <template title="xenquote_search_form_tabs" version_id="11" version_string="1.0.0"><![CDATA[		<li{xen:if "{$searchType} == 'quote'", ' class="active"'}><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li>]]></template>
   </templates>
 </addon>

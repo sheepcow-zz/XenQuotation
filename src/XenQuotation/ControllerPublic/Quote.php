@@ -75,7 +75,13 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	{
 		$this->_assertCanAddQuotation();
 		
-		$viewParams = array();
+		$defaultMessage = '';
+
+		$viewParams = array(
+			'defaultMessage' => $defaultMessage,
+			'captcha' => XenForo_Captcha_Abstract::createDefault()
+		);
+		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_Create', 'xenquote_quote_create', $viewParams);
 	}
 	

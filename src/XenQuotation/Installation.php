@@ -39,21 +39,19 @@ class XenQuotation_Installation
 		/*
 		 * Set up the quotes content type
 		 */
-	
-		$db->query(
-			"REPLACE INTO `xf_content_type_field`
-			(`content_type`, `field_name`, `field_value`)
-			VALUES
-			('quote', 'like_handler_class', 'XenQuotation_LikeHandler_Quote'),
-			('quote', 'search_handler_class', 'XenQuotation_Search_DataHandler_Quote'),
-			('quote', 'alert_handler_class', 'XenQuotation_AlertHandler_Quote')"
+		
+		$contentType = array(
+			'like_handler_class' => 'XenQuotation_LikeHandler_Quote',
+			'search_handler_class' => 'XenQuotation_Search_DataHandler_Quote',
+			'alert_handler_class' => 'XenQuotation_AlertHandler_Quote'
 		);
 	
-		/*
-		 * Rebuild the content type fields cache
-		 */
-	
-		XenForo_Model::create('XenForo_Model_ContentType')->rebuildContentTypeCache();
+		$db->query(
+			"REPLACE INTO `xf_content_type`
+			(`content_type`, `addon_id`, `fields`)
+			VALUES
+			('quote', 'XenQuote', '" . serialize($contentType) . "')"
+		);
 	}
 	
 	/**

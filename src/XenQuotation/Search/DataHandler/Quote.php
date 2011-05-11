@@ -138,7 +138,7 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function getSearchFormControllerResponse(XenForo_ControllerPublic_Abstract $controller, XenForo_Input $input, array $viewParams)
 	{
-		return null;
+		return $controller->responseView('XenQuotation_ViewPublic_Search_Form_Quote', 'xenquote_search_form_quote', $viewParams);
 	}
 	
 	/**
