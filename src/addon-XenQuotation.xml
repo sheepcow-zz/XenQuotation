@@ -54,14 +54,18 @@
     <phrase title="xenquote_add_quotation" version_id="11" version_string="1.0.0"><![CDATA[Add Quotation]]></phrase>
     <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
     <phrase title="xenquote_attributed_to" version_id="11" version_string="1.0.0"><![CDATA[Attributed To]]></phrase>
+    <phrase title="xenquote_list_of_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[This is a list of quotations saved by {username}.]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
     <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotation" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
+    <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
+    <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
     <phrase title="xenquote_viewing_a_quote" version_id="10" version_string="1.0.0"><![CDATA[Viewing a quote]]></phrase>
     <phrase title="xenquote_your_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Added By You]]></phrase>
     <phrase title="xenquote_you_may_not_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[You may not add a new quotation]]></phrase>
+    <phrase title="xenquote_you_must_enter_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[You must enter a quotation.]]></phrase>
   </phrases>
   <route_prefixes>
     <route_type type="public">
@@ -85,7 +89,7 @@
 	<meta name="robots" content="noindex" />
 </xen:container>
 
-<form action="{xen:link 'quotes/create-quote'}" method="post"
+<form action="{xen:link 'quotes/save', $quote}" method="post"
 	class="xenForm Preview AutoValidator"
 	data-previewUrl="{xen:link 'quotes/preview'}"
 	data-redirect="on">
@@ -121,9 +125,15 @@
 
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
-    <template title="xenquote_quote_list" version_id="10" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_quotations}{xen:helper pagenumber, $page}</xen:title>
-<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
-<xen:description>{xen:phrase xenquote_list_of_quotations_by_members_of_x, 'board_title={$xenOptions.boardTitle}'}</xen:description>
+    <template title="xenquote_quote_list" version_id="11" version_string="1.0.0"><![CDATA[<xen:if is="{$quotesByUser}">
+	<xen:title>{xen:phrase xenquote_quotations_added_by_x, 'username={$quotesByUser}'}{xen:helper pagenumber, $page}</xen:title>
+	<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
+	<xen:description>{xen:phrase xenquote_list_of_quotations_added_by_x, 'username={$quotesByUser}'}</xen:description>
+<xen:else />
+	<xen:title>{xen:phrase xenquote_quotations}{xen:helper pagenumber, $page}</xen:title>
+	<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
+	<xen:description>{xen:phrase xenquote_list_of_quotations_by_members_of_x, 'board_title={$xenOptions.boardTitle}'}</xen:description>
+</xen:if>
 
 <xen:if is="{$canCreateQuotation}">
 	<xen:topctrl>
@@ -183,5 +193,20 @@
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
     <template title="xenquote_search_form_tabs" version_id="11" version_string="1.0.0"><![CDATA[		<li{xen:if "{$searchType} == 'quote'", ' class="active"'}><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li>]]></template>
+    <template title="xenquote_search_result_quote" version_id="11" version_string="1.0.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="searchResult post primaryContent" data-author="{$quote.author.username}">
+
+	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>
+
+	<div class="listBlock main">
+		<div class="titleText">
+			<h3 class="title">{$i} <a href="{xen:link quotes, $quote}">{xen:helper highlight, $quote.quotation, $search.search_query, 'highlight'}</a></h3>
+		</div>
+
+		<div class="meta">
+			{xen:phrase post_by}: <xen:username user="$quote.author" />,
+			<xen:datetime time="{$quote.quote_date}" />
+		</div>
+	</div>
+</li>]]></template>
   </templates>
 </addon>

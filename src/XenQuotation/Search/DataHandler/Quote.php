@@ -5,6 +5,12 @@
  */
 class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_Abstract
 {
+	
+	/**
+	 * @var XenQuotation_Model_Quote
+	 */
+	protected $_quoteModel = null;
+	
 	/**
 	 * Inserts into (or replaces a record) in the index.
 	 *
@@ -12,6 +18,15 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	protected function _insertIntoIndex(XenForo_Search_Indexer $indexer, array $data, array $parentData = null)
 	{
+		$metadata = array();
+		$groupId = 0;
+		$title = '';
+		
+		$indexer->insertIntoIndex(
+			'quote', $data['quote_id'],
+			$title, $data['quotation'],
+			$data['quote_date'], $data['author_user_id'], $groupId, $metadata
+		);
 	}
 	
 	/**
@@ -21,6 +36,7 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	protected function _updateIndex(XenForo_Search_Indexer $indexer, array $data, array $fieldUpdates)
 	{
+		$indexer->updateIndex('quote', $data['quote_id'], $fieldUpdates);
 	}
 	
 	/**
@@ -30,6 +46,13 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	protected function _deleteFromIndex(XenForo_Search_Indexer $indexer, array $dataList)
 	{
+		$quoteIds = array();
+		foreach ($dataList AS $data)
+		{
+			$quoteIds[] = $data['quote_id'];
+		}
+
+		$indexer->deleteFromIndex('quote', $quoteIds);
 	}
 	
 	/**
@@ -39,6 +62,15 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function rebuildIndex(XenForo_Search_Indexer $indexer, $lastId, $batchSize)
 	{
+		$quoteIds = $this->_getQuoteModel()->getQuoteIdsInRange($lastId, $batchSize);
+		if (!$quoteIds)
+		{
+			return false;
+		}
+
+		$this->quickIndex($indexer, $quoteIds);
+
+		return max($quoteIds);
 	}
 	
 	/**
@@ -48,6 +80,16 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function quickIndex(XenForo_Search_Indexer $indexer, array $contentIds)
 	{
+		$quoteModel = $this->_getQuoteModel();
+
+		$quotes = $quoteModel->getQuotesByIds($contentIds);
+
+		foreach ($quotes AS $quote)
+		{
+			$this->insertIntoIndex($indexer, $quote);
+		}
+
+		return true;
 	}
 	
 	/**
@@ -57,7 +99,7 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function getDataForResults(array $ids, array $viewingUser, array $resultsGrouped)
 	{
-		return array();
+		return $this->_getQuoteModel()->getQuotesByIds($ids);
 	}
 	
 	/**
@@ -67,7 +109,9 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function canViewResult(array $result, array $viewingUser)
 	{
-		return false;
+		$quoteModel = $this->_getQuoteModel();
+		
+		return $quoteModel->canViewQuotation($result['quote_id']);
 	}
 	
 	/**
@@ -77,6 +121,7 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function prepareResult(array $result, array $viewingUser)
 	{
+		$this->_getQuoteModel()->prepareQuotation($result);
 		return $result;
 	}
 	
@@ -87,7 +132,7 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function getResultDate(array $result)
 	{
-		return 0;
+		return $result['quote_date'];
 	}
 	
 	/**
@@ -97,6 +142,10 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function renderResult(XenForo_View $view, array $result, array $search)
 	{
+		return $view->createTemplateObject('xenquote_search_result_quote', array(
+			'quote' => $result,
+			'search' => $search,
+		));
 	}
 	
 	/**
@@ -169,6 +218,16 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	public function getGroupByType()
 	{
 		return 'quote';
+	}
+	
+	protected function _getQuoteModel()
+	{
+		if (!$this->_quoteModel)
+		{
+			$this->_quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
+		}
+
+		return $this->_quoteModel;
 	}
 	
 }

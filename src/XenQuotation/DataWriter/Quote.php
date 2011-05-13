@@ -4,9 +4,9 @@
  * The DataWriter class deals with validating and writing
  * quotes to the database.
  */
-class Quotation_DataWriter_Quote
+class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 {
-	protected $_existingDataErrorPhrase = 'fhtq_requested_quote_not_found';
+	protected $_existingDataErrorPhrase = 'xenquote_requested_quotation_not_found';
 	
 	protected function _getFields()
 	{
@@ -17,8 +17,8 @@ class Quotation_DataWriter_Quote
 				'author_username'		=> array('type' => self::TYPE_STRING, 'default' => ''),
 				'quote_date'			=> array('type' => self::TYPE_UINT, 
 												 'default' => XenForo_Application::$time),
-				'quote'					=> array('type' => self::TYPE_STRING, 'required' => true,
-												 'requiredError' => 'fhtq_please_enter_a_quote'),
+				'quotation'				=> array('type' => self::TYPE_STRING, 'required' => true,
+												 'requiredError' => 'xenquote_you_must_enter_a_quotation'),
 				'quote_state'			=> array('type' => self::TYPE_STRING, 'default' => 'moderated',
 												 'allowedValues' => array('visible', 'moderated', 'deleted')),				
 				'attributed_date'		=> array('type' => self::TYPE_UINT, 'default' => 0),
@@ -49,6 +49,69 @@ class Quotation_DataWriter_Quote
 	protected function _getUpdateCondition($tableName)
 	{
 		return '`quote_id`=' . $this->_db->quote($this->getExisting('quote_id'));
+	}
+	
+	protected function _preSave()
+	{
+	}
+	
+	/**
+	 * Alerts the attributed user that a quotation has
+	 * been added about them.
+	 */
+	protected function _postSave()
+	{
+		$this->_addToSearchIndex();
+		
+		if ($this->get('message_state') == 'visible')
+		{
+			/* TODO */
+		}
+	}
+	
+	/**
+	 * Removes any alerts for a quote that has been deleted
+	 */
+	protected function _postDelete()
+	{
+		$this->_removeFromSearchIndex();
+		
+		if ($this->get('quote_state') == 'visible')
+		{
+			$this->getModelFromCache('XenForo_Model_Alert')->deleteAlerts('quote', $this->get('quote_id'));
+		}
+	}
+	
+	/**
+	 */
+	protected function _addToSearchIndex()
+	{
+		if ($this->isChanged('quotation'))
+		{
+			$dataHandler = $this->_getSearchDataHandler();
+			$indexer = new XenForo_Search_Indexer();
+
+			$dataHandler->insertIntoIndex($indexer, $this->getMergedData());
+		}
+	}
+	
+	/**
+	 */
+	protected function _removeFromSearchIndex()
+	{
+		$dataHandler = $this->_getSearchDataHandler();
+		$indexer = new XenForo_Search_Indexer();
+
+		$dataHandler->deleteFromIndex($indexer, $this->getMergedData());
+	}
+	
+	/**
+	 * @return XenQuotation_Search_DataHandler_Quote
+	 */
+	protected function _getSearchDataHandler()
+	{
+		// Gets the search-data handler for 'scratchpad_note' content type
+		return $this->getModelFromCache('XenForo_Model_Search')->getSearchDataHandler('quote');
 	}
 	
 }

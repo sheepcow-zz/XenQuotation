@@ -27,9 +27,28 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	 */
 	public function actionList()
 	{
+		$quotesByUser = false;
+		
+		if ($this->_input->inRequest('user'))
+		{
+			$userModel = $this->_getUserModel();
+			$userId = $this->_input->filterSingle('user', XenForo_Input::UINT);
+			$quotesByUser = $userModel->getUserById($userId);
+		}
+		
+		if ($quotesByUser)
+		{
+			// displaying a list of quotes by a specific user
+		}
+		else
+		{
+			// displaying all quotes
+		}
+		
 		$viewParams = array(
 			'page' => 1,
-			'canCreateQuotation' => true
+			'canCreateQuotation' => true,
+			'quotesByUser' => ($quotesByUser) ? $quotesByUser['username'] : false
 		);
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'xenquote_quote_list', $viewParams);
@@ -66,6 +85,58 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	public function actionSave()
 	{
 		$this->_assertPostOnly();
+		$this->_assertRegistrationRequired();
+		
+		$visitor = XenForo_Visitor::getInstance();
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		
+		if ($this->_input->inRequest('quote_id'))
+		{
+			// editing a quote
+			$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);
+			$quoteHelper->assertQuoteValidAndViewable($quoteId);
+			
+			/* TODO */
+			/*
+			$this->_assertCanEditQuote($quoteId)
+			
+			$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
+			$dw->setExistingData($quoteId);
+			*/
+		}
+		else
+		{
+			$this->_assertCanAddQuotation();
+			
+			$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
+			
+			$dw->set('author_user_id', $visitor['user_id']);
+			$dw->set('author_username', $visitor['username']);
+		}
+		
+		if (!XenForo_Captcha_Abstract::validateDefault($this->_input))
+		{
+			return $this->responseCaptchaFailed();
+		}
+		
+		// get the data
+		$input = array();
+		
+		$input['quotation'] = $this->getHelper('Editor')->getMessageText('quotation', $this->_input);
+		$input['quotation'] = XenForo_Helper_String::autoLinkBbCode($input['quotation']);
+
+		// set the data and save the changes
+		$dw->set('quotation', $input['quotation']);
+		$dw->save();
+		
+		$quote = $dw->getMergedData();
+
+		// regular redirect
+		return $this->responseRedirect(
+			XenForo_ControllerResponse_Redirect::SUCCESS,
+			XenForo_Link::buildPublicLink('quotes', $quote)
+		);
 	}
 	
 	/**
@@ -76,10 +147,12 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		$this->_assertCanAddQuotation();
 		
 		$defaultMessage = '';
+		$quote = false;
 
 		$viewParams = array(
 			'defaultMessage' => $defaultMessage,
-			'captcha' => XenForo_Captcha_Abstract::createDefault()
+			'captcha' => XenForo_Captcha_Abstract::createDefault(),
+			'quote' => $quote
 		);
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_Create', 'xenquote_quote_create', $viewParams);
@@ -108,6 +181,8 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		return new XenForo_Phrase('xenquote_viewing_a_quote');
 	}
 	
+	/**
+	 */
 	protected function _assertCanAddQuotation()
 	{		
 		if (!$this->_getQuoteModel()->canAddQuotation($errorPhraseKey))
@@ -122,6 +197,14 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	protected function _getQuoteModel()
 	{
 		return $this->getModelFromCache('XenQuotation_Model_Quote');
+	}
+	
+	/**
+	 * @return XenForo_Model_User
+	 */
+	protected function _getUserModel()
+	{
+		return $this->getModelFromCache('XenForo_Model_User');
 	}
 }
 

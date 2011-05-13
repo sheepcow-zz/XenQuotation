@@ -22,7 +22,7 @@ class XenQuotation_Installation
 			  `author_user_id` int(10) unsigned NOT NULL DEFAULT '0',
 			  `author_username` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
 			  `quote_date` int(10) unsigned NOT NULL DEFAULT '0',
-			  `quote` text COLLATE utf8_unicode_ci NOT NULL,
+			  `quotation` text COLLATE utf8_unicode_ci NOT NULL,
 			  `quote_state` enum('visible','moderated','deleted') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'moderated',
 			  `attributed_date` int(10) unsigned NOT NULL DEFAULT '0',
 			  `attributed_context` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
