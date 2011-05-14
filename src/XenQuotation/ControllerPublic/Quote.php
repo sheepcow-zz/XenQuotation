@@ -29,6 +29,15 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	{
 		$quotesByUser = false;
 		
+		// default sorting
+		$defaultSortOrder = 'date';
+		$defaultSortDirection = 'desc';
+		
+		$sortOrder = $defaultSortOrder;
+		$sortDirection = $defaultSortDirection;
+		
+		$additionalNavParams = array();
+		
 		if ($this->_input->inRequest('user'))
 		{
 			$userModel = $this->_getUserModel();
@@ -36,40 +45,112 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			$quotesByUser = $userModel->getUserById($userId);
 		}
 		
-		if ($quotesByUser)
-		{
-			// displaying a list of quotes by a specific user
-		}
-		else
-		{
-			// displaying all quotes
-		}
-		
 		$visitor = XenForo_Visitor::getInstance();
 		
 		$page = max(1, $this->_input->filterSingle('page', XenForo_Input::UINT));
-		$postsPerPage = XenForo_Application::get('options')->xenquoteQuotationsPerPage;
+		$quotesPerPage = XenForo_Application::get('options')->xenquoteQuotationsPerPage;
 		
 		$quoteModel = $this->_getQuoteModel();
 		
+		// work out any sorting
+		$input = $this->_input->filter(array(
+			'order' => XenForo_Input::STRING,
+			'direction' => XenForo_Input::STRING
+		));
+		
+		if (!empty($input['order']))
+		{
+			switch (strtolower($input['order']))
+			{
+				case 'date':
+				case 'likes':
+				case 'views':
+					$sortOrder = $input['order'];
+					break;
+			}
+		}
+		
+		if (!empty($input['direction']))
+		{
+			switch (strtolower($input['direction']))
+			{
+				case 'desc':
+					$sortDirection = 'desc';
+					break;
+					
+				case 'asc':
+					$sortDirection = 'asc';
+					break;
+			}
+		}
+		
+		if (strtolower($sortDirection) == 'asc')
+		{
+			$altSortDirection = 'desc';
+		}
+		else
+		{
+			$altSortDirection = 'asc';
+		}
+		
+		$sortParams = array(
+			'date' => array('order' => 'date', 'direction' => 'desc') + $additionalNavParams,
+			'likes' => array('order' => 'likes', 'direction' => 'desc') + $additionalNavParams,
+			'views' => array('order' => 'views', 'direction' => 'desc') + $additionalNavParams
+		);
+		
+		// invert the direction of the current sort
+		$sortParams[$sortOrder]['direction'] = $altSortDirection;
+		
 		$quoteFetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions() + array(
-			'perPage' => $postsPerPage,
+			'perPage' => $quotesPerPage,
 			'page' => $page,
+			'order' => $sortOrder,
+			'direction' => $sortDirection,
 			'likeUserId' => $visitor['user_id']
 		);
 		
+		if (!empty($quotesByUser))
+		{
+			// displaying a list of quotes by a specific user
+			$additionalNavParams['user'] = $quotesByUser['user_id'];
+			
+			$quoteFetchOptions += array(
+				'authors' => array($quotesByUser['user_id'])
+			);
+		}
+		
 		$quotes = $quoteModel->getQuotes($quoteFetchOptions);
+		$totalQuotations = $quoteModel->countQuotes($quoteFetchOptions);
 		
 		foreach ($quotes as &$quote)
 		{
 			$quote = $quoteModel->prepareQuotation($quote);
 		}
 		
+		$quoteModel->quotationsViewed($quotes);
+		
 		$viewParams = array(
-			'page' => 1,
+			'page' => $page,
+
+			'quotationsPerPage' => $quotesPerPage,
+			'totalQuotations' => $totalQuotations,
+			
+			'quotationStartOffset' => ($page - 1) * $quotesPerPage + 1,
+			'quotationEndOffset' => ($page - 1) * $quotesPerPage + count($quotes),
+
 			'canCreateQuotation' => $quoteModel->canAddQuotation(),
 			'quotesByUser' => ($quotesByUser) ? $quotesByUser['username'] : false,
-			'quotes' => $quotes
+			'quotes' => $quotes,
+			
+			'order' => $sortOrder,
+			'orderDirection' => $sortDirection,
+			'orderParams' => $sortParams,
+			
+			'pageNavParams' => array(
+				'order' => ($sortOrder != $defaultSortOrder) ? $sortOrder : '',
+				'direction' => ($sortDirection != $defaultSortDirection) ? $sortDirection : ''
+			) + $additionalNavParams
 		);
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'xenquote_quote_list', $viewParams);
@@ -91,6 +172,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		$quote = $quoteModel->getQuoteById($quoteId);
 		$quoteModel->prepareQuotation($quote);
+		$quoteModel->quotationViewed($quote);
 		
 		$viewParams = array(
 			'quote' => $quote
@@ -281,7 +363,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 				{
 					$output[$key] = array(
 						new XenForo_Phrase('xenquote_viewing_quotation'),
-						new XenForo_Phrase('xenquote_added_by', 
+						new XenForo_Phrase('xenquote_added_by_x', 
 							array('username' => $quote['author_username'])
 						),
 						XenForo_Link::buildPublicLink('quotes', $quote),

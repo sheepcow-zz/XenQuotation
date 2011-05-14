@@ -12,7 +12,13 @@
   <cron/>
   <email_templates/>
   <optiongroups>
-    <group group_id="xenquotation" display_order="1000" debug_only="0"/>
+    <group group_id="xenquotation" display_order="2000" debug_only="0"/>
+    <option option_id="xenquoteAllowedBbCode" edit_format="callback" data_type="array" can_backup="1">
+      <default_value>a:10:{s:5:"tag_b";s:1:"1";s:5:"tag_i";s:1:"1";s:5:"tag_u";s:1:"1";s:5:"tag_s";s:1:"1";s:9:"tag_color";s:1:"1";s:8:"tag_font";s:1:"1";s:8:"tag_size";s:1:"1";s:7:"tag_url";s:1:"1";s:9:"tag_email";s:1:"1";s:9:"tag_plain";s:1:"1";}</default_value>
+      <edit_format_params>XenQuotation_Option_AllowedBbCode::renderOption</edit_format_params>
+      <sub_options>*</sub_options>
+      <relation group_id="xenquotation" display_order="30"/>
+    </option>
     <option option_id="xenquotePreviewLength" edit_format="spinbox" data_type="positive_integer" can_backup="1">
       <default_value>100</default_value>
       <edit_format_params></edit_format_params>
@@ -52,6 +58,8 @@
   <phrases>
     <phrase title="option_group_xenquotation" version_id="11" version_string="1.0.0"><![CDATA[XenQuotation]]></phrase>
     <phrase title="option_group_xenquotation_description" version_id="11" version_string="1.0.0"><![CDATA[Options for the XenQuotation add-on.]]></phrase>
+    <phrase title="option_xenquoteAllowedBbCode" version_id="11" version_string="1.0.0"><![CDATA[Allowed BB Code]]></phrase>
+    <phrase title="option_xenquoteAllowedBbCode_explain" version_id="11" version_string="1.0.0"><![CDATA[Tick the BB code that you wish to allow in quotations.]]></phrase>
     <phrase title="option_xenquotePreviewLength" version_id="11" version_string="1.0.0"><![CDATA[Quotation Preview Length]]></phrase>
     <phrase title="option_xenquotePreviewLength_explain" version_id="11" version_string="1.0.0"><![CDATA[Maximum number of characters to display in quotation preview popups.]]></phrase>
     <phrase title="option_xenquoteQuotationsPerPage" version_id="11" version_string="1.0.0"><![CDATA[Quotations Per Page]]></phrase>
@@ -71,9 +79,11 @@
     <phrase title="permission_quote_view" version_id="10" version_string="1.0.0"><![CDATA[View quotations]]></phrase>
     <phrase title="permission_quote_viewDeleted" version_id="10" version_string="1.0.0"><![CDATA[View deleted quotations]]></phrase>
     <phrase title="permission_quote_viewModerated" version_id="11" version_string="1.0.0"><![CDATA[View moderated quotations]]></phrase>
-    <phrase title="xenquote_added_by" version_id="11" version_string="1.0.0"><![CDATA[added by {username}]]></phrase>
+    <phrase title="xenquote_added_by" version_id="0" version_string=""><![CDATA[Added By]]></phrase>
+    <phrase title="xenquote_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[added by {username}]]></phrase>
     <phrase title="xenquote_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[Add a New Quotation]]></phrase>
     <phrase title="xenquote_add_a_quotation" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Add a Quotation]]></phrase>
+    <phrase title="xenquote_add_a_quoteation_now" version_id="11" version_string="1.0.0"><![CDATA[Add a quotation now]]></phrase>
     <phrase title="xenquote_add_quotation" version_id="11" version_string="1.0.0"><![CDATA[Add Quotation]]></phrase>
     <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
     <phrase title="xenquote_attributed_date" version_id="11" version_string="1.0.0"><![CDATA[Attribution Date]]></phrase>
@@ -85,12 +95,16 @@
     <phrase title="xenquote_list_of_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[This is a list of quotations saved by {username}.]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
     <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
+    <phrase title="xenquote_option_allowedbbcode_tag" version_id="11" version_string="1.0.0"><![CDATA[[{tag}]]]></phrase>
+    <phrase title="xenquote_post_x" version_id="11" version_string="1.0.0"><![CDATA[Post {post}]]></phrase>
+    <phrase title="xenquote_post_x_in_y" version_id="11" version_string="1.0.0"><![CDATA[Post {position} in {title}]]></phrase>
     <phrase title="xenquote_quotation" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
     <phrase title="xenquote_quotation_explain" version_id="11" version_string="1.0.0"><![CDATA[Please note that new lines will be removed from the quotation.]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
+    <phrase title="xenquote_there_are_no_quotations_to_display" version_id="11" version_string="1.0.0"><![CDATA[There are no quotations to display.]]></phrase>
     <phrase title="xenquote_viewing_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
     <phrase title="xenquote_viewing_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
     <phrase title="xenquote_viewing_quotations" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotations]]></phrase>
@@ -107,9 +121,9 @@
   <templates>
     <template title="xenquote_list_item_preview" version_id="11" version_string="1.0.0"><![CDATA[<div class="previewTooltip">
 	<xen:avatar user="$quote.author" size="s" />
-	
+
 	<div class="text">
-		<blockquote class="previewText">{xen:string nl2br, {xen:helper wordtrim, $quote.parsedQuotation, $xenOptions.xenquotePreviewLength}}</blockquote>
+		<blockquote class="previewText">{xen:raw $quote.parsedQuotation}</blockquote>
 		
 		<div class="posterDate muted">{$quote.author.username}, <xen:datetime time="{$quote.quote_date}" class="faint" /></div>
 	</div>
@@ -122,7 +136,313 @@
 	<xen:if is="{$canSearch}"><li><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li></xen:if>
 </xen:hook>
 </ul>]]></template>
-    <template title="xenquote_quotation_list.css" version_id="10" version_string="1.0.0"><![CDATA[]]></template>
+    <template title="xenquote_quotation_list.css" version_id="11" version_string="1.0.0"><![CDATA[.quotationList
+{
+	position: relative;
+	zoom: 1;
+}
+
+/** column style and width **/
+
+.quotationList .sectionHeaders,
+.quotationListItem
+{
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	word-wrap: normal;
+}
+
+	.quotationList .sectionHeaders dt,
+	.quotationList .sectionHeaders dd,
+	.quotationListItem .listBlock
+	{
+		display: table-cell;
+		vertical-align: middle;
+	}
+	
+		.quotationList .posterAvatar
+		{
+			width: {xen:property discussionListAvatarWidth};
+		}
+		
+		.quotationList .main
+		{
+			width: auto;
+		}
+		
+		.quotationList .stats
+		{
+			width: {xen:property discussionListStatsWidth};
+		}
+
+			.quotationList .stats .likes
+			{
+				width: {xen:calc '{xen:property discussionListStatsWidth} / 2'};
+			}
+
+			.quotationList .stats .views
+			{
+				text-align: right;
+				width: {xen:calc '{xen:property discussionListStatsWidth} / 2'};
+			}
+
+			.quotationList .sectionHeaders .stats .minor
+			{
+				text-align: right;
+			}
+		
+		.quotationList .dateAdded
+		{
+			width: {xen:property discussionListLastPostWidth};
+			text-align: right;
+			overflow: hidden;
+		}
+		
+		.quotationList .statsDateAdded /* combined last two columns */
+		{
+			width: {xen:calc '{xen:property discussionListStatsWidth} + {xen:property discussionListLastPostWidth}'}px;
+		}
+
+/* column headers */
+
+.quotationList .sectionHeaders
+{	
+	{xen:property subHeading}
+	
+	padding: 0;
+}
+
+	.quotationList .sectionHeaders dt span
+	{
+		display: none !important;
+	}
+		
+	.quotationList .sectionHeaders a
+	{
+		display: block;
+		color: {xen:property subHeading.color};
+		outline: none;
+	}
+	
+	.quotationList .sectionHeaders a:hover
+	{
+		text-decoration: none;
+	}
+			
+	.quotationList .sectionHeaders dd a[href]:hover
+	{
+		{xen:property subHeadingHover}
+	}
+
+	.quotationList .sectionHeaders .stats a
+	{
+		float: left;
+		width: 50%;
+		white-space: nowrap;
+	}
+	
+		.quotationList .sectionHeaders a span
+		{
+			{xen:property subHeading.padding}
+			display: block;
+		}
+
+/** IE <8 **/
+.quotationList .sectionHeaders,
+.quotationListItem                { *display: block; _vertical-align: bottom; }
+.quotationList .sectionHeaders dt,
+.quotationList .sectionHeaders dd,
+.quotationListItem .listBlock     { *display: block; *float: left; }
+.quotationListItem .listBlock     { _height: 52px; *min-height: 52px; } /* todo: should be calculation */
+.quotationList .posterAvatar      { *width: 6.98%; }
+.quotationListItem .posterAvatar  { *font-size: 0; }	
+.quotationList .main              { *width: 56.98%; }
+.quotationList .stats             { *width: 15.97%; }	
+.quotationList .dateAdded         { *width: 19.97%; }
+.quotationList .statsLastPost     { *width: 35.97%; }
+.quotationList .sectionHeaders dt,
+.quotationList .sectionHeaders dd { *padding: 5px 0; }
+.quotationList .sectionHeaders a,
+.quotationList .sectionHeaders a span { *display: inline !important; *float: none !important; }
+
+/* items in quotation list */
+
+.quotationListItems
+{
+}
+
+/* individual quotation list item */
+	
+/** main **/
+
+.quotationListItem
+{
+	{xen:property primaryContent.background}
+	
+	{xen:property primaryContent.border}
+}
+
+	/* sections, section widths */
+	
+		.quotationListItem .posterAvatar,		
+		.quotationListItem .stats
+		{
+			{xen:property secondaryContent.background}
+		}
+		
+		.quotationListItem .main,
+		.quotationListItem .dateAdded
+		{
+		}
+		
+	/* avatar section */
+	
+	.quotationListItem .posterAvatar .avatarContainer
+	{
+		display: block;
+		position: relative;
+	}
+	
+	.quotationListItem .posterAvatar .avatar
+	{
+		{xen:property discussionListAvatar}
+		
+		width: auto;
+		height: auto;
+	}
+	
+		.quotationListItem .posterAvatar .avatar img
+		{
+			width: {xen:property discussionListAvatar.width};
+			height: {xen:property discussionListAvatar.height};
+			display: block;
+		}
+
+	/* title, poster section */
+	
+	.quotationListItem .titleText
+	{
+		padding: 5px;
+		overflow: hidden; zoom: 1;
+		position: relative;
+	}
+
+		/* first row */
+	
+		.quotationListItem .title
+		{
+			{xen:property discussionListFirstRow}
+			float: left;
+		}
+		
+		/* second row */
+		
+		.quotationListItem .secondRow
+		{
+			{xen:property discussionListSecondRow}
+			clear: both;
+		}
+		
+			.quotationListItem .secondRow .controls
+			{
+				float: right;
+				padding-left: 20px;
+			}
+				
+				.quotationListItem.AjaxProgress .controls
+				{
+					background: transparent url('{xen:property imagePath}/xenforo/widgets/ajaxload.info_B4B4DC_facebook.gif') no-repeat left center;
+				}
+
+	/* stats section */
+	
+	.quotationListItem .stats dl
+	{
+		padding: 0 10px;
+		border-left: 1px solid {xen:property primaryLighterStill};
+		border-right: 1px solid {xen:property primaryLighterStill};
+	}
+		.quotationListItem .stats .major
+		{
+			{xen:property discussionListFirstRow};
+			
+			margin-top: 5px;
+		}
+			
+		.quotationListItem .stats .minor
+		{
+			{xen:property discussionListSecondRow};
+			
+			margin-bottom: 5px;
+		}
+			
+	/* last post section */
+	
+	.quotationListItem .dateAddedInfo
+	{
+		padding: 5px;
+	}
+	
+		.quotationListItem .dateAddedInfo .username
+		{
+			{xen:property discussionListFirstRow};
+		}
+
+		.quotationListItem .dateAddedInfo .dateTime
+		{
+			{xen:property discussionListSecondRow}
+		}
+
+
+/* extra note row */
+
+.quotationListItem .noteRow
+{
+	{xen:property primaryContent.background}
+	padding: 5px;
+	text-align: center;
+	font-size: 11px;
+	color: {xen:property primaryMedium};
+}
+
+/* deleted item */
+
+.quotationList .quotationListItem.deleted
+{
+}
+
+	.quotationList .quotationListItem.deleted .avatar img
+	{
+		opacity: 0.5;
+		filter: alpha(opacity='50');
+	}
+		
+	.quotationList .quotationListItem.deleted .deletionNote
+	{
+		float: left;
+		color: rgb(150,0,0);
+	}
+		
+/* moderated item */
+
+.quotationList .quotationListItem.moderated .listBlock
+{
+	{xen:property primaryContent.background}
+}
+
+/** bottom summary **/
+
+.quotationList .sectionFooter
+{
+	overflow: hidden; zoom: 1;
+}
+
+	.quotationList .sectionFooter .contentSummary
+	{
+		float: left;
+		display: block;
+	}]]></template>
     <template title="xenquote_quote_create" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>
 
 <xen:container var="$head.robots">
@@ -197,14 +517,83 @@
 	<xen:description>{xen:phrase xenquote_list_of_quotations_by_members_of_x, 'board_title={$xenOptions.boardTitle}'}</xen:description>
 </xen:if>
 
+<xen:container var="$head.canonical">
+	<link rel="canonical" href="{xen:link 'canonical:quotes', 'page={$page}'}" />
+</xen:container>
+
 <xen:if is="{$canCreateQuotation}">
 	<xen:topctrl>
 		<a href="{xen:link quotes/create-quote}" class="callToAction"><span>{xen:phrase xenquote_add_a_new_quotation}</span></a>
 	</xen:topctrl>
 </xen:if>
 
-<xen:require css="xenquote_quotation_list.css" />]]></template>
-    <template title="xenquote_quote_list_item" version_id="0" version_string=""><![CDATA[]]></template>
+<xen:require css="xenquote_quotation_list.css" />
+
+<div class="pageNavLinkGroup">
+	<xen:pagenav link="quotes" linkparams="{$pageNavParams}" page="{$page}" perpage="{$quotationsPerPage}" total="{$totalQuotations}" />
+</div>
+
+<div class="quotationList section sectionMain">
+	<form action="#" method="post">	
+
+		<dl class="sectionHeaders">
+			<dt class="posterAvatar"><a><span>{xen:phrase sort_by}:</span></a></dt>			
+			<dd class="main"><a class="title"><span>{xen:phrase xenquote_quotation}</span></a></dd>			
+			<dd class="stats">
+				<a href="{xen:link quotes, '', '_params={$orderParams.likes}'}" class="likes"><span>{xen:phrase likes}{xen:helper sortArrow, $order, $orderDirection, likes}</span></a>
+				<a href="{xen:link quotes, '', '_params={$orderParams.views}'}" class="views"><span>{xen:phrase views}{xen:helper sortArrow, $order, $orderDirection, views}</span></a>
+			</dd>
+			<dd class="dateAdded"><a href="{xen:link quotes, '', '_params={$orderParams.date}'}" ><span>{xen:phrase xenquote_added_by}{xen:helper sortArrow, $order, $orderDirection, date}</span></a></dd>
+		</dl>
+
+		<ol class="quotationListItems">
+		<xen:if is="{$quotes}">
+			<xen:foreach loop="$quotes" value="$quote">
+				<xen:include template="xenquote_quote_list_item" />
+			</xen:foreach>
+		<xen:else />
+			<li class="primaryContent">{xen:phrase xenquote_there_are_no_quotations_to_display} <xen:if is="{$canCreateQuotation}"><a href="{xen:link quotes/create-quote}">{xen:phrase xenquote_add_a_quoteation_now}</a></xen:if></li>
+		</xen:if>
+		</ol>
+
+	</form>
+</div>
+
+<div class="pageNavLinkGroup">
+	<xen:pagenav link="quotes" linkparams="{$pageNavParams}" page="{$page}" perpage="{$quotationsPerPage}" total="{$totalQuotations}" />
+</div>]]></template>
+    <template title="xenquote_quote_list_item" version_id="11" version_string="1.0.0"><![CDATA[<xen:require css="xenquote_quotation_list.css" />
+
+<li id="quote-{$quote.quote_id}" class="quotationListItem" data-author="{$quote.author.username}">
+
+	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
+		
+	<div class="listBlock main">
+		<div class="titleText">
+			<h3 class="title">
+				{xen:raw $quote.parsedQuotation}
+			</h3>
+			<div class="secondRow">
+				<div class="attribution">
+					{xen:raw $quote.renderedAttribution}
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	<div class="listBlock stats pairsJustified">
+		<dl class="major"><dt>{xen:phrase likes}:</dt> <dd>{xen:number {$quote.likes}}</dd></dl>
+		<dl class="minor"><dt>{xen:phrase views}:</dt> <dd>{xen:number {$quote.views}}</dd></dl>
+	</div>
+
+	<div class="listBlock dateAdded">
+		<dl class="dateAddedInfo">
+			<dt><xen:username user="$quote.author" /></dt>
+			<dd class="muted dateTime"><xen:datetime time="$quote.quote_date" /></dd>
+		</dl>
+	</div>
+	
+</li>]]></template>
     <template title="xenquote_quote_view" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
 <xen:h1></xen:h1>
 
@@ -277,7 +666,7 @@
 
 	<div class="listBlock main">
 		<div class="titleText">
-			<h3 class="title">{$i} <a href="{xen:link quotes, $quote}">{xen:helper highlight, $quote.quotation, $search.search_query, 'highlight'}</a></h3>
+			<h3 class="title">{$i} <a href="{xen:link quotes, $quote}">{xen:helper highlight, $quote.parsedQuotation, $search.search_query, 'highlight'}</a></h3>
 		</div>
 
 		<div class="meta">

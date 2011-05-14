@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</string>
+	<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -112,84 +112,38 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>38</integer>
 				<key>line</key>
-				<integer>31</integer>
+				<integer>92</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>14</integer>
-		</dict>
-		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/DataWriter/Quote.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>51</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>40</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>78</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
+			<integer>46</integer>
 		</dict>
 		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>50</integer>
 				<key>line</key>
-				<integer>20</integer>
+				<integer>118</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>7</integer>
-		</dict>
-		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Search/DataHandler/Quote.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>143</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>82</integer>
+			<integer>92</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/DataWriter/Quote.php</string>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Search/DataHandler/Quote.php</string>
 		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
 		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{332, 18}, {871, 663}}</string>
+	<string>{{346, 14}, {871, 663}}</string>
 </dict>
 </plist>
