@@ -22,9 +22,12 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 		$groupId = 0;
 		$title = '';
 		
+		// index the quotation with the context and attributed username.
+		$indexedData = $data['quotation'] . ' - ' . $data['attributed_context'] . ' - ' . $data['attributed_username'];
+		
 		$indexer->insertIntoIndex(
 			'quote', $data['quote_id'],
-			$title, $data['quotation'],
+			$title, $indexedData,
 			$data['quote_date'], $data['author_user_id'], $groupId, $metadata
 		);
 	}

@@ -45,10 +45,31 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			// displaying all quotes
 		}
 		
+		$visitor = XenForo_Visitor::getInstance();
+		
+		$page = max(1, $this->_input->filterSingle('page', XenForo_Input::UINT));
+		$postsPerPage = XenForo_Application::get('options')->xenquoteQuotationsPerPage;
+		
+		$quoteModel = $this->_getQuoteModel();
+		
+		$quoteFetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions() + array(
+			'perPage' => $postsPerPage,
+			'page' => $page,
+			'likeUserId' => $visitor['user_id']
+		);
+		
+		$quotes = $quoteModel->getQuotes($quoteFetchOptions);
+		
+		foreach ($quotes as &$quote)
+		{
+			$quote = $quoteModel->prepareQuotation($quote);
+		}
+		
 		$viewParams = array(
 			'page' => 1,
-			'canCreateQuotation' => true,
-			'quotesByUser' => ($quotesByUser) ? $quotesByUser['username'] : false
+			'canCreateQuotation' => $quoteModel->canAddQuotation(),
+			'quotesByUser' => ($quotesByUser) ? $quotesByUser['username'] : false,
+			'quotes' => $quotes
 		);
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'xenquote_quote_list', $viewParams);
@@ -59,8 +80,46 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	 */	
 	public function actionView()
 	{
-		$viewParams = array();
-		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'DEFAULT', $viewParams);	
+		$quoteModel = $this->_getQuoteModel();
+		
+		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quoteHelper->assertQuoteValidAndViewable($quoteId);
+		
+		/*TODO $this->_assertCanViewQuote($quoteId)*/
+		
+		$quote = $quoteModel->getQuoteById($quoteId);
+		$quoteModel->prepareQuotation($quote);
+		
+		$viewParams = array(
+			'quote' => $quote
+		);
+		
+		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'xenquote_quote_view', $viewParams);	
+	}
+	
+	/**
+	 * Renders a preview of a specific quotation
+	 */
+	public function actionPreview()
+	{
+		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);
+		$quoteModel = $this->_getQuoteModel();
+
+		$visitor = XenForo_Visitor::getInstance();
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quoteHelper->assertQuoteValidAndViewable($quoteId);
+		
+		$quote = $quoteModel->getQuoteById($quoteId);
+		$quoteModel->prepareQuotation($quote);
+		
+		$viewParams = array(
+			'quote' => $quote
+		);
+		
+		return $this->responseView('XenQuotation_ViewPublic_Quote_Preview', 'xenquote_list_item_preview', $viewParams);
 	}
 	
 	/**
@@ -121,13 +180,41 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		}
 		
 		// get the data
-		$input = array();
+		$input = $this->_input->filter(array(
+			'context' => XenForo_Input::STRING,
+			'attributedDate' => XenForo_Input::DATE_TIME,
+			'attributedTo' => XenForo_Input::STRING
+		));
+		
+		// parse the attributedTo field to determine if it
+		// is a forum username.
+		
+		if (strlen($input['attributedTo']) > 0)
+		{
+			if (preg_match('#^(.+)(,)?$#iU', $input['attributedTo'], $match))
+			{
+				$attribUser = $this->getModelFromCache('XenForo_Model_User')->getUserByName($match[1]);
+
+				if ($attribUser)
+				{
+					$dw->set('attributed_user_id', $attribUser['user_id']);
+					$dw->set('attributed_username', $attribUser['username']);
+				}
+				else
+				{
+					$dw->set('attributed_username', $match[1]);
+				}
+			}
+		}
 		
 		$input['quotation'] = $this->getHelper('Editor')->getMessageText('quotation', $this->_input);
 		$input['quotation'] = XenForo_Helper_String::autoLinkBbCode($input['quotation']);
 
 		// set the data and save the changes
 		$dw->set('quotation', $input['quotation']);
+		
+		$dw->set('attributed_date', $input['attributedDate']);
+		$dw->set('attributed_context', $input['context']);
 		$dw->save();
 		
 		$quote = $dw->getMergedData();
@@ -178,7 +265,37 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	 */
 	public static function getSessionActivityDetailsForList(array $activities)
 	{
-		return new XenForo_Phrase('xenquote_viewing_a_quote');
+		$output = array();
+		$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
+		
+		foreach ($activities as $key => $activity)
+		{
+			if ($activity['controller_action'] == 'List')
+			{
+				$output[$key] = new XenForo_Phrase('xenquote_viewing_quotations');
+			}
+			else if (!empty($activity['params']['quote_id']))
+			{
+				if ($quoteModel->canViewQuotation($activity['params']['quote_id']) &&
+					($quote = $quoteModel->getQuoteById($activity['params']['quote_id'])))
+				{
+					$output[$key] = array(
+						new XenForo_Phrase('xenquote_viewing_quotation'),
+						new XenForo_Phrase('xenquote_added_by', 
+							array('username' => $quote['author_username'])
+						),
+						XenForo_Link::buildPublicLink('quotes', $quote),
+						XenForo_Link::buildPublicLink('quotes/preview', $quote)
+					);
+				}
+				else
+				{
+					$output[$key] = new XenForo_Phrase('xenquote_viewing_a_quotation');
+				}
+			}
+		}
+		
+		return $output;
 	}
 	
 	/**

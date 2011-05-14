@@ -8,6 +8,27 @@ class XenQuotation_Model_Quote extends XenForo_Model
 {
 
 	/**
+	 * Gets quotes using the given fetch options
+	 *
+	 * @param array $fetchOptions Quote fetch options
+	 *
+	 * @return array
+	 */
+	public function getQuotes(array $fetchOptions = array())
+	{
+		$limitOptions = $this->prepareLimitFetchOptions($fetchOptions);
+		$stateLimit = $this->prepareStateLimitFromConditions($fetchOptions, 'quotation', 'quote_state', 'author_user_id');
+		
+		return $this->fetchAllKeyed($this->limitQueryResults('
+				SELECT quotation.*
+				FROM xq_quotation AS quotation
+				WHERE (' . $stateLimit . ')
+				ORDER BY quotation.quote_date DESC, quotation.quote_id DESC
+			', $limitOptions['limit'], $limitOptions['offset']), 
+		'quote_id');
+	}
+
+	/**
 	 * Gets the specified quote by ID.
 	 *
 	 * @param integer $quoteId
@@ -20,11 +41,10 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			return false;
 		}
 		
-		return $this->_getDb()->fetchRow(
-			'SELECT quotation.* FROM xq_quotation AS quotation
-			 WHERE quotation.`quote_id` = ?',
-			$quoteId
-		);
+		return $this->_getDb()->fetchRow('
+			SELECT quotation.* FROM xq_quotation AS quotation
+			 WHERE quotation.`quote_id` = ?
+		', $quoteId);
 	}
 	
 	/**
@@ -85,7 +105,37 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			'user_id' => $quote['author_user_id']
 		);
 		
+		if ($quote['quote_state'] == 'moderated')
+		{
+			$quote['isModerated'] = true;
+		}
+		
+		if ($quote['quote_state'] == 'deleted')
+		{
+			$quote['isDeleted'] = true;
+		}
+		
+		// bbcode parse the quote
+		$quote['parsedQuotation'] = $quote['quotation'];
+		
 		return $quote;
+	}
+	
+	/**
+	 * Gets quote fetch options for the given user (or the active visitor)
+	 * based on their permissions.
+	 */
+	public function getPermissionBasedQuoteFetchOptions(array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		
+		$viewModerated = XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'viewModerated');
+		$viewDeleted = XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'viewDeleted');
+		
+		return array(
+			'moderated' => $viewModerated,
+			'deleted' => $viewDeleted
+		);
 	}
 
 	/**

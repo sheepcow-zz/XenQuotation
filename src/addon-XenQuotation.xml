@@ -11,16 +11,30 @@
   </code_event_listeners>
   <cron/>
   <email_templates/>
-  <optiongroups/>
+  <optiongroups>
+    <group group_id="xenquotation" display_order="1000" debug_only="0"/>
+    <option option_id="xenquotePreviewLength" edit_format="spinbox" data_type="positive_integer" can_backup="1">
+      <default_value>100</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation" display_order="20"/>
+    </option>
+    <option option_id="xenquoteQuotationsPerPage" edit_format="spinbox" data_type="positive_integer" can_backup="1">
+      <default_value>25</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation" display_order="10"/>
+    </option>
+  </optiongroups>
   <permissions>
     <permission_groups>
       <permission_group permission_group_id="quote"/>
     </permission_groups>
     <permissions>
-      <permission permission_group_id="quote" permission_id="approveUnapprove" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="50"/>
+      <permission permission_group_id="quote" permission_id="approveUnapprove" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="60"/>
       <permission permission_group_id="quote" permission_id="deleteAny" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="20"/>
       <permission permission_group_id="quote" permission_id="deleteOwn" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="50"/>
-      <permission permission_group_id="quote" permission_id="editAny" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="60"/>
+      <permission permission_group_id="quote" permission_id="editAny" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="70"/>
       <permission permission_group_id="quote" permission_id="editOwn" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="40"/>
       <permission permission_group_id="quote" permission_id="hardDeleteAny" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="40"/>
       <permission permission_group_id="quote" permission_id="like" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="20"/>
@@ -28,6 +42,7 @@
       <permission permission_group_id="quote" permission_id="undelete" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="10"/>
       <permission permission_group_id="quote" permission_id="view" permission_type="flag" default_value="unset" interface_group_id="xenQuotationPermissions" display_order="10"/>
       <permission permission_group_id="quote" permission_id="viewDeleted" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="30"/>
+      <permission permission_group_id="quote" permission_id="viewModerated" permission_type="flag" default_value="unset" interface_group_id="xenQuotationModeratorPermissions" display_order="50"/>
     </permissions>
     <interface_groups>
       <interface_group interface_group_id="xenQuotationModeratorPermissions" display_order="1510"/>
@@ -35,6 +50,12 @@
     </interface_groups>
   </permissions>
   <phrases>
+    <phrase title="option_group_xenquotation" version_id="11" version_string="1.0.0"><![CDATA[XenQuotation]]></phrase>
+    <phrase title="option_group_xenquotation_description" version_id="11" version_string="1.0.0"><![CDATA[Options for the XenQuotation add-on.]]></phrase>
+    <phrase title="option_xenquotePreviewLength" version_id="11" version_string="1.0.0"><![CDATA[Quotation Preview Length]]></phrase>
+    <phrase title="option_xenquotePreviewLength_explain" version_id="11" version_string="1.0.0"><![CDATA[Maximum number of characters to display in quotation preview popups.]]></phrase>
+    <phrase title="option_xenquoteQuotationsPerPage" version_id="11" version_string="1.0.0"><![CDATA[Quotations Per Page]]></phrase>
+    <phrase title="option_xenquoteQuotationsPerPage_explain" version_id="11" version_string="1.0.0"><![CDATA[The number of quotations that are displayed per page in the quotation list.]]></phrase>
     <phrase title="permission_group_quote" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
     <phrase title="permission_interface_xenQuotationModeratorPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Moderator Permissions]]></phrase>
     <phrase title="permission_interface_xenQuotationPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
@@ -49,20 +70,30 @@
     <phrase title="permission_quote_undelete" version_id="10" version_string="1.0.0"><![CDATA[Undelete quotations]]></phrase>
     <phrase title="permission_quote_view" version_id="10" version_string="1.0.0"><![CDATA[View quotations]]></phrase>
     <phrase title="permission_quote_viewDeleted" version_id="10" version_string="1.0.0"><![CDATA[View deleted quotations]]></phrase>
+    <phrase title="permission_quote_viewModerated" version_id="11" version_string="1.0.0"><![CDATA[View moderated quotations]]></phrase>
+    <phrase title="xenquote_added_by" version_id="11" version_string="1.0.0"><![CDATA[added by {username}]]></phrase>
     <phrase title="xenquote_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[Add a New Quotation]]></phrase>
     <phrase title="xenquote_add_a_quotation" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Add a Quotation]]></phrase>
     <phrase title="xenquote_add_quotation" version_id="11" version_string="1.0.0"><![CDATA[Add Quotation]]></phrase>
     <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
+    <phrase title="xenquote_attributed_date" version_id="11" version_string="1.0.0"><![CDATA[Attribution Date]]></phrase>
+    <phrase title="xenquote_attributed_date_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the date that the quotation was originally said.]]></phrase>
     <phrase title="xenquote_attributed_to" version_id="11" version_string="1.0.0"><![CDATA[Attributed To]]></phrase>
+    <phrase title="xenquote_attributed_to_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the name (or forum username) of the person that you are quoting.]]></phrase>
+    <phrase title="xenquote_context" version_id="11" version_string="1.0.0"><![CDATA[Context]]></phrase>
+    <phrase title="xenquote_context_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Add some context to the quotation.]]></phrase>
     <phrase title="xenquote_list_of_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[This is a list of quotations saved by {username}.]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
     <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotation" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
+    <phrase title="xenquote_quotation_explain" version_id="11" version_string="1.0.0"><![CDATA[Please note that new lines will be removed from the quotation.]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
-    <phrase title="xenquote_viewing_a_quote" version_id="10" version_string="1.0.0"><![CDATA[Viewing a quote]]></phrase>
+    <phrase title="xenquote_viewing_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
+    <phrase title="xenquote_viewing_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
+    <phrase title="xenquote_viewing_quotations" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotations]]></phrase>
     <phrase title="xenquote_your_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Added By You]]></phrase>
     <phrase title="xenquote_you_may_not_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[You may not add a new quotation]]></phrase>
     <phrase title="xenquote_you_must_enter_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[You must enter a quotation.]]></phrase>
@@ -74,6 +105,15 @@
   </route_prefixes>
   <style_properties/>
   <templates>
+    <template title="xenquote_list_item_preview" version_id="11" version_string="1.0.0"><![CDATA[<div class="previewTooltip">
+	<xen:avatar user="$quote.author" size="s" />
+	
+	<div class="text">
+		<blockquote class="previewText">{xen:string nl2br, {xen:helper wordtrim, $quote.parsedQuotation, $xenOptions.xenquotePreviewLength}}</blockquote>
+		
+		<div class="posterDate muted">{$quote.author.username}, <xen:datetime time="{$quote.quote_date}" class="faint" /></div>
+	</div>
+</div>]]></template>
     <template title="xenquote_navigation_tab" version_id="10" version_string="1.0.0"><![CDATA[<ul class="secondaryContent blockLinksList">
 <xen:hook name="navigation_tabs_quotes">
 	<xen:if is="{$canAddQuote}"><li><a href="{xen:link 'quotes/create-quote'}">{xen:phrase xenquote_add_a_quotation}</a></li></xen:if>
@@ -105,13 +145,35 @@
 
 	<dl class="ctrlUnit">
 		<dt><label for="ctrl_attributedTo">{xen:phrase xenquote_attributed_to}:</label></dt>
-		<dd><input type="text" name="_attributedTo" value="" class="textCtrl" /></dd>
+		<dd>
+			<input type="text" name="attributedTo" id="ctrl_attributedTo" value="" class="textCtrl AutoComplete" />
+			<p class="explain">{xen:phrase xenquote_attributed_to_explain}</p>
+		</dd>
+	</dl>
+
+	<dl class="ctrlUnit">
+		<dt><label for="ctrl_attributedDate">{xen:phrase xenquote_attributed_date}:</label></dt>
+		<dd>
+			<input type="date" name="attributedDate" value="" class="textCtrl" id="ctrl_attributedDate" />
+			<p class="explain">{xen:phrase xenquote_attributed_date_explain}</p>
+		</dd>
+	</dl>
+
+	<dl class="ctrlUnit">
+		<dt><label for="ctrl_context">{xen:phrase xenquote_context}:</label></dt>
+		<dd>
+			<input type="text" name="context" id="ctrl_context" value="" class="textCtrl" />
+			<p class="explain">{xen:phrase xenquote_context_explain}</p>
+		</dd>
 	</dl>
 
 	<fieldset>
 		<dl class="ctrlUnit fullWidth surplusLabel">
 			<dt><label for="ctrl_quotation">{xen:phrase xenquote_quotation}:</label></dt>
-			<dd>{xen:raw $editorTemplate}</dd>
+			<dd>
+				{xen:raw $editorTemplate}
+				<p class="explain">{xen:phrase xenquote_quotation_explain}</p>
+			</dd>
 		</dl>
 	</fieldset>
 
@@ -143,6 +205,22 @@
 
 <xen:require css="xenquote_quotation_list.css" />]]></template>
     <template title="xenquote_quote_list_item" version_id="0" version_string=""><![CDATA[]]></template>
+    <template title="xenquote_quote_view" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
+<xen:h1></xen:h1>
+
+<xen:require css="xenquote_quote_view.css" />
+
+<div class="section quotation">
+	{xen:raw $quote.parsedQuotation}
+</div>
+
+<div class="sectionMain">
+	hello
+</div>]]></template>
+    <template title="xenquote_quote_view.css" version_id="11" version_string="1.0.0"><![CDATA[.quotation
+{
+	font-size: 16pt;
+}]]></template>
     <template title="xenquote_search_form_quote" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_search_quotations}</xen:title>
 
 <xen:navigation>
