@@ -10,6 +10,8 @@ It's totally up to you why you want quotations, but the typical reason is so any
 
 * Fully customisable permissions-based viewing, adding, editing, deleting and liking of quotations.
 * Ability to add a random quotation to your forums sidebar.
+* Integrates with XenForo's built-in search feature.
+* Community members can _like_ quotations.
 
 * Quotations can be attributed to another member of your community or simply plain text (e.g. "Winston Churchill")
 * Quotations can have some context added to display near it (e.g. "Whilst live on air on BBC Radio 1")
