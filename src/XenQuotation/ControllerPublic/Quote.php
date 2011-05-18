@@ -84,23 +84,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			}
 		}
 		
-		if (strtolower($sortDirection) == 'asc')
-		{
-			$altSortDirection = 'desc';
-		}
-		else
-		{
-			$altSortDirection = 'asc';
-		}
-		
-		$sortParams = array(
-			'date' => array('order' => 'date', 'direction' => 'desc') + $additionalNavParams,
-			'likes' => array('order' => 'likes', 'direction' => 'desc') + $additionalNavParams,
-			'views' => array('order' => 'views', 'direction' => 'desc') + $additionalNavParams
-		);
-		
-		// invert the direction of the current sort
-		$sortParams[$sortOrder]['direction'] = $altSortDirection;
+		$orderParams = array();
 		
 		$quoteFetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions() + array(
 			'perPage' => $quotesPerPage,
@@ -120,13 +104,52 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			);
 		}
 		
+		foreach (array('date', 'likes', 'views') AS $field)
+		{
+			$sortParams[$field]['order'] = ($field != $defaultSortOrder ? $field : false);
+			if ($sortOrder == $field)
+			{
+				$sortParams[$field]['direction'] = ($sortDirection == 'desc' ? 'asc' : 'desc');
+			}
+			
+			$sortParams[$field] += $additionalNavParams;
+		}
+		
 		$quotes = $quoteModel->getQuotes($quoteFetchOptions);
 		$totalQuotations = $quoteModel->countQuotes($quoteFetchOptions);
 		
+		// prepare all quotes for the quote list
+		$inlineModOptions = array();
+		$permissions = $visitor->getPermissions();
+		
 		foreach ($quotes as &$quote)
 		{
-			$quote = $quoteModel->prepareQuotation($quote);
+			$quoteModOptions = $quoteModel->addInlineModOptionToQuote($quote, $permissions);
+			$inlineModOptions += $quoteModOptions;
+			
+			if ($quoteModOptions['approve'] && $quote['quote_state'] == 'moderated')
+			{
+				$quote['canApprove'] = true;
+			}
+			
+			if ($quoteModOptions['unapprove'] && $quote['quote_state'] == 'visible')
+			{
+				$quote['canUnapprove'] = true;
+			}
+			
+			if ($quoteModOptions['delete'] && $quote['quote_state'] != 'deleted')
+			{
+				$quote['canDelete'] = true;
+			}
+			
+			if ($quoteModOptions['undelete'] && $quote['quote_state'] == 'deleted')
+			{
+				$quote['canUndelete'] = true;
+			}
+			
+			$quoteModel->prepareQuotation($quote);
 		}
+		unset($quote);
 		
 		$quoteModel->quotationsViewed($quotes);
 		
@@ -142,6 +165,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			'canCreateQuotation' => $quoteModel->canAddQuotation(),
 			'quotesByUser' => ($quotesByUser) ? $quotesByUser['username'] : false,
 			'quotes' => $quotes,
+			'inlineModOptions' => $inlineModOptions,
 			
 			'order' => $sortOrder,
 			'orderDirection' => $sortDirection,
@@ -154,6 +178,102 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		);
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'xenquote_quote_list', $viewParams);
+	}
+	
+	/**
+	 */
+	public function actionApprove()
+	{
+		$quoteModel = $this->_getQuoteModel();
+		
+		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quoteHelper->assertCanApproveQuote($quoteId);
+		
+		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
+		$dw->setExistingData($quoteId);
+		
+		$dw->set('quote_state', 'visible');
+		$dw->save();
+		
+		// regular redirect
+		return $this->responseRedirect(
+			XenForo_ControllerResponse_Redirect::SUCCESS,
+			XenForo_Link::buildPublicLink('quotes')
+		);
+	}
+	
+	/**
+	 */
+	public function actionUnapprove()
+	{
+		$quoteModel = $this->_getQuoteModel();
+		
+		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quoteHelper->assertCanApproveQuote($quoteId);
+		
+		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
+		$dw->setExistingData($quoteId);
+		
+		$dw->set('quote_state', 'moderated');
+		$dw->save();
+		
+		// regular redirect
+		return $this->responseRedirect(
+			XenForo_ControllerResponse_Redirect::SUCCESS,
+			XenForo_Link::buildPublicLink('quotes')
+		);
+	}
+	
+	/**
+	 */
+	public function actionDelete()
+	{
+		$quoteModel = $this->_getQuoteModel();
+		
+		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quoteHelper->assertCanDeleteQuote($quoteId);
+		
+		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
+		$dw->setExistingData($quoteId);
+		
+		$dw->set('quote_state', 'deleted');
+		$dw->save();
+		
+		// regular redirect
+		return $this->responseRedirect(
+			XenForo_ControllerResponse_Redirect::SUCCESS,
+			XenForo_Link::buildPublicLink('quotes')
+		);
+	}
+	
+	/**
+	 */
+	public function actionUndelete()
+	{
+		$quoteModel = $this->_getQuoteModel();
+		
+		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quoteHelper->assertCanUndeleteQuote($quoteId);
+		
+		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
+		$dw->setExistingData($quoteId);
+		
+		$dw->set('quote_state', 'moderated');
+		$dw->save();
+		
+		// regular redirect
+		return $this->responseRedirect(
+			XenForo_ControllerResponse_Redirect::SUCCESS,
+			XenForo_Link::buildPublicLink('quotes')
+		);
 	}
 
 	/**

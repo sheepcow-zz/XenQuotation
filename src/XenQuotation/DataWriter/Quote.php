@@ -40,7 +40,7 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 		}
 
 		return array(
-			'xq_quote' => $this->getModelFromCache('Quotation_Model_Quote')->getQuoteById(
+			'xq_quotation' => $this->getModelFromCache('XenQuotation_Model_Quote')->getQuoteById(
 				$quoteId, array('quoteStates' => array('new', 'approved', 'rejected'))
 			)
 		);

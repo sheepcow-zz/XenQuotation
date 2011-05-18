@@ -17,19 +17,19 @@
       <default_value>a:10:{s:5:"tag_b";s:1:"1";s:5:"tag_i";s:1:"1";s:5:"tag_u";s:1:"1";s:5:"tag_s";s:1:"1";s:9:"tag_color";s:1:"1";s:8:"tag_font";s:1:"1";s:8:"tag_size";s:1:"1";s:7:"tag_url";s:1:"1";s:9:"tag_email";s:1:"1";s:9:"tag_plain";s:1:"1";}</default_value>
       <edit_format_params>XenQuotation_Option_AllowedBbCode::renderOption</edit_format_params>
       <sub_options>*</sub_options>
-      <relation group_id="xenquotation" display_order="30"/>
-    </option>
-    <option option_id="xenquotePreviewLength" edit_format="spinbox" data_type="positive_integer" can_backup="1">
-      <default_value>100</default_value>
-      <edit_format_params></edit_format_params>
-      <sub_options></sub_options>
-      <relation group_id="xenquotation" display_order="20"/>
+      <relation group_id="xenquotation" display_order="500"/>
     </option>
     <option option_id="xenquoteQuotationsPerPage" edit_format="spinbox" data_type="positive_integer" can_backup="1">
       <default_value>25</default_value>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
-      <relation group_id="xenquotation" display_order="10"/>
+      <relation group_id="xenquotation" display_order="100"/>
+    </option>
+    <option option_id="xenquoteRandomQuote" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>false</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation" display_order="200"/>
     </option>
   </optiongroups>
   <permissions>
@@ -60,10 +60,10 @@
     <phrase title="option_group_xenquotation_description" version_id="11" version_string="1.0.0"><![CDATA[Options for the XenQuotation add-on.]]></phrase>
     <phrase title="option_xenquoteAllowedBbCode" version_id="11" version_string="1.0.0"><![CDATA[Allowed BB Code]]></phrase>
     <phrase title="option_xenquoteAllowedBbCode_explain" version_id="11" version_string="1.0.0"><![CDATA[Tick the BB code that you wish to allow in quotations.]]></phrase>
-    <phrase title="option_xenquotePreviewLength" version_id="11" version_string="1.0.0"><![CDATA[Quotation Preview Length]]></phrase>
-    <phrase title="option_xenquotePreviewLength_explain" version_id="11" version_string="1.0.0"><![CDATA[Maximum number of characters to display in quotation preview popups.]]></phrase>
     <phrase title="option_xenquoteQuotationsPerPage" version_id="11" version_string="1.0.0"><![CDATA[Quotations Per Page]]></phrase>
     <phrase title="option_xenquoteQuotationsPerPage_explain" version_id="11" version_string="1.0.0"><![CDATA[The number of quotations that are displayed per page in the quotation list.]]></phrase>
+    <phrase title="option_xenquoteRandomQuote" version_id="11" version_string="1.0.0"><![CDATA[Show Random Quote]]></phrase>
+    <phrase title="option_xenquoteRandomQuote_explain" version_id="11" version_string="1.0.0"><![CDATA[Show the random quote. This option enables the add-on to add a random quote to the sidebar.]]></phrase>
     <phrase title="permission_group_quote" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
     <phrase title="permission_interface_xenQuotationModeratorPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Moderator Permissions]]></phrase>
     <phrase title="permission_interface_xenQuotationPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
@@ -95,6 +95,8 @@
     <phrase title="xenquote_list_of_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[This is a list of quotations saved by {username}.]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
     <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
+    <phrase title="xenquote_no_permission_to_approve_or_unapprove" version_id="11" version_string="1.0.0"><![CDATA[You do not have permission to approve or unapprove this quotation.]]></phrase>
+    <phrase title="xenquote_no_permission_to_delete" version_id="11" version_string="1.0.0"><![CDATA[You do not have permission to delete this quotation.]]></phrase>
     <phrase title="xenquote_option_allowedbbcode_tag" version_id="11" version_string="1.0.0"><![CDATA[[{tag}]]]></phrase>
     <phrase title="xenquote_post_x" version_id="11" version_string="1.0.0"><![CDATA[Post {post}]]></phrase>
     <phrase title="xenquote_post_x_in_y" version_id="11" version_string="1.0.0"><![CDATA[Post {position} in {title}]]></phrase>
@@ -102,9 +104,13 @@
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
     <phrase title="xenquote_quotation_explain" version_id="11" version_string="1.0.0"><![CDATA[Please note that new lines will be removed from the quotation.]]></phrase>
+    <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
     <phrase title="xenquote_there_are_no_quotations_to_display" version_id="11" version_string="1.0.0"><![CDATA[There are no quotations to display.]]></phrase>
+    <phrase title="xenquote_this_quote_has_been_deleted" version_id="11" version_string="1.0.0"><![CDATA[This quotation has been deleted.]]></phrase>
+    <phrase title="xenquote_unapprove" version_id="11" version_string="1.0.0"><![CDATA[Unapprove]]></phrase>
+    <phrase title="xenquote_undelete" version_id="11" version_string="1.0.0"><![CDATA[Undelete]]></phrase>
     <phrase title="xenquote_viewing_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
     <phrase title="xenquote_viewing_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
     <phrase title="xenquote_viewing_quotations" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotations]]></phrase>
@@ -534,7 +540,11 @@
 </div>
 
 <div class="quotationList section sectionMain">
-	<form action="#" method="post">	
+	<form action="#" method="post"
+		class="InlineModForm"
+		data-cookieName="quotes"
+		data-controls="#InlineModControls"
+		data-imodOptions="#ModerationSelect option">	
 
 		<dl class="sectionHeaders">
 			<dt class="posterAvatar"><a><span>{xen:phrase sort_by}:</span></a></dt>			
@@ -562,9 +572,49 @@
 <div class="pageNavLinkGroup">
 	<xen:pagenav link="quotes" linkparams="{$pageNavParams}" page="{$page}" perpage="{$quotationsPerPage}" total="{$totalQuotations}" />
 </div>]]></template>
-    <template title="xenquote_quote_list_item" version_id="11" version_string="1.0.0"><![CDATA[<xen:require css="xenquote_quotation_list.css" />
+    <template title="xenquote_quote_list_item" version_id="11" version_string="1.0.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
 
-<li id="quote-{$quote.quote_id}" class="quotationListItem" data-author="{$quote.author.username}">
+	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
+		
+	<div class="listBlock main">
+		<div class="titleText">
+			<h3 class="title">
+				{xen:raw $quote.parsedQuotation}
+			</h3>
+			<div class="secondRow">
+				<div class="controls">
+					<xen:if is="{$quote.canApprove}"><a href="{xen:link 'quotes/approve', $quote}">{xen:phrase approve}</a></xen:if>
+					<xen:if is="{$quote.canUnapprove}"><a href="{xen:link 'quotes/unapprove', $quote}">{xen:phrase xenquote_unapprove}</a></xen:if>
+					<xen:if is="{$quote.canDelete}"><a href="{xen:link 'quotes/delete', $quote}">{xen:phrase delete}</a></xen:if>
+					<xen:if is="{$quote.canUndelete}"><a href="{xen:link 'quotes/undelete', $quote}">{xen:phrase xenquote_undelete}</a></xen:if>
+				</div>
+				<xen:if is="{$quote.quote_state} == 'deleted'">
+					<div class="deletionNote">
+						{xen:phrase xenquote_this_quote_has_been_deleted}
+					</div>
+				<xen:else />
+					<div class="attribution muted">
+						{xen:raw $quote.renderedAttribution}
+					</div>
+				</xen:if>
+			</div>
+		</div>
+	</div>
+		
+	<div class="listBlock stats pairsJustified">
+		<dl class="major"><dt>{xen:phrase likes}:</dt> <dd>{xen:number {$quote.likes}}</dd></dl>
+		<dl class="minor"><dt>{xen:phrase views}:</dt> <dd>{xen:number {$quote.views}}</dd></dl>
+	</div>
+
+	<div class="listBlock dateAdded">
+		<dl class="dateAddedInfo">
+			<dt><xen:username user="$quote.author" /></dt>
+			<dd class="muted dateTime"><xen:datetime time="$quote.quote_date" /></dd>
+		</dl>
+	</div>
+	
+</li>]]></template>
+    <template title="xenquote_quote_list_item_deleted" version_id="11" version_string="1.0.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
 		
@@ -666,7 +716,7 @@
 
 	<div class="listBlock main">
 		<div class="titleText">
-			<h3 class="title">{$i} <a href="{xen:link quotes, $quote}">{xen:helper highlight, $quote.parsedQuotation, $search.search_query, 'highlight'}</a></h3>
+			<h3 class="title">{$i} <a href="{xen:link quotes, $quote}">{xen:raw $quote.parsedQuotation}</a></h3>
 		</div>
 
 		<div class="meta">
@@ -675,5 +725,17 @@
 		</div>
 	</div>
 </li>]]></template>
+    <template title="xenquote_sidebar_random_quote" version_id="11" version_string="1.0.0"><![CDATA[<xen:if hascontent="true">
+	<!-- block: sidebar_random_quote -->
+	<div class="section randomQuote">
+		<div class="secondaryContent">
+			<h3>{xen:phrase xenquote_random_quotation}</h3>
+			<xen:contentcheck>
+				{$quote.parsedQuotation}
+			</xen:contentcheck>
+		</div>
+	</div>
+	<!-- end block: sidebar_random_quote -->
+</xen:if>]]></template>
   </templates>
 </addon>

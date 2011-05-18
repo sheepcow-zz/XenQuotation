@@ -3,18 +3,32 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
+	<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Event/TemplateHook.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>AlertHandler</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
 			<key>sourceDirectory</key>
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/AlertHandler</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>BbCode</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/BbCode</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>ControllerHelper</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerHelper</string>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -27,8 +41,6 @@
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>DataWriter</string>
 			<key>regexFolderFilter</key>
@@ -49,12 +61,8 @@
 		<dict>
 			<key>filename</key>
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Installation.php</string>
-			<key>lastUsed</key>
-			<date>2011-05-12T19:00:41Z</date>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>LikeHandler</string>
 			<key>regexFolderFilter</key>
@@ -76,6 +84,14 @@
 			<key>expanded</key>
 			<true/>
 			<key>name</key>
+			<string>Option</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Option</string>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Routes</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
@@ -83,8 +99,6 @@
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Routes</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>Search</string>
 			<key>regexFolderFilter</key>
@@ -93,8 +107,6 @@
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Search</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>ViewPublic</string>
 			<key>regexFolderFilter</key>
@@ -112,34 +124,81 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>38</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>92</integer>
+				<integer>50</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>33</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>82</integer>
+				<key>line</key>
+				<integer>50</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>50</integer>
+			</dict>
+		</dict>
+		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Event/TemplateHook.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>24</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>46</integer>
+			<integer>4</integer>
 		</dict>
 		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>50</integer>
+				<integer>45</integer>
 				<key>line</key>
-				<integer>118</integer>
+				<integer>12</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>92</integer>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>38</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>45</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
 		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</string>
+		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
+		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Event/TemplateHook.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

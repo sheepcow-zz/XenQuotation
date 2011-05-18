@@ -20,6 +20,21 @@ class XenQuotation_Event_TemplateHook
 			// append the xenquote_search_form_tabs template
 			$contents .= $template->create('xenquote_search_form_tabs', $viewParams)->render();
 		}
+		else if ($hookName == 'forum_list_sidebar' &&
+				 XenForo_Application::get('options')->xenquoteRandomQuote)
+		{
+			
+			$quote = array(
+				'quote_id' => 1,
+				'quotation' => 'quotation',
+				'parsedQuotation' => 'quotation'
+			);
+			
+			$viewParams = array('quote' => $quote);
+			
+			// add the random quote to the sidebar
+			$contents .= $template->create('xenquote_sidebar_random_quote', $viewParams)->render();
+		}
 	}
 }
 

@@ -167,6 +167,44 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	
 	/**
 	 */
+	public function addInlineModOptionToQuote(array &$quote, array $permissions = null, array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		
+		$modOptions = array();
+		
+		$canInlineMod = ($viewingUser['user_id'] && (
+			XenForo_Permission::hasPermission($permissions, 'quote', 'deleteAny')
+			|| XenForo_Permission::hasPermission($permissions, 'quote', 'undelete')
+			|| XenForo_Permission::hasPermission($permissions, 'quote', 'approveUnapprove')
+		));
+		
+		if ($canInlineMod)
+		{
+			if ($this->canDeleteQuote($quote, 'soft', $permissions, $viewingUser))
+			{
+				$modOptions['delete'] = true;
+			}
+			
+			if ($this->canUndeleteQuote($quote, $permissions, $viewingUser))
+			{
+				$modOptions['undelete'] = true;
+			}
+			
+			if ($this->canApproveUnapprove($quote, $permissions, $viewingUser))
+			{
+				$modOptions['approve'] = true;
+				$modOptions['unapprove'] = true;
+			}
+		}
+		
+		$quote['canInlineMod'] = (count($modOptions) > 0);
+
+		return $modOptions;
+	}
+	
+	/**
+	 */
 	public function prepareQuotation(array &$quote)
 	{
 		
@@ -206,12 +244,12 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		{
 			// attributed username is filled in, get the template helper
 			// to render the username	
-			$attribution[] = XenForo_Template_Helper_Core::helperUserName($quote['attributed_user'], 'dimmed');
+			$attribution[] = XenForo_Template_Helper_Core::helperUserName($quote['attributed_user']);
 		}
 		
 		if ($quote['attributed_date'] > 0)
 		{
-			$attribution[] = '<span class="dimmed">' . XenForo_Template_Helper_Core::date($quote['attributed_date']) . '</span>';
+			$attribution[] = '<span>' . XenForo_Template_Helper_Core::date($quote['attributed_date']) . '</span>';
 		}
 		
 		if ($quote['attributed_post_id'] != 0)
@@ -246,13 +284,13 @@ class XenQuotation_Model_Quote extends XenForo_Model
 				
 				$attribution[] = '<a href="' .
 				 	XenForo_Link::buildPublicLink('full:posts', array('post_id' => $post['post_id'])) . 
-				'" class="dimmed">' . $threadTitle . '</a>';
+				'">' . $threadTitle . '</a>';
 			}
 		}
 		
 		if (strlen(trim($quote['attributed_context'])) > 0)
 		{
-			$attribution[] = '<span class="context dimmed">' . $quote['attributed_context'] . '</span>';
+			$attribution[] = '<span class="context">' . $quote['attributed_context'] . '</span>';
 		}
 		
 		$quote['renderedAttribution'] = implode(', ', $attribution);
@@ -312,6 +350,52 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		}
 		
 		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'post');
+	}
+	
+	/**
+	 */
+	public function canDeleteQuote(array $quote, $deleteType = 'soft', array $permissions = null, array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		
+		if (!$viewingUser['user_id'])
+		{
+			return false;
+		}
+		
+		if ($deleteType != 'soft' && !XenForo_Permission::hasPermission($permissions, 'quote', 'hardDeleteAny'))
+		{
+			// fail immediately on hard delete without permission
+			return false;
+		}
+		
+		if (XenForo_Permission::hasPermission($permissions, 'quote', 'deleteAny'))
+		{
+			return true;
+		}
+		else if ($quote['author_user_id'] == $viewingUser['user_id'] &&
+				 XenForo_Permission::hasPermission($permissions, 'quote', 'deleteOwn'))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 */
+	public function canUndeleteQuote(array $quote, array $permissions = null, array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		return ($viewingUser['user_id']) && XenForo_Permission::hasPermission($permissions, 'quote', 'undelete');
+	}
+	
+	/**
+	 */
+	public function canApproveUnapprove(array $quote, array $permissions = null, array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		return ($viewingUser['user_id']) && XenForo_Permission::hasPermission($permissions, 'quote', 'approveUnapprove');
 	}
 	
 	/**
