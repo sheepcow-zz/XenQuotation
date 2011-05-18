@@ -117,6 +117,13 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	}
 	
 	/**
+	 */
+	public function getRandomQuotation()
+	{
+		return false;
+	}
+	
+	/**
 	 * Gets quote IDs in the specified range. The IDs returned will be those immediately
 	 * after the "start" value (not including the start), up to the specified limit.
 	 *

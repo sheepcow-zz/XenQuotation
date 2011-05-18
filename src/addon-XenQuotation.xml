@@ -109,6 +109,7 @@
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
     <phrase title="xenquote_there_are_no_quotations_to_display" version_id="11" version_string="1.0.0"><![CDATA[There are no quotations to display.]]></phrase>
     <phrase title="xenquote_this_quote_has_been_deleted" version_id="11" version_string="1.0.0"><![CDATA[This quotation has been deleted.]]></phrase>
+    <phrase title="xenquote_this_quote_waiting_approval" version_id="11" version_string="1.0.0"><![CDATA[This quotation is waiting to be approved by a moderator.]]></phrase>
     <phrase title="xenquote_unapprove" version_id="11" version_string="1.0.0"><![CDATA[Unapprove]]></phrase>
     <phrase title="xenquote_undelete" version_id="11" version_string="1.0.0"><![CDATA[Undelete]]></phrase>
     <phrase title="xenquote_viewing_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
@@ -341,6 +342,13 @@
 			{xen:property discussionListFirstRow}
 			float: left;
 		}
+
+		.quotationListItem .iconKey span
+		{
+			{xen:property dicussionListIcon}
+		}
+			
+			.quotationListItem .iconKey .moderated { background-image: url('{xen:property imagePath}/xenforo/icons/moderated.png'); }
 		
 		/* second row */
 		
@@ -429,6 +437,12 @@
 		float: left;
 		color: rgb(150,0,0);
 	}
+
+	.quotationList .quotationListItem.deleted .note
+	{
+		float: left;
+		font-weight: bold;
+	}
 		
 /* moderated item */
 
@@ -457,7 +471,7 @@
 
 <form action="{xen:link 'quotes/save', $quote}" method="post"
 	class="xenForm Preview AutoValidator"
-	data-previewUrl="{xen:link 'quotes/preview'}"
+	data-previewUrl="{xen:link 'quotes/edit-preview'}"
 	data-redirect="on">
 
 	<xen:if is="{$visitor.user_id} == 0">
@@ -513,6 +527,10 @@
 
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
+    <template title="xenquote_quote_edit_preview" version_id="11" version_string="1.0.0"><![CDATA[<div class="section">
+	<h3 class="subHeading">{xen:phrase preview}</h3>
+	<div class="messageText primaryContent baseHtml">{xen:raw $quote.parsedQuotation}</div>
+</div>]]></template>
     <template title="xenquote_quote_list" version_id="11" version_string="1.0.0"><![CDATA[<xen:if is="{$quotesByUser}">
 	<xen:title>{xen:phrase xenquote_quotations_added_by_x, 'username={$quotesByUser}'}{xen:helper pagenumber, $page}</xen:title>
 	<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
@@ -581,6 +599,15 @@
 			<h3 class="title">
 				{xen:raw $quote.parsedQuotation}
 			</h3>
+
+			<xen:if hascontent="true">
+				<div class="iconKey">
+				<xen:contentcheck>
+					<xen:if is="{$quote.isModerated}"><span class="moderated" title="{xen:phrase moderated}">{xen:phrase moderated}</span></xen:if>
+				</xen:contentcheck>
+				</div>
+			</xen:if>
+
 			<div class="secondRow">
 				<div class="controls">
 					<xen:if is="{$quote.canApprove}"><a href="{xen:link 'quotes/approve', $quote}">{xen:phrase approve}</a></xen:if>
@@ -588,7 +615,7 @@
 					<xen:if is="{$quote.canDelete}"><a href="{xen:link 'quotes/delete', $quote}">{xen:phrase delete}</a></xen:if>
 					<xen:if is="{$quote.canUndelete}"><a href="{xen:link 'quotes/undelete', $quote}">{xen:phrase xenquote_undelete}</a></xen:if>
 				</div>
-				<xen:if is="{$quote.quote_state} == 'deleted'">
+				<xen:if is="{$quote.isDeleted}">
 					<div class="deletionNote">
 						{xen:phrase xenquote_this_quote_has_been_deleted}
 					</div>
@@ -597,36 +624,6 @@
 						{xen:raw $quote.renderedAttribution}
 					</div>
 				</xen:if>
-			</div>
-		</div>
-	</div>
-		
-	<div class="listBlock stats pairsJustified">
-		<dl class="major"><dt>{xen:phrase likes}:</dt> <dd>{xen:number {$quote.likes}}</dd></dl>
-		<dl class="minor"><dt>{xen:phrase views}:</dt> <dd>{xen:number {$quote.views}}</dd></dl>
-	</div>
-
-	<div class="listBlock dateAdded">
-		<dl class="dateAddedInfo">
-			<dt><xen:username user="$quote.author" /></dt>
-			<dd class="muted dateTime"><xen:datetime time="$quote.quote_date" /></dd>
-		</dl>
-	</div>
-	
-</li>]]></template>
-    <template title="xenquote_quote_list_item_deleted" version_id="11" version_string="1.0.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem" data-author="{$quote.author.username}">
-
-	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
-		
-	<div class="listBlock main">
-		<div class="titleText">
-			<h3 class="title">
-				{xen:raw $quote.parsedQuotation}
-			</h3>
-			<div class="secondRow">
-				<div class="attribution">
-					{xen:raw $quote.renderedAttribution}
-				</div>
 			</div>
 		</div>
 	</div>

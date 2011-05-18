@@ -127,22 +127,22 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			$quoteModOptions = $quoteModel->addInlineModOptionToQuote($quote, $permissions);
 			$inlineModOptions += $quoteModOptions;
 			
-			if ($quoteModOptions['approve'] && $quote['quote_state'] == 'moderated')
+			if (!empty($quoteModOptions['approve']) && $quote['quote_state'] == 'moderated')
 			{
 				$quote['canApprove'] = true;
 			}
 			
-			if ($quoteModOptions['unapprove'] && $quote['quote_state'] == 'visible')
+			if (!empty($quoteModOptions['unapprove']) && $quote['quote_state'] == 'visible')
 			{
 				$quote['canUnapprove'] = true;
 			}
 			
-			if ($quoteModOptions['delete'] && $quote['quote_state'] != 'deleted')
+			if (!empty($quoteModOptions['delete']) && $quote['quote_state'] != 'deleted')
 			{
 				$quote['canDelete'] = true;
 			}
 			
-			if ($quoteModOptions['undelete'] && $quote['quote_state'] == 'deleted')
+			if (!empty($quoteModOptions['undelete']) && $quote['quote_state'] == 'deleted')
 			{
 				$quote['canUndelete'] = true;
 			}
@@ -313,9 +313,9 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
 		$quoteHelper->assertQuoteValidAndViewable($quoteId);
-		
+
 		$quote = $quoteModel->getQuoteById($quoteId);
-		$quoteModel->prepareQuotation($quote);
+		$quoteModel->prepareQuotation($quote);	
 		
 		$viewParams = array(
 			'quote' => $quote
@@ -338,6 +338,33 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	 */
 	public function actionEditPreview()
 	{
+		
+		$visitor = XenForo_Visitor::getInstance();
+		$quoteModel = $this->_getQuoteModel();
+		
+		$quote = array(
+			'attributed_username' => '',
+			'attributed_user_id' => 0,
+			'attributed_context' => '',
+			'attributed_post_id' => 0,
+			'attributed_date' => 0,
+			'author_user_id' => $visitor['user_id'],
+			'author_username' => $visitor['username'],
+			'quote_state' => 'visible'
+		);
+		
+		$quote['quotation'] = $this->getHelper('Editor')->getMessageText('quotation', $this->_input);
+		$quote['quotation'] = XenForo_Helper_String::autoLinkBbCode($quote['quotation']);
+
+		$quoteModel->prepareQuotation($quote);
+		
+		$viewParams = array(
+			'quote' => $quote
+		);
+
+		return $this->responseView(
+			'XenQuotation_ViewPublic_Quote_EditPreview', 'xenquote_quote_edit_preview', $viewParams
+		);
 	}
 	
 	/**
@@ -424,7 +451,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		// regular redirect
 		return $this->responseRedirect(
 			XenForo_ControllerResponse_Redirect::SUCCESS,
-			XenForo_Link::buildPublicLink('quotes', $quote)
+			XenForo_Link::buildPublicLink('quotes')
 		);
 	}
 	

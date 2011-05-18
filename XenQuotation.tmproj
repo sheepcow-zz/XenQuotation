@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Event/TemplateHook.php</string>
+	<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerHelper/Quote.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -23,6 +23,8 @@
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/BbCode</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>ControllerHelper</string>
 			<key>regexFolderFilter</key>
@@ -41,6 +43,8 @@
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>DataWriter</string>
 			<key>regexFolderFilter</key>
@@ -119,86 +123,70 @@
 	<integer>198</integer>
 	<key>metaData</key>
 	<dict>
-		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>50</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>33</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>82</integer>
-				<key>line</key>
-				<integer>50</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>50</integer>
-			</dict>
-		</dict>
-		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Event/TemplateHook.php</key>
+		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerHelper/Quote.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>3</integer>
 				<key>line</key>
-				<integer>24</integer>
+				<integer>70</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>4</integer>
+			<integer>57</integer>
+		</dict>
+		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>263</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>242</integer>
 		</dict>
 		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>45</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>12</integer>
+				<integer>185</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>169</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>38</integer>
+				<integer>16</integer>
 				<key>line</key>
-				<integer>12</integer>
+				<integer>185</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>45</integer>
+				<integer>24</integer>
 				<key>line</key>
-				<integer>12</integer>
+				<integer>185</integer>
 			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</string>
 		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Event/TemplateHook.php</string>
+		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerHelper/Quote.php</string>
+		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

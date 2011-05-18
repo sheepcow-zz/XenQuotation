@@ -24,16 +24,15 @@ class XenQuotation_Event_TemplateHook
 				 XenForo_Application::get('options')->xenquoteRandomQuote)
 		{
 			
-			$quote = array(
-				'quote_id' => 1,
-				'quotation' => 'quotation',
-				'parsedQuotation' => 'quotation'
-			);
+			$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
 			
-			$viewParams = array('quote' => $quote);
+			$quote = $quoteModel->getRandomQuotation();
 			
-			// add the random quote to the sidebar
-			$contents .= $template->create('xenquote_sidebar_random_quote', $viewParams)->render();
+			if ($quote)
+			{
+				// add the random quote to the sidebar
+				$contents .= $template->create('xenquote_sidebar_random_quote', array('quote' => $quote))->render();	
+			}
 		}
 	}
 }

@@ -50,7 +50,7 @@ class XenQuotation_Installation
 			"REPLACE INTO `xf_content_type`
 			(`content_type`, `addon_id`, `fields`)
 			VALUES
-			('quote', 'XenQuote', '" . serialize($contentType) . "')"
+			('quote', 'XenQuotation', '" . serialize($contentType) . "')"
 		);
 	}
 	
