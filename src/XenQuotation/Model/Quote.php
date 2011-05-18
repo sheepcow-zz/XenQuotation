@@ -244,6 +244,26 @@ class XenQuotation_Model_Quote extends XenForo_Model
 				'stopLineBreakConversion' => true // stops new lines being rendered as <br/>
 			)
 		);
+		
+		$visitor = XenForo_Visitor::getInstance();
+		
+		$quote['isLiked'] = false;
+		$quote['like_users'] = unserialize($quote['like_users']);
+		
+		if (is_array($quote['like_users']))
+		{
+			foreach ($quote['like_users'] as $u)
+			{
+				if ($u['user_id'] == $visitor['user_id'])
+				{
+					$quote['isLiked'] = true;
+					$quote['like_date'] = 1;
+					break;
+				}
+			}
+		}
+		
+		// Attribution
 
 		$attribution = array();
 		
@@ -341,6 +361,32 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		/* TODO: look at the state the quote is in */
 		
 		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'view');
+	}
+
+	/**
+	 * Indicates if the user is able to add a quotation.
+	 */
+	public function canLikeQuotation(array $quote, &$errorPhraseKey = '', array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		
+		if (!$viewingUser['user_id'])
+		{
+			return false;
+		}
+		
+		if ($quote['quote_state'] != 'visible')
+		{
+			return false;
+		}
+		
+		if ($quote['author_user_id'] == $viewingUser['user_id'])
+		{
+			$errorPhraseKey = 'liking_own_content_cheating';
+			return false;
+		}
+		
+		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'like');
 	}
 	
 	/**

@@ -5,13 +5,18 @@
  */
 class XenQuotation_AlertHandler_Quote extends XenForo_AlertHandler_DiscussionMessage
 {
+	protected $_quoteModel = null;
+	
 	/**
 	 * Gets the quote content.
 	 * @see XenForo_AlertHandler_Abstract::getContentByIds()
 	 */
 	public function getContentByIds(array $contentIds, $model, $userId, array $viewingUser)
 	{
-		return array();
+		$quoteModel = $this->_getQuoteModel();
+		$quotes = $quoteModel->getQuotesByIds($contentIds);
+		
+		return $quotes;
 	}
 	
 	/**
@@ -20,7 +25,22 @@ class XenQuotation_AlertHandler_Quote extends XenForo_AlertHandler_DiscussionMes
 	 */
 	public function canViewAlert(array $alert, $content, array $viewingUser)
 	{
-		return false;
+		return $this->_getQuoteModel()->canViewQuotation(
+			$content['quote_id'], $null, $viewingUser
+		);
+	}
+	
+	/**
+	 * @return XenQuotation_Model_Quote
+	 */
+	protected function _getQuoteModel()
+	{
+		if (!$this->_quoteModel)
+		{
+			$this->_quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
+		}
+
+		return $this->_quoteModel;
 	}
 		
 }

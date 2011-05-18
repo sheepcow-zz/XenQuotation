@@ -147,7 +147,13 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 				$quote['canUndelete'] = true;
 			}
 			
+			if ($quoteModel->canLikeQuotation($quote))
+			{
+				$quote['canLike'] = true;
+			}
+			
 			$quoteModel->prepareQuotation($quote);
+
 		}
 		unset($quote);
 		
@@ -479,6 +485,63 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	 */
 	public function actionLike()
 	{
+		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);
+		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quote = $quoteHelper->assertQuoteValidAndViewable($quoteId);
+
+		if (!$this->_getQuoteModel()->canLikeQuotation($quote, $errorPhraseKey))
+		{
+			throw $this->getErrorOrNoPermissionResponseException($errorPhraseKey);
+		}
+
+		$likeModel = $this->_getLikeModel();
+
+		$existingLike = $likeModel->getContentLikeByLikeUser('quote', $quoteId, XenForo_Visitor::getUserId());
+
+		if ($this->_request->isPost())
+		{
+			if ($existingLike)
+			{
+				$latestUsers = $likeModel->unlikeContent($existingLike);
+			}
+			else
+			{
+				$latestUsers = $likeModel->likeContent('quote', $quoteId, $quote['author_user_id']);
+			}
+
+			$liked = ($existingLike ? false : true);
+
+			if ($this->_noRedirect() && $latestUsers !== false)
+			{
+				$quote['likeUsers'] = $latestUsers;
+				$quote['likes'] += ($liked ? 1 : -1);
+				$quote['like_date'] = ($liked ? XenForo_Application::$time : 0);
+
+				$viewParams = array(
+					'quote' => $quote,
+					'liked' => $liked,
+				);
+
+				return $this->responseView('XenQuotation_ViewPublic_Quote_LikeConfirmed', '', $viewParams);
+			}
+			else
+			{
+				return $this->responseRedirect(
+					XenForo_ControllerResponse_Redirect::SUCCESS,
+					XenForo_Link::buildPublicLink('quotes')
+				);
+			}
+		}
+		else
+		{
+			$viewParams = array(
+				'quote' => $quote,
+				'like' => $existingLike
+			);
+
+			return $this->responseView('XenQuotation_ViewPublic_Quote_Like', 'xenquote_post_like', $viewParams);
+		}
 	}
 	
 	/**
@@ -535,6 +598,14 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		{
 			throw $this->getErrorOrNoPermissionResponseException($errorPhraseKey);
 		}
+	}
+
+	/**
+	 * @return XenForo_Model_Like
+	 */
+	protected function _getLikeModel()
+	{
+		return $this->getModelFromCache('XenForo_Model_Like');
 	}
 	
 	/**
