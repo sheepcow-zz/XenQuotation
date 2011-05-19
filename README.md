@@ -6,6 +6,14 @@ XenQuotation is an add-on for the XenForo (http://xenforo.com/) community softwa
 
 It's totally up to you why you want quotations, but the typical reason is so any particularly memorable quotes (e.g. funny, insightful, ridiculous, e.t.c.) can be saved away and found easily.
 
+# Installation
+
+1. Extract the zip file.
+2. Upload the _XenQuotation_ directory in the _src_ directory to the _library_ directory on your web server.
+3. Go to install add-on in the XenForo control panel.
+4. Select the _addon-XenQuotation.xml_ file that was in the zip.
+5. All done!
+
 # Features
 
 * Fully customisable permissions-based viewing, adding, editing, deleting and liking of quotations.
