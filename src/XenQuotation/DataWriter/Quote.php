@@ -110,7 +110,7 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 	 */
 	protected function _getSearchDataHandler()
 	{
-		// Gets the search-data handler for 'scratchpad_note' content type
+		// Gets the search-data handler for 'quote' content type
 		return $this->getModelFromCache('XenForo_Model_Search')->getSearchDataHandler('quote');
 	}
 	

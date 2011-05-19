@@ -46,12 +46,18 @@ class XenQuotation_Installation
 			'alert_handler_class' => 'XenQuotation_AlertHandler_Quote'
 		);
 	
-		$db->query(
+		/*$db->query(
 			"REPLACE INTO `xf_content_type`
 			(`content_type`, `addon_id`, `fields`)
 			VALUES
 			('quote', 'XenQuotation', '" . serialize($contentType) . "')"
-		);
+		);*/
+		
+		foreach ($contentType as $name => $value)
+		{
+			$db->query("INSERT INTO `xf_content_type_field` (`content_type`, `field_name`, `field_value`) 
+					    VALUES(?, ?, ?)", array('quote', $name, $value));
+		}
 	}
 	
 	/**
