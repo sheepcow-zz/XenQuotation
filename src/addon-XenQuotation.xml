@@ -653,7 +653,7 @@
 <div class="pageNavLinkGroup">
 	<xen:pagenav link="quotes" linkparams="{$pageNavParams}" page="{$page}" perpage="{$quotationsPerPage}" total="{$totalQuotations}" />
 </div>]]></template>
-    <template title="xenquote_quote_list_item" version_id="11" version_string="1.0.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
+    <template title="xenquote_quote_list_item" version_id="1" version_string="0.1.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
 		
@@ -700,7 +700,7 @@
 	<div class="listBlock dateAdded">
 		<dl class="dateAddedInfo">
 			<dt><xen:username user="$quote.author" /></dt>
-			<dd class="muted dateTime"><xen:datetime time="$quote.quote_date" /></dd>
+			<dd class="muted dateTime"><xen:if is="{$quote.quote_date} > 0"><xen:datetime time="$quote.quote_date" /></xen:if></dd>
 		</dl>
 	</div>
 	
