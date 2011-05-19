@@ -2,6 +2,8 @@
 
 XenQuotation is an add-on for the XenForo (http://xenforo.com/) community software. It allows members of your community to add and view quotations.
 
+See https://github.com/sheepcow/XenQuotation/wiki for more information.
+
 ## Why
 
 It's totally up to you why you want quotations, but the typical reason is so any particularly memorable quotes (e.g. funny, insightful, ridiculous, e.t.c.) can be saved away and found easily.
