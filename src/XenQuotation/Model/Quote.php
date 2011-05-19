@@ -108,19 +108,39 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		}
 		
 		$orderClause = $this->prepareQuoteOrderOptions($fetchOptions, 'quotation.quote_date');
+		$stateLimit = $this->prepareStateLimitFromConditions($fetchOptions, 'quotation', 'quote_state', 'author_user_id');
 		
 		return $this->fetchAllKeyed(
 			'SELECT quotation.* FROM xq_quotation AS quotation
-			 WHERE quotation.`quote_id` IN (' . $this->_getDb()->quote($quoteIds) . ') 
+			 WHERE quotation.`quote_id` IN (' . $this->_getDb()->quote($quoteIds) . ')
+			 AND (' . $stateLimit . ')
 			' . $orderClause . '
 		', 'quote_id');
 	}
 	
 	/**
 	 */
-	public function getRandomQuotation()
+	public function getRandomQuotation(array $fetchOptions = array())
 	{
-		return false;
+		$stateLimit = $this->prepareStateLimitFromConditions($fetchOptions, 'quotation', 'quote_state', 'author_user_id');
+		
+		if (!$tableInfo = $this->_getDb()->fetchRow(
+			'SELECT MAX(quotation.`quote_id`) AS max_id, MIN(quotation.`quote_id`) AS min_id
+				FROM `xq_quotation` AS `quotation`
+				WHERE (' . $stateLimit . ')'
+		))
+		{
+			return false;
+		}
+		
+		if ($tableInfo['max_id'] == 0 || $tableInfo['min_id'] == 0)
+		{
+			return false;
+		}
+		
+		$randomId = mt_rand($tableInfo['min_id'], $tableInfo['max_id']);
+
+		return $this->getQuoteById($randomId);
 	}
 	
 	/**

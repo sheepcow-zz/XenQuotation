@@ -26,12 +26,21 @@ class XenQuotation_Event_TemplateHook
 			
 			$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
 			
-			$quote = $quoteModel->getRandomQuotation();
+			$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions();
+			$quote = $quoteModel->getRandomQuotation($fetchOptions);
 			
 			if ($quote)
 			{
 				// add the random quote to the sidebar
-				$contents .= $template->create('xenquote_sidebar_random_quote', array('quote' => $quote))->render();	
+				$quoteModel->prepareQuotation($quote);
+				$quoteModel->quotationViewed($quote);
+				
+				$htmlContent = $template->create('xenquote_sidebar_random_quote', array('quote' => $quote))->render();
+				
+				$placeAbove = '<!-- block: forum_stats -->';
+				
+				$contents = str_replace($placeAbove, $htmlContent . $placeAbove, $contents);
+				
 			}
 		}
 	}

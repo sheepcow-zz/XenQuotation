@@ -854,16 +854,33 @@
 	</div>
 </li>]]></template>
     <template title="xenquote_sidebar_random_quote" version_id="11" version_string="1.0.0"><![CDATA[<xen:if hascontent="true">
+
+<xen:require css="xenquote_sidebar_random_quote.css" />
+
 	<!-- block: sidebar_random_quote -->
-	<div class="section randomQuote">
+	<div class="section randomQuotation">
 		<div class="secondaryContent">
 			<h3>{xen:phrase xenquote_random_quotation}</h3>
 			<xen:contentcheck>
-				{$quote.parsedQuotation}
+				<div class="quotation">
+					{$quote.parsedQuotation}
+				</div>
 			</xen:contentcheck>
+			<div class="muted attribution">
+				{xen:raw $quote.renderedAttribution}
+			</div>
 		</div>
 	</div>
 	<!-- end block: sidebar_random_quote -->
 </xen:if>]]></template>
+    <template title="xenquote_sidebar_random_quote.css" version_id="11" version_string="1.0.0"><![CDATA[.randomQuotation .quotation
+{
+	font-size: 11pt;
+}
+
+.randomQuotation .attribution
+{
+	padding: 6px 0 0 0;
+}]]></template>
   </templates>
 </addon>

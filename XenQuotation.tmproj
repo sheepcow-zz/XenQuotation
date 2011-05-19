@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ViewPublic/Quote/LikeConfirmed.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -119,6 +117,8 @@
 			<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Search</string>
 		</dict>
 		<dict>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>ViewPublic</string>
 			<key>regexFolderFilter</key>
@@ -130,72 +130,7 @@
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>198</integer>
 	<key>metaData</key>
-	<dict>
-		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>11</integer>
-				<key>line</key>
-				<integer>522</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>498</integer>
-		</dict>
-		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>28</integer>
-				<key>line</key>
-				<integer>259</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>238</integer>
-		</dict>
-		<key>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ViewPublic/Quote/LikeConfirmed.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>40</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>7</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>31</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>52</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/Model/Quote.php</string>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ViewPublic/Quote/LikeConfirmed.php</string>
-		<string>../../../Ben/Desktop/XenQuotation/src/XenQuotation/ControllerPublic/Quote.php</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
