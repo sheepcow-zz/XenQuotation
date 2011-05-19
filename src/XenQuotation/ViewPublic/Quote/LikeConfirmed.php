@@ -13,7 +13,8 @@ class XenQuotation_ViewPublic_Quote_LikeConfirmed extends XenForo_ViewPublic_Bas
 				'likesUrl' => XenForo_Link::buildPublicLink('quotes/likes', $message)
 			);
 
-			$output = $this->_renderer->getDefaultOutputArray(get_class($this), $params, 'likes_summary');
+			//$output = $this->_renderer->getDefaultOutputArray(get_class($this), $params, 'likes_summary');
+			$output = $this->_renderer->getDefaultOutputArray(get_class($this), $params, '');
 		}
 		else
 		{
