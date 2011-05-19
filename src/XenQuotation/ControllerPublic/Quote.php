@@ -177,6 +177,8 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			'orderDirection' => $sortDirection,
 			'orderParams' => $sortParams,
 			
+			'showPostedNotice' => ($this->_input->filterSingle('posted', XenForo_Input::UINT) == 1),
+			
 			'pageNavParams' => array(
 				'order' => ($sortOrder != $defaultSortOrder) ? $sortOrder : '',
 				'direction' => ($sortDirection != $defaultSortDirection) ? $sortDirection : ''
@@ -296,12 +298,61 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		/*TODO $this->_assertCanViewQuote($quoteId)*/
 		
-		$quote = $quoteModel->getQuoteById($quoteId);
+		$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions();
+		
+		$quote = $quoteModel->getQuoteById($quoteId, $fetchOptions);
 		$quoteModel->prepareQuotation($quote);
 		$quoteModel->quotationViewed($quote);
 		
+		$likesUsers = array();
+		$totalLikes = 0;
+		
+		foreach ($quote['like_users'] as $likeUser)
+		{
+			$likesUsers[] = $likeUser['username'];
+			$totalLikes++;
+		}
+		
+		$likeList = '';
+		
+		switch ($totalLikes)
+		{
+			case 0: 
+			break;
+				
+			case 1:
+				$likeList = new XenForo_Phrase(
+					'likes_user1_likes_this', 
+					array('user1' => $likesUsers[0])
+				);
+			break;
+				
+			case 2:
+				$likeList = new XenForo_Phrase(
+					'likes_user1_and_user2_like_this', 
+					array('user1' => $likesUsers[0], 'user2' => $likesUsers[1])
+				);
+			break;
+			
+			case 3:
+				$likeList = new XenForo_Phrase(
+					'likes_user1_user2_and_user3_like_this', 
+					array('user1' => $likesUsers[0], 'user2' => $likesUsers[1], 'user3' => $likesUsers[2])
+				);
+			break;
+			
+			default:
+				$lastUser = array_pop($likesUsers);
+				$likeList = implode(', ', $likesUsers) . ' ';
+				$likeList .= new XenForo_Phrase('xenquote_and_user_like_this', array(
+					'user' => $lastUser
+				));
+			break;
+		}
+		
 		$viewParams = array(
-			'quote' => $quote
+			'quote' => $quote,
+			'likeList' => $likeList
 		);
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'xenquote_quote_view', $viewParams);	
@@ -354,6 +405,9 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			'attributed_context' => '',
 			'attributed_post_id' => 0,
 			'attributed_date' => 0,
+			'likes' => 0,
+			'views' => 0,
+			'like_users' => 'a:0:{}',
 			'author_user_id' => $visitor['user_id'],
 			'author_username' => $visitor['username'],
 			'quote_state' => 'visible'
@@ -457,7 +511,8 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		// regular redirect
 		return $this->responseRedirect(
 			XenForo_ControllerResponse_Redirect::SUCCESS,
-			XenForo_Link::buildPublicLink('quotes')
+			XenForo_Link::buildPublicLink('quotes', '', array('posted' => 1)),
+			new XenForo_Phrase('xenquote_your_quotation_has_been_added')
 		);
 	}
 	

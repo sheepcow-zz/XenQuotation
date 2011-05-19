@@ -86,12 +86,15 @@
     <phrase title="xenquote_add_a_quoteation_now" version_id="11" version_string="1.0.0"><![CDATA[Add a quotation now]]></phrase>
     <phrase title="xenquote_add_quotation" version_id="11" version_string="1.0.0"><![CDATA[Add Quotation]]></phrase>
     <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
+    <phrase title="xenquote_and_user_like_this" version_id="11" version_string="1.0.0"><![CDATA[and {user} like this.]]></phrase>
     <phrase title="xenquote_attributed_date" version_id="11" version_string="1.0.0"><![CDATA[Attribution Date]]></phrase>
     <phrase title="xenquote_attributed_date_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the date that the quotation was originally said.]]></phrase>
     <phrase title="xenquote_attributed_to" version_id="11" version_string="1.0.0"><![CDATA[Attributed To]]></phrase>
     <phrase title="xenquote_attributed_to_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the name (or forum username) of the person that you are quoting.]]></phrase>
     <phrase title="xenquote_context" version_id="11" version_string="1.0.0"><![CDATA[Context]]></phrase>
     <phrase title="xenquote_context_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Add some context to the quotation.]]></phrase>
+    <phrase title="xenquote_date_added" version_id="11" version_string="1.0.0"><![CDATA[Date Added]]></phrase>
+    <phrase title="xenquote_like_quotation" version_id="11" version_string="1.0.0"><![CDATA[Like Quotation]]></phrase>
     <phrase title="xenquote_list_of_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[This is a list of quotations saved by {username}.]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
     <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
@@ -112,12 +115,19 @@
     <phrase title="xenquote_this_quote_waiting_approval" version_id="11" version_string="1.0.0"><![CDATA[This quotation is waiting to be approved by a moderator.]]></phrase>
     <phrase title="xenquote_unapprove" version_id="11" version_string="1.0.0"><![CDATA[Unapprove]]></phrase>
     <phrase title="xenquote_undelete" version_id="11" version_string="1.0.0"><![CDATA[Undelete]]></phrase>
+    <phrase title="xenquote_unlike_quotation" version_id="11" version_string="1.0.0"><![CDATA[Unlike Quotation]]></phrase>
     <phrase title="xenquote_viewing_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
     <phrase title="xenquote_viewing_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
     <phrase title="xenquote_viewing_quotations" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotations]]></phrase>
+    <phrase title="xenquote_x_liked_your_quotation_y" version_id="11" version_string="1.0.0"><![CDATA[{name} liked your quotation {title}]]></phrase>
+    <phrase title="xenquote_x_liked_ys_quotation_z" version_id="0" version_string=""><![CDATA[{name} liked {author}'s quotation {title}]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_added" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added.]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_added_moderated" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added, until it is approved by a moderator it will only be visible to you.]]></phrase>
     <phrase title="xenquote_your_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Added By You]]></phrase>
     <phrase title="xenquote_you_may_not_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[You may not add a new quotation]]></phrase>
     <phrase title="xenquote_you_must_enter_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[You must enter a quotation.]]></phrase>
+    <phrase title="xenquote_you_sure_you_want_to_like_this_quote" version_id="11" version_string="1.0.0"><![CDATA[Are you sure you want to like this quotation?]]></phrase>
+    <phrase title="xenquote_you_sure_you_want_to_unlike_this_quote" version_id="11" version_string="1.0.0"><![CDATA[Are you sure you want to unlike this quotation?]]></phrase>
   </phrases>
   <route_prefixes>
     <route_type type="public">
@@ -126,6 +136,9 @@
   </route_prefixes>
   <style_properties/>
   <templates>
+    <template title="alert_quote_like" version_id="11" version_string="1.0.0"><![CDATA[{xen:phrase xenquote_x_liked_your_quotation_y,
+	'name={xen:helper username, $user, 'subject'}',
+	'title=<a href="{xen:link quotes, $content}" class="PopupItemLink">{$content.quotation}</a>'}]]></template>
     <template title="xenquote_list_item_preview" version_id="11" version_string="1.0.0"><![CDATA[<div class="previewTooltip">
 	<xen:avatar user="$quote.author" size="s" />
 
@@ -143,6 +156,51 @@
 	<xen:if is="{$canSearch}"><li><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li></xen:if>
 </xen:hook>
 </ul>]]></template>
+    <template title="xenquote_news_feed_item_quotation_list" version_id="11" version_string="1.0.0"><![CDATA[<h3 class="description">
+
+	<xen:if is="{$content.user_id} == {$visitor.user_id}">
+	
+		<xen:comment><!-- $user liked your post --></xen:comment>
+		{xen:phrase xenquote_x_liked_your_quotation_y,
+			'name={xen:helper username, $user, 'primaryText'}',
+			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{$content.quotation}</a>'}
+		
+	<xen:else />
+	
+		<xen:comment><!-- $user liked $contentUser's post --></xen:comment>
+		{xen:phrase xenquote_x_liked_ys_quotation_z,
+			'name={xen:helper username, $user, 'primaryText'}',
+			'poster={$content.author_username}',
+			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{$content.quotation}</a>'}
+		
+	</xen:if>
+
+</h3>
+
+<p class="snippet">{xen:helper snippet, $content.quotation, 100, {xen:array 'stripQuote=1'}}</p>
+]]></template>
+    <template title="xenquote_post_like" version_id="11" version_string="1.0.0"><![CDATA[<xen:h1>{xen:if $like, '{xen:phrase xenquote_unlike_quotation}', '{xen:phrase xenquote_like_quotation}'}</xen:h1>
+
+<form action="{xen:link 'quotes/like', $quote}" method="post" class="xenForm">
+
+	<dl class="ctrlUnit fullWidth surplusLabel">
+		<dt></dt>
+		<dd>
+			<xen:if is="{$like}">
+				{xen:phrase xenquote_you_sure_you_want_to_unlike_this_quote}
+			<xen:else />
+				{xen:phrase xenquote_you_sure_you_want_to_like_this_quote}
+			</xen:if>
+		</dd>
+	</dl>
+
+	<dl class="ctrlUnit submitUnit">
+		<dt></dt>
+		<dd><input type="submit" value="{xen:if $like, '{xen:phrase xenquote_unlike_quotation}', '{xen:phrase xenquote_like_quotation}'}" accesskey="s" class="button primary" autofocus="true" /></dd>
+	</dl>
+
+	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
+</form>]]></template>
     <template title="xenquote_quotation_list.css" version_id="11" version_string="1.0.0"><![CDATA[.quotationList
 {
 	position: relative;
@@ -531,6 +589,7 @@
 	<h3 class="subHeading">{xen:phrase preview}</h3>
 	<div class="messageText primaryContent baseHtml">{xen:raw $quote.parsedQuotation}</div>
 </div>]]></template>
+    <template title="xenquote_quote_likeconfirmed" version_id="11" version_string="1.0.0"><![CDATA[L{$quote.liked}]]></template>
     <template title="xenquote_quote_list" version_id="11" version_string="1.0.0"><![CDATA[<xen:if is="{$quotesByUser}">
 	<xen:title>{xen:phrase xenquote_quotations_added_by_x, 'username={$quotesByUser}'}{xen:helper pagenumber, $page}</xen:title>
 	<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
@@ -552,6 +611,10 @@
 </xen:if>
 
 <xen:require css="xenquote_quotation_list.css" />
+
+<xen:if is="{$showPostedNotice}">
+	<div class="importantMessage">{xen:phrase xenquote_your_quotation_has_been_added_moderated}</div>
+</xen:if>
 
 <div class="pageNavLinkGroup">
 	<xen:pagenav link="quotes" linkparams="{$pageNavParams}" page="{$page}" perpage="{$quotationsPerPage}" total="{$totalQuotations}" />
@@ -609,11 +672,12 @@
 			</xen:if>
 
 			<div class="secondRow">
-				<div class="controls">
+				<div class="controls dimmed">
 					<xen:if is="{$quote.canApprove}"><a href="{xen:link 'quotes/approve', $quote}">{xen:phrase approve}</a></xen:if>
 					<xen:if is="{$quote.canUnapprove}"><a href="{xen:link 'quotes/unapprove', $quote}">{xen:phrase xenquote_unapprove}</a></xen:if>
 					<xen:if is="{$quote.canDelete}"><a href="{xen:link 'quotes/delete', $quote}">{xen:phrase delete}</a></xen:if>
 					<xen:if is="{$quote.canUndelete}"><a href="{xen:link 'quotes/undelete', $quote}">{xen:phrase xenquote_undelete}</a></xen:if>
+					<xen:if is="{$quote.canLike}"><a href="{xen:link 'quotes/like', $quote}" class="LikeLink {xen:if $quote.like_date, unlike, like}" data-container="#likes-quote-{$quote.quote_id}"><span></span><span class="LikeLabel">{xen:if $quote.like_date, {xen:phrase unlike}, {xen:phrase like}}</span></a></xen:if>
 				</div>
 				<xen:if is="{$quote.isDeleted}">
 					<div class="deletionNote">
@@ -629,7 +693,7 @@
 	</div>
 		
 	<div class="listBlock stats pairsJustified">
-		<dl class="major"><dt>{xen:phrase likes}:</dt> <dd>{xen:number {$quote.likes}}</dd></dl>
+		<dl class="major"><dt>{xen:phrase likes}:</dt> <dd id="likes-quote-{$quote.quote_id}"><span class="LikeText">{xen:number {$quote.likes}}</span></dd></dl>
 		<dl class="minor"><dt>{xen:phrase views}:</dt> <dd>{xen:number {$quote.views}}</dd></dl>
 	</div>
 
@@ -646,16 +710,83 @@
 
 <xen:require css="xenquote_quote_view.css" />
 
-<div class="section quotation">
-	{xen:raw $quote.parsedQuotation}
+<div class="section">
+	<div class="sectionMain">
+		<div class="primaryContent quotation">
+			{xen:raw $quote.parsedQuotation}
+		</div>
+		<xen:if hascontent="true">
+			<div class="secondaryContent">
+				<xen:contentcheck>
+					{xen:raw $quote.renderedAttribution}
+				</xen:contentcheck>
+			</div>
+		</xen:if>
+	</div>
 </div>
 
-<div class="sectionMain">
-	hello
+<div class="sectionFooter quotationAttributes">
+	<div class="attributeBlock">
+		<dl>
+			<dt>{xen:phrase xenquote_added_by}:</dt>
+			<dd><xen:username user="$quote.author" /></dd>
+		</dl>
+		<dl>
+			<dt>{xen:phrase xenquote_date_added}:</dt>
+			<dd><xen:datetime time="$quote.quote_date" /></dd>
+		</dl>
+	</div>
+	<div class="attributeBlock">
+		<dl>
+			<dt>{xen:phrase likes}:</dt>
+			<dd>{xen:number {$quote.likes}}</dd>
+		</dl>
+		<dl>
+			<dt>{xen:phrase views}:</dt>
+			<dd>{xen:number {$quote.views}}</dd>
+		</dl>
+	</div>
+	<div class="likeUsers">
+		<xen:if is="{$likeList}">
+			<strong>{xen:raw {$likeList}}</strong>
+		</xen:if>
+	</div>
 </div>]]></template>
     <template title="xenquote_quote_view.css" version_id="11" version_string="1.0.0"><![CDATA[.quotation
 {
 	font-size: 16pt;
+}
+
+.likeUsers
+{
+	clear: both;
+	padding: 4px 0 0 0;
+}
+
+.attributeBlock
+{
+	width: 50%;
+	float: left;
+}
+
+.quotationAttributes dl
+{
+	display: table;
+	table-layout: fixed;
+	padding: 2px 4px 2px 0;
+	width: 100%;
+}
+
+.quotationAttributes dl dt,
+.quotationAttributes dl dd
+{
+	display: table-cell;
+	width: 50%;
+}
+
+.quotationAttributes dl dt
+{
+	font-weight: bold;
 }]]></template>
     <template title="xenquote_search_form_quote" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_search_quotations}</xen:title>
 

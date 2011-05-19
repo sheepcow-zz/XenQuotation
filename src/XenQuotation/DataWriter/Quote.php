@@ -19,7 +19,7 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 												 'default' => XenForo_Application::$time),
 				'quotation'				=> array('type' => self::TYPE_STRING, 'required' => true,
 												 'requiredError' => 'xenquote_you_must_enter_a_quotation'),
-				'quote_state'			=> array('type' => self::TYPE_STRING, 'default' => 'visible',
+				'quote_state'			=> array('type' => self::TYPE_STRING, 'default' => 'moderated',
 												 'allowedValues' => array('visible', 'moderated', 'deleted')),				
 				'attributed_date'		=> array('type' => self::TYPE_UINT, 'default' => 0),
 				'attributed_context'	=> array('type' => self::TYPE_STRING, 'default' => ''),

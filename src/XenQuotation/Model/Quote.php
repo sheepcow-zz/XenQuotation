@@ -149,9 +149,12 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	 */
 	public function quotationViewed(array &$quote)
 	{
-		$quote['views']++;
-		
-		$this->_getDb()->query('UPDATE xq_quotation SET views = views + 1 WHERE quote_id = ?', $quote['quote_id']);
+		if ($quote['quote_state'] == 'visible')
+		{
+			$quote['views']++;
+
+			$this->_getDb()->query('UPDATE xq_quotation SET views = views + 1 WHERE quote_id = ?', $quote['quote_id']);	
+		}
 	}
 	
 	/**
@@ -162,8 +165,11 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		$quoteIds = array();
 		foreach ($quotes as $q => $quote)
 		{
-			$quotes[$q]['views']++;
-			$quoteIds[] = intval($quote['quote_id']);
+			if ($quote['quote_state'] == 'visible')
+			{
+				$quotes[$q]['views']++;
+				$quoteIds[] = intval($quote['quote_id']);	
+			}
 		}
 		
 		if (count($quoteIds) > 0)
@@ -320,7 +326,10 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			$attribution[] = '<span class="context">' . $quote['attributed_context'] . '</span>';
 		}
 		
-		$quote['renderedAttribution'] = implode(', ', $attribution);
+		if (count($attribution) > 0)
+		{
+			$quote['renderedAttribution'] = implode(', ', $attribution);
+		}
 		
 		return $quote;
 	}
