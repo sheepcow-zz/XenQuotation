@@ -99,6 +99,9 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			}
 		}
 		
+		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
+		$quoteHelper->assertCanViewQuotes();
+		
 		$orderParams = array();
 		
 		$quoteFetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions() + array(

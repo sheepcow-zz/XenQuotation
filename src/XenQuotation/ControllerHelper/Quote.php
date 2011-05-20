@@ -38,6 +38,18 @@ class XenQuotation_ControllerHelper_Quote extends XenForo_ControllerHelper_Abstr
 	
 	/**
 	 */
+	public function assertCanViewQuotes()
+	{
+		$permissions = $this->_visitor->getPermissions();
+		
+		if (!XenForo_Permission::hasPermission($permissions, 'quote', 'view'))
+		{
+			throw $this->_controller->getErrorOrNoPermissionResponseException('xenquote_no_permission_to_view_quotations');
+		}
+	}
+	
+	/**
+	 */
 	public function assertQuoteValidAndViewable($quoteId)
 	{
 		$quote = $this->getQuoteOrError($quoteId);
@@ -46,6 +58,10 @@ class XenQuotation_ControllerHelper_Quote extends XenForo_ControllerHelper_Abstr
 		
 		if (!$quoteModel->canViewQuotation($quoteId, $errorPhraseKey))
 		{
+			if ($errorPhraseKey == '')
+			{
+				$errorPhraseKey = 'xenquote_no_permission_to_view_quotations';
+			}
 			throw $this->_controller->getErrorOrNoPermissionResponseException($errorPhraseKey);
 		}
 		
