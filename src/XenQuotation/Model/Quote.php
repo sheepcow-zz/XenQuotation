@@ -255,16 +255,34 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	 */
 	public function prepareQuotation(array &$quote)
 	{
+		$userIds = array($quote['author_user_id'], $quote['attributed_user_id']);
 		
-		$quote['attributed_user'] = array(
-			'username' => $quote['attributed_username'],
-			'user_id' => $quote['attributed_user_id']
-		);
+		$userModel = $this->_getUserModel();
+		$users = $userModel->getUsersByIds($userIds);
+
+		if (!empty($users[$quote['author_user_id']])) 
+		{
+			$quote['author'] = $users[$quote['author_user_id']];
+		}
+		else
+		{
+			$quote['author'] = array(
+				'username' => $quote['author_username'],
+				'user_id' => $quote['author_user_id']
+			);
+		}
 		
-		$quote['author'] = array(
-			'username' => $quote['author_username'],
-			'user_id' => $quote['author_user_id']
-		);
+		if (!empty($users[$quote['attributed_user_id']])) 
+		{
+			$quote['attributed_user'] = $users[$quote['attributed_user_id']];
+		}
+		else
+		{
+			$quote['attributed_user'] = array(
+				'username' => $quote['attributed_username'],
+				'user_id' => $quote['attributed_user_id']
+			);
+		}
 		
 		if ($quote['quote_state'] == 'moderated')
 		{
@@ -365,6 +383,9 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		{
 			$quote['renderedAttribution'] = implode(', ', $attribution);
 		}
+		
+		// quotations can be previewed
+		$quote['hasPreview'] = true;
 		
 		return $quote;
 	}
@@ -529,6 +550,11 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		}
 		
 		return $this->_bbCodeParser;
+	}
+	
+	protected function _getUserModel()
+	{
+		return $this->getModelFromCache('XenForo_Model_User');
 	}
 	
 }
