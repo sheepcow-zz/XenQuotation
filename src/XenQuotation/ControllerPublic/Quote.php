@@ -487,8 +487,52 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		$input = $this->_input->filter(array(
 			'context' => XenForo_Input::STRING,
 			'attributedDate' => XenForo_Input::DATE_TIME,
-			'attributedTo' => XenForo_Input::STRING
+			'attributedTo' => XenForo_Input::STRING,
 		));
+		
+		if ($this->_input->inRequest('post'))
+		{
+			$postId = $this->_input->filterSingle('post', XenForo_Input::UINT);
+			
+			$threadFetchOptions = array(
+				'readUserId' => $visitor['user_id'],
+				'watchUserId' => $visitor['user_id'],
+				'join' => XenForo_Model_Thread::FETCH_AVATAR
+			);
+			$forumFetchOptions = array(
+				'readUserId' => $visitor['user_id']
+			);
+			
+			$postModel = $this->_getPostModel();
+			$post = $postModel->getPostById($postId);
+			
+			if ($post)
+			{
+				$threadModel = $this->_getThreadModel();
+				$thread = $threadModel->getThreadById($post['thread_id']);
+				
+				if ($thread)
+				{
+					$forumModel = $this->_getForumModel();
+					$forum = $forumModel->getForumById($thread['node_id']);
+					
+					if ($forum)
+					{
+						if ($postModel->canViewPostAndContainer($post, $thread, $forum))
+						{
+							$input['attributedTo'] = $post['username'];
+							$input['attributedDate'] = $post['post_date'];
+							
+							$dw->set('attributed_post_id', $postId);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			
+		}
 		
 		// parse the attributedTo field to determine if it
 		// is a forum username.
@@ -540,12 +584,56 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		$defaultMessage = '';
 		$quote = false;
-
+		
 		$viewParams = array(
 			'defaultMessage' => $defaultMessage,
 			'captcha' => XenForo_Captcha_Abstract::createDefault(),
-			'quote' => $quote
 		);
+		
+		if ($this->_input->inRequest('post'))
+		{
+			$visitor = XenForo_Visitor::getInstance();
+			$postId = $this->_input->filterSingle('post', XenForo_Input::UINT);
+			
+			$threadFetchOptions = array(
+				'readUserId' => $visitor['user_id'],
+				'watchUserId' => $visitor['user_id'],
+				'join' => XenForo_Model_Thread::FETCH_AVATAR
+			);
+			$forumFetchOptions = array(
+				'readUserId' => $visitor['user_id']
+			);
+			
+			$postModel = $this->_getPostModel();
+			$post = $postModel->getPostById($postId);
+			
+			if ($post)
+			{
+				$threadModel = $this->_getThreadModel();
+				$thread = $threadModel->getThreadById($post['thread_id']);
+				
+				if ($thread)
+				{
+					$forumModel = $this->_getForumModel();
+					$forum = $forumModel->getForumById($thread['node_id']);
+					
+					if ($forum)
+					{
+						if ($postModel->canViewPostAndContainer($post, $thread, $forum))
+						{
+							$viewParams += array(
+								'forum' => $forum,
+								'thread' => $thread,
+								'post' => $post
+							);
+							
+							$viewParams['defaultMessage'] = XenForo_Helper_String::stripQuotes($post['message'], 0);
+						}
+					}
+				}
+			}
+			
+		}
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_Create', 'xenquote_quote_create', $viewParams);
 	}
@@ -692,6 +780,30 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	protected function _getUserModel()
 	{
 		return $this->getModelFromCache('XenForo_Model_User');
+	}
+
+	/**
+	 * @return XenForo_Model_Forum
+	 */
+	protected function _getForumModel()
+	{
+		return $this->getModelFromCache('XenForo_Model_Forum');
+	}
+	
+	/**
+	 * @return XenForo_Model_Thread
+	 */
+	protected function _getThreadModel()
+	{
+		return $this->getModelFromCache('XenForo_Model_Thread');
+	}
+	
+	/**
+	 * @return XenForo_Model_Post
+	 */
+	protected function _getPostModel()
+	{
+		return $this->getModelFromCache('XenForo_Model_Post');
 	}
 }
 

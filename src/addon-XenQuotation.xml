@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.0" version_id="1" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
+<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.1" version_id="2" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -89,6 +89,7 @@
     <phrase title="xenquote_and_user_like_this" version_id="11" version_string="1.0.0"><![CDATA[and {user} like this.]]></phrase>
     <phrase title="xenquote_attributed_date" version_id="11" version_string="1.0.0"><![CDATA[Attribution Date]]></phrase>
     <phrase title="xenquote_attributed_date_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the date that the quotation was originally said.]]></phrase>
+    <phrase title="xenquote_attributed_post" version_id="1" version_string="0.1.0"><![CDATA[Attributed Post]]></phrase>
     <phrase title="xenquote_attributed_to" version_id="11" version_string="1.0.0"><![CDATA[Attributed To]]></phrase>
     <phrase title="xenquote_attributed_to_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the name (or forum username) of the person that you are quoting.]]></phrase>
     <phrase title="xenquote_context" version_id="11" version_string="1.0.0"><![CDATA[Context]]></phrase>
@@ -536,7 +537,7 @@
 		float: left;
 		display: block;
 	}]]></template>
-    <template title="xenquote_quote_create" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>
+    <template title="xenquote_quote_create" version_id="1" version_string="0.1.0"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>
 
 <xen:container var="$head.robots">
 	<meta name="robots" content="noindex" />
@@ -556,19 +557,37 @@
 
 	<xen:include template="helper_captcha_unit" />
 
+	<xen:if is="{$post}">
+		<input type="hidden" name="post" value="{$post.post_id}" />
+		<dl class="ctrlUnit">
+			<dt>{xen:phrase xenquote_attributed_post}:</dt>
+			<dd>
+				<a href="{xen:link 'posts', $post}">{xen:phrase xenquote_post_x_in_y, 'position={xen:calc '{$post.position} + 1'}', 'title={$thread.title}'}</a>
+			</dd>
+		</dl>
+	</xen:if>
+
 	<dl class="ctrlUnit">
 		<dt><label for="ctrl_attributedTo">{xen:phrase xenquote_attributed_to}:</label></dt>
 		<dd>
-			<input type="text" name="attributedTo" id="ctrl_attributedTo" value="" class="textCtrl AutoComplete" />
-			<p class="explain">{xen:phrase xenquote_attributed_to_explain}</p>
+			<xen:if is="{$post}">
+				{$post.username}
+			<xen:else/>
+				<input type="text" name="attributedTo" id="ctrl_attributedTo" value="" class="textCtrl AutoComplete" />
+				<p class="explain">{xen:phrase xenquote_attributed_to_explain}</p>
+			</xen:if>
 		</dd>
 	</dl>
 
 	<dl class="ctrlUnit">
 		<dt><label for="ctrl_attributedDate">{xen:phrase xenquote_attributed_date}:</label></dt>
 		<dd>
-			<input type="date" name="attributedDate" value="" class="textCtrl" id="ctrl_attributedDate" />
-			<p class="explain">{xen:phrase xenquote_attributed_date_explain}</p>
+			<xen:if is="{$post}">
+				<xen:datetime time="$post.post_date" />
+			<xen:else/>
+				<input type="date" name="attributedDate" value="" class="textCtrl" id="ctrl_attributedDate" />
+				<p class="explain">{xen:phrase xenquote_attributed_date_explain}</p>
+			</xen:if>
 		</dd>
 	</dl>
 
