@@ -423,9 +423,29 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			return false;
 		}
 		
-		/* TODO: look at the state the quote is in */
+		$viewQuotations = XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'view');
+		$viewModerated = XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'viewModerated');
+		$viewDeleted = XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'viewDeleted');
 		
-		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'view');
+		if (!$viewQuotations)
+		{
+			$errorPhraseKey = 'xenquote_no_permission_to_view_this_quotation';
+			return false;
+		}
+		
+		if (!$viewModerated && $quote['quote_state'] == 'moderated')
+		{
+			$errorPhraseKey = 'xenquote_no_permission_to_view_this_quotation';
+			return false;
+		}
+		
+		if (!$viewDeleted && $quote['quote_state'] == 'deleted')
+		{
+			$errorPhraseKey = 'xenquote_no_permission_to_view_this_quotation';
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
