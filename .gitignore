@@ -1,3 +1,5 @@
 # Ignore the TextMate project
 *.tmproj
+
+# Ignore the downloads, they're added separately
 *.zip

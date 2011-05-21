@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.1" version_id="2" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
+<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.2" version_id="3" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -114,6 +114,7 @@
     <phrase title="xenquote_quotation_status" version_id="2" version_string="0.1.1"><![CDATA[Quotation Status]]></phrase>
     <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
+    <phrase title="xenquote_save_quotation" version_id="2" version_string="0.1.1"><![CDATA[Save Quotation]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
     <phrase title="xenquote_there_are_no_quotations_to_display" version_id="11" version_string="1.0.0"><![CDATA[There are no quotations to display.]]></phrase>
     <phrase title="xenquote_this_quote_has_been_deleted" version_id="11" version_string="1.0.0"><![CDATA[This quotation has been deleted.]]></phrase>
