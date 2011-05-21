@@ -84,7 +84,10 @@ class XenQuotation_Installation
 		$db = XenForo_Application::get('db');
 		
 		// remove the table from the database
-		$db->query("DROP TABLE IF EXISTS xq_quotation");
+		$db->query('DROP TABLE IF EXISTS xq_quotation');
+		
+		// remove the content type handlers
+		$db->query('DELETE FROM `xf_content_type_field` WHERE `content_type` = ?', array('quote'));
 	}
 	
 }
