@@ -110,6 +110,7 @@
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
     <phrase title="xenquote_quotation_explain" version_id="11" version_string="1.0.0"><![CDATA[Please note that new lines will be removed from the quotation.]]></phrase>
+    <phrase title="xenquote_quotation_status" version_id="2" version_string="0.1.1"><![CDATA[Quotation Status]]></phrase>
     <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
@@ -746,10 +747,24 @@
 	</div>
 	
 </li>]]></template>
-    <template title="xenquote_quote_view" version_id="11" version_string="1.0.0"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
+    <template title="xenquote_quote_view" version_id="2" version_string="0.1.1"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
 <xen:h1></xen:h1>
 
 <xen:require css="xenquote_quote_view.css" />
+
+<xen:if hascontent="true">
+	<dl class="quotationAlerts">
+		<dt>{xen:phrase xenquote_quotation_status}:</dt>
+		<xen:contentcheck>
+			<xen:if is="{$quote.isModerated}">
+				<dd>{xen:phrase moderated}</dd>
+			</xen:if>
+			<xen:if is="{$quote.isDeleted}">
+				<dd>{xen:phrase deleted}</dd>
+			</xen:if>
+		</xen:contentcheck>
+	</dl>
+</xen:if>
 
 <div class="section">
 	<div class="sectionMain">
@@ -793,7 +808,29 @@
 		</xen:if>
 	</div>
 </div>]]></template>
-    <template title="xenquote_quote_view.css" version_id="11" version_string="1.0.0"><![CDATA[.quotation
+    <template title="xenquote_quote_view.css" version_id="2" version_string="0.1.1"><![CDATA[.quotationAlerts
+{
+	border: 1px solid {xen:property primaryLighterStill};
+	border-radius: 5px;
+	font-size: 11px;
+	margin: 10px 0;
+	padding: 5px 10px;
+}
+	
+	.quotationAlerts dt
+	{
+		color: {xen:property primaryLight};
+		display: inline;
+	}
+	
+	.quotationAlerts dd
+	{
+		color: {xen:property primaryDark};
+		font-weight: bold;
+		display: inline;
+	}
+
+.quotation
 {
 	font-size: 16pt;
 }
