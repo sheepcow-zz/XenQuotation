@@ -94,6 +94,8 @@ class XenQuotation_Installation
 		// remove the content type handlers
 		$db->query('DELETE FROM `xf_content_type` WHERE `addon_id` = ?', array('XenQuotation'));
 		$db->query('DELETE FROM `xf_content_type_field` WHERE `content_type` = ?', array('quote'));
+		
+		// TODO: tidy up the search index
 	}
 	
 }

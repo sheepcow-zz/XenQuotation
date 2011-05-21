@@ -100,6 +100,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			}
 		}
 		
+		// check they can actually view any quotations
 		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
 		$quoteHelper->assertCanViewQuotes();
 		
