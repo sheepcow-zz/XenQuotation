@@ -109,6 +109,7 @@
     <phrase title="xenquote_quotation" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
+    <phrase title="xenquote_quotation_by" version_id="2" version_string="0.1.1"><![CDATA[Quotation By]]></phrase>
     <phrase title="xenquote_quotation_explain" version_id="11" version_string="1.0.0"><![CDATA[Please note that new lines will be removed from the quotation.]]></phrase>
     <phrase title="xenquote_quotation_status" version_id="2" version_string="0.1.1"><![CDATA[Quotation Status]]></phrase>
     <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
@@ -915,7 +916,7 @@
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
     <template title="xenquote_search_form_tabs" version_id="11" version_string="1.0.0"><![CDATA[		<li{xen:if "{$searchType} == 'quote'", ' class="active"'}><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li>]]></template>
-    <template title="xenquote_search_result_quote" version_id="1" version_string="0.1.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="searchResult post primaryContent" data-author="{$quote.author.username}">
+    <template title="xenquote_search_result_quote" version_id="2" version_string="0.1.1"><![CDATA[<li id="quote-{$quote.quote_id}" class="searchResult post primaryContent" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>
 
@@ -927,7 +928,7 @@
 		</div>
 
 		<div class="meta">
-			{xen:phrase post_by}: <xen:username user="$quote.author" />,
+			{xen:phrase xenquote_quotation_by}: <xen:username user="$quote.author" />,
 			<xen:datetime time="{$quote.quote_date}" />
 		</div>
 	</div>

@@ -61,18 +61,23 @@ class XenQuotation_Installation
 			'alert_handler_class' => 'XenQuotation_AlertHandler_Quote'
 		);
 	
-		/*$db->query(
+		$db->query(
 			"REPLACE INTO `xf_content_type`
 			(`content_type`, `addon_id`, `fields`)
 			VALUES
-			('quote', 'XenQuotation', '" . serialize($contentType) . "')"
-		);*/
+			('quote', 'XenQuotation', ?)",
+			array(serialize(array()))
+		);
 		
 		foreach ($contentType as $name => $value)
 		{
-			$db->query("INSERT INTO `xf_content_type_field` (`content_type`, `field_name`, `field_value`) 
+			$db->query("REPLACE INTO `xf_content_type_field` (`content_type`, `field_name`, `field_value`) 
 					    VALUES(?, ?, ?)", array('quote', $name, $value));
 		}
+		
+		// force a content type cache rebuild, (TODO: probably not needed)
+		XenForo_Model::create('XenForo_Model_ContentType')->rebuildContentTypeCache();
+
 	}
 	
 	/**
@@ -87,6 +92,7 @@ class XenQuotation_Installation
 		$db->query('DROP TABLE IF EXISTS xq_quotation');
 		
 		// remove the content type handlers
+		$db->query('DELETE FROM `xf_content_type` WHERE `addon_id` = ?', array('XenQuotation'));
 		$db->query('DELETE FROM `xf_content_type_field` WHERE `content_type` = ?', array('quote'));
 	}
 	

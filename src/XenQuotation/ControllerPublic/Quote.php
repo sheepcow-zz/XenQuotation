@@ -27,6 +27,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	 */
 	public function actionIndex()
 	{
+		
 		if ($this->_input->inRequest('quote_id'))
 		{
 			// a quote id has been supplied, redirect to view the quote
