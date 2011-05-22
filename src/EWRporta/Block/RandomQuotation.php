@@ -20,8 +20,13 @@
  */
 class EWRporta_Block_RandomQuotation extends XenForo_Model
 {	
-	public function getBypass()
+	public function getModule()
 	{		
+		if (!$addon = $this->getModelFromCache('XenForo_Model_AddOn')->getAddOnById('XenQuotation') || empty($addon['active']))
+		{
+			return "killModule";
+		}
+		
 		$quoteModel = $this->getModelFromCache('XenQuotation_Model_Quote');
 		
 		$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions();
