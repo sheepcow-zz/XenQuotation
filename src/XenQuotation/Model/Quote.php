@@ -134,9 +134,14 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	}
 	
 	/**
+	 * Random Quotation overrides moderator permissions to only display
+	 * visible quotations.
 	 */
 	public function getRandomQuotation(array $fetchOptions = array())
 	{
+		unset($fetchOptions['moderated']);
+		unset($fetchOptions['deleted']);
+		
 		$stateLimit = $this->prepareStateLimitFromConditions($fetchOptions, 'quotation', 'quote_state', 'author_user_id');
 		
 		if (!$tableInfo = $this->_getDb()->fetchRow(

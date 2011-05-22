@@ -8,6 +8,7 @@
   <code_event_listeners>
     <listener event_id="navigation_tabs" execute_order="10" callback_class="XenQuotation_Event_NavigationTabs" callback_method="listen" active="1" description="Adds the quotes navigation tab."/>
     <listener event_id="template_hook" execute_order="10" callback_class="XenQuotation_Event_TemplateHook" callback_method="listen" active="1" description="Adds a tab to allow searching quotations."/>
+    <listener event_id="widget_framework_ready" execute_order="10" callback_class="XenQuotation_Event_WidgetFrameworkReady" callback_method="listen" active="1" description="Adds the random quotation widget to the [bd] Widget Framework (if installed)"/>
   </code_event_listeners>
   <cron/>
   <email_templates/>
@@ -934,34 +935,36 @@
 		</div>
 	</div>
 </li>]]></template>
-    <template title="xenquote_sidebar_random_quote" version_id="11" version_string="1.0.0"><![CDATA[<xen:if hascontent="true">
-
-<xen:require css="xenquote_sidebar_random_quote.css" />
+    <template title="xenquote_sidebar_random_quote" version_id="3" version_string="0.1.2"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
 
 	<!-- block: sidebar_random_quote -->
 	<div class="section randomQuotation">
 		<div class="secondaryContent">
-			<h3>{xen:phrase xenquote_random_quotation}</h3>
-			<xen:contentcheck>
-				<div class="quotation">
-					{$quote.parsedQuotation}
-				</div>
-			</xen:contentcheck>
-			<div class="muted attribution">
-				{xen:raw $quote.renderedAttribution}
-			</div>
+			<h3><a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical">{xen:phrase xenquote_random_quotation}</a></h3>
+			<xen:include template="xenquote_sidebar_random_quote_content" />
 		</div>
 	</div>
-	<!-- end block: sidebar_random_quote -->
-</xen:if>]]></template>
-    <template title="xenquote_sidebar_random_quote.css" version_id="11" version_string="1.0.0"><![CDATA[.randomQuotation .quotation
+	<!-- end block: sidebar_random_quote -->]]></template>
+    <template title="xenquote_sidebar_random_quote.css" version_id="3" version_string="0.1.2"><![CDATA[.sidebar .section .quotation
 {
 	font-size: 11pt;
 }
 
-.randomQuotation .attribution
+.sidebar .section .quotationAttribution
 {
 	padding: 6px 0 0 0;
 }]]></template>
+    <template title="xenquote_sidebar_random_quote_content" version_id="3" version_string="0.1.2"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
+
+<xen:if is="{$quote}">
+	<div class="quotation">
+		{xen:raw $quote.parsedQuotation}
+	</div>
+	<div class="muted quotationAttribution">
+		<a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical" class="dimmed">#{$quote.quote_id}</a> {xen:raw $quote.renderedAttribution}
+	</div>
+<xen:else />
+	{xen:phrase xenquote_there_are_no_quotations_to_display}
+</xen:if>]]></template>
   </templates>
 </addon>
