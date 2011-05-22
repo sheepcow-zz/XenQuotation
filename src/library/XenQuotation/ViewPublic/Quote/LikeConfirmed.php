@@ -23,22 +23,11 @@ class XenQuotation_ViewPublic_Quote_LikeConfirmed extends XenForo_ViewPublic_Bas
 	 */
 	public function renderJson()
 	{
-		$message = $this->_params['quote'];
+		$params = array(
+			'quote' => $this->_params['quote']
+		);
 
-		if (!empty($message['likeUsers']))
-		{
-			$params = array(
-				'message' => $message,
-				'likesUrl' => XenForo_Link::buildPublicLink('quotes/likes', $message)
-			);
-
-			//$output = $this->_renderer->getDefaultOutputArray(get_class($this), $params, 'likes_summary');
-			$output = $this->_renderer->getDefaultOutputArray(get_class($this), $params, '');
-		}
-		else
-		{
-			$output = array('templateHtml' => '', 'js' => '', 'css' => '');
-		}
+		$output = $this->_renderer->getDefaultOutputArray(get_class($this), $params, 'xenquote_quote_list_likecounter');
 		
 		if ($this->_params['liked'])
 		{

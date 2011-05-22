@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.3" version_id="13" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
+<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.3" version_id="14" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -630,7 +630,7 @@
 	<div class="messageText primaryContent baseHtml">{xen:raw $quote.parsedQuotation}</div>
 </div>]]></template>
     <template title="xenquote_quote_likeconfirmed" version_id="11" version_string="1.0.0"><![CDATA[L{$quote.liked}]]></template>
-    <template title="xenquote_quote_list" version_id="1" version_string="0.1.0"><![CDATA[<xen:if is="{$quotesByUser}">
+    <template title="xenquote_quote_list" version_id="13" version_string="0.1.3"><![CDATA[<xen:if is="{$quotesByUser}">
 	<xen:title>{xen:phrase xenquote_quotations_added_by_x, 'username={$quotesByUser}'}{xen:helper pagenumber, $page}</xen:title>
 	<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
 	<xen:description>{xen:phrase xenquote_list_of_quotations_added_by_x, 'username={$quotesByUser}'}</xen:description>
@@ -650,6 +650,7 @@
 	</xen:topctrl>
 </xen:if>
 
+<xen:require js="js/xenquotation/likecounter.js" />
 <xen:require css="xenquote_quotation_list.css" />
 
 <xen:if is="{$showPostedNotice}">
@@ -696,7 +697,7 @@
 
 <xen:require css="xenquote_list_item_preview.css" />
 <xen:include template="preview_tooltip" />]]></template>
-    <template title="xenquote_quote_list_item" version_id="1" version_string="0.1.0"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
+    <template title="xenquote_quote_list_item" version_id="13" version_string="0.1.3"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
 		
@@ -722,7 +723,7 @@
 					<xen:if is="{$quote.canUnapprove}"><a href="{xen:link 'quotes/unapprove', $quote}">{xen:phrase xenquote_unapprove}</a></xen:if>
 					<xen:if is="{$quote.canDelete}"><a href="{xen:link 'quotes/delete', $quote}">{xen:phrase delete}</a></xen:if>
 					<xen:if is="{$quote.canUndelete}"><a href="{xen:link 'quotes/undelete', $quote}">{xen:phrase xenquote_undelete}</a></xen:if>
-					<xen:if is="{$quote.canLike}"><a href="{xen:link 'quotes/like', $quote}" class="LikeLink {xen:if $quote.like_date, unlike, like}" data-container="#likes-quote-{$quote.quote_id}"><span></span><span class="LikeLabel">{xen:if $quote.like_date, {xen:phrase unlike}, {xen:phrase like}}</span></a></xen:if>
+					<xen:if is="{$quote.canLike}"><a href="{xen:link 'quotes/like', $quote}" class="LikeCounter {xen:if $quote.like_date, unlike, like}" data-container="#likes-quote-{$quote.quote_id}"><span></span><span class="LikeLabel">{xen:if $quote.like_date, {xen:phrase unlike}, {xen:phrase like}}</span></a></xen:if>
 				</div>
 				<xen:if is="{$quote.isDeleted}">
 					<div class="deletionNote">
@@ -750,6 +751,7 @@
 	</div>
 	
 </li>]]></template>
+    <template title="xenquote_quote_list_likecounter" version_id="13" version_string="0.1.3"><![CDATA[<span class="LikeText">{$quote.likes}</span>]]></template>
     <template title="xenquote_quote_view" version_id="2" version_string="0.1.1"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
 <xen:h1></xen:h1>
 
