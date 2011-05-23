@@ -29,6 +29,113 @@ class XenForo_ControllerPublic_InlineMod_Quotation extends XenForo_ControllerPub
 	 */
 	public $inlineModKey = 'quotes';
 	
+	/**
+	 * @return XenQuotation_Model_InlineMod_Quote
+	 */
+	public function getInlineModTypeModel()
+	{
+		return $this->_getInlineModQuoteModel();
+	}
+	
+	/**
+	 * Approves the specified threads.
+	 *
+	 * @return XenForo_ControllerResponse_Abstract
+	 */
+	public function actionApprove()
+	{
+		return $this->executeInlineModAction('approveQuotes');
+	}
+
+	/**
+	 * Unapproves the specified threads.
+	 *
+	 * @return XenForo_ControllerResponse_Abstract
+	 */
+	public function actionUnapprove()
+	{
+		return $this->executeInlineModAction('unapproveQuotes');
+	}
+	
+	/**
+	 * Undeletes the specified threads.
+	 *
+	 * @return XenForo_ControllerResponse_Abstract
+	 */
+	public function actionUndelete()
+	{
+		return $this->executeInlineModAction('undeleteQuotes');
+	}
+	
+	/**
+	 * Deletes a quotation.
+	 *
+	 * @return XenForo_ControllerResponse_Abstract
+	 */
+	public function actionDelete()
+	{
+		if ($this->isConfirmedPost())
+		{
+			$quoteIds = $this->getInlineModIds();
+
+			$hardDelete = $this->_input->filterSingle('hard_delete', XenForo_Input::STRING);
+			$options = array(
+				'deleteType' => ($hardDelete ? 'hard' : 'soft'),
+				'reason' => $this->_input->filterSingle('reason', XenForo_Input::STRING)
+			);
+
+			$deleted = $this->_getInlineModQuoteModel()->deleteQuotes(
+				$quoteIds, $options, $errorPhraseKey
+			);
+			if (!$deleted)
+			{
+				throw $this->getErrorOrNoPermissionResponseException($errorPhraseKey);
+			}
+
+			$this->clearCookie();
+
+			return $this->responseRedirect(
+				XenForo_ControllerResponse_Redirect::SUCCESS,
+				$this->getDynamicRedirect(false, false)
+			);
+		}
+		else
+		{
+			$quoteIds = $this->getInlineModIds();
+			$quoteModel = $this->_getQuoteModel();
+			
+			$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions();
+			$quotes = $quoteModel->getQuotesByIds($quoteIds, $fetchOptions);
+			
+			foreach ($quotes as $quote)
+			{
+				if (!$quoteModel->canDeleteQuote($quote, 'soft'))
+				{
+					throw $this->getErrorOrNoPermissionResponseException();
+				}
+			}
+
+			$redirect = $this->getDynamicRedirect();
+
+			if (!$quoteIds)
+			{
+				return $this->responseRedirect(
+					XenForo_ControllerResponse_Redirect::SUCCESS,
+					$redirect
+				);
+			}
+
+			$viewParams = array(
+				'quoteIds' => $quoteIds,
+				'quoteCount' => count($quoteIds),
+				'canHardDelete' => $quoteModel->canDeleteQuotes('hard'),
+				'redirect' => $redirect,
+			);
+
+			return $this->responseView('XenQuotation_ViewPublic_InlineMod_Quote_Delete', 'xenquote_inline_mod_quote_delete', $viewParams);
+		}
+	}
+	
 	public function _getInlineModQuoteModel()
 	{
 		return $this->getModelFromCache('XenQuotation_Model_InlineMod_Quote');

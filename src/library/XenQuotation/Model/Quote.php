@@ -220,9 +220,10 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	
 	/**
 	 */
-	public function addInlineModOptionToQuote(array &$quote, array $permissions = null, array $viewingUser = null)
+	public function addInlineModOptionToQuote(array &$quote, array $viewingUser = null)
 	{
 		$this->standardizeViewingUserReference($viewingUser);
+		$permissions = $viewingUser['permissions'];
 		
 		$modOptions = array();
 		
@@ -234,17 +235,17 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		
 		if ($canInlineMod)
 		{
-			if ($this->canDeleteQuote($quote, 'soft', $permissions, $viewingUser))
+			if ($this->canDeleteQuote($quote, 'soft', $viewingUser))
 			{
 				$modOptions['delete'] = true;
 			}
 			
-			if ($this->canUndeleteQuote($quote, $permissions, $viewingUser))
+			if ($this->canUndeleteQuotes($viewingUser))
 			{
 				$modOptions['undelete'] = true;
 			}
 			
-			if ($this->canApproveUnapprove($quote, $permissions, $viewingUser))
+			if ($this->canApproveUnapproveQuotes($viewingUser))
 			{
 				$modOptions['approve'] = true;
 				$modOptions['unapprove'] = true;
@@ -497,9 +498,10 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	
 	/**
 	 */
-	public function canDeleteQuote(array $quote, $deleteType = 'soft', array $permissions = null, array $viewingUser = null)
+	public function canDeleteQuote(array $quote, $deleteType = 'soft', array $viewingUser = null)
 	{
 		$this->standardizeViewingUserReference($viewingUser);
+		$permissions = $viewingUser['permissions'];
 		
 		if (!$viewingUser['user_id'])
 		{
@@ -524,20 +526,43 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		
 		return false;
 	}
+
+	/**
+	 */
+	public function canDeleteQuotes($deleteType = 'soft', array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		$permissions = $viewingUser['permissions'];
+		
+		if ($deleteType == 'hard')
+		{
+			$permission = XenForo_Permission::hasPermission($permissions, 'quote', 'hardDeleteAny');
+		}
+		else
+		{
+			$permission = XenForo_Permission::hasPermission($permissions, 'quote', 'deleteAny');
+		}
+		
+		return ($viewingUser['user_id']) && $permission;
+	}
 	
 	/**
 	 */
-	public function canUndeleteQuote(array $quote, array $permissions = null, array $viewingUser = null)
+	public function canUndeleteQuotes(array $viewingUser = null)
 	{
 		$this->standardizeViewingUserReference($viewingUser);
+		$permissions = $viewingUser['permissions'];
+		
 		return ($viewingUser['user_id']) && XenForo_Permission::hasPermission($permissions, 'quote', 'undelete');
 	}
 	
 	/**
 	 */
-	public function canApproveUnapprove(array $quote, array $permissions = null, array $viewingUser = null)
+	public function canApproveUnapproveQuotes(array $viewingUser = null)
 	{
 		$this->standardizeViewingUserReference($viewingUser);
+		$permissions = $viewingUser['permissions'];
+		
 		return ($viewingUser['user_id']) && XenForo_Permission::hasPermission($permissions, 'quote', 'approveUnapprove');
 	}
 	

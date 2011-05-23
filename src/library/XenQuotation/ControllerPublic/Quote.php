@@ -140,11 +140,10 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		// prepare all quotes for the quote list
 		$inlineModOptions = array();
-		$permissions = $visitor->getPermissions();
 		
 		foreach ($quotes as &$quote)
 		{
-			$quoteModOptions = $quoteModel->addInlineModOptionToQuote($quote, $permissions);
+			$quoteModOptions = $quoteModel->addInlineModOptionToQuote($quote);
 			$inlineModOptions += $quoteModOptions;
 			
 			if (!empty($quoteModOptions['approve']) && $quote['quote_state'] == 'moderated')
@@ -206,102 +205,6 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		);
 		
 		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'xenquote_quote_list', $viewParams);
-	}
-	
-	/**
-	 */
-	public function actionApprove()
-	{
-		$quoteModel = $this->_getQuoteModel();
-		
-		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
-		
-		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
-		$quoteHelper->assertCanApproveQuote($quoteId);
-		
-		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
-		$dw->setExistingData($quoteId);
-		
-		$dw->set('quote_state', 'visible');
-		$dw->save();
-		
-		// regular redirect
-		return $this->responseRedirect(
-			XenForo_ControllerResponse_Redirect::SUCCESS,
-			XenForo_Link::buildPublicLink('quotes')
-		);
-	}
-	
-	/**
-	 */
-	public function actionUnapprove()
-	{
-		$quoteModel = $this->_getQuoteModel();
-		
-		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
-		
-		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
-		$quoteHelper->assertCanApproveQuote($quoteId);
-		
-		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
-		$dw->setExistingData($quoteId);
-		
-		$dw->set('quote_state', 'moderated');
-		$dw->save();
-		
-		// regular redirect
-		return $this->responseRedirect(
-			XenForo_ControllerResponse_Redirect::SUCCESS,
-			XenForo_Link::buildPublicLink('quotes')
-		);
-	}
-	
-	/**
-	 */
-	public function actionDelete()
-	{
-		$quoteModel = $this->_getQuoteModel();
-		
-		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
-		
-		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
-		$quoteHelper->assertCanDeleteQuote($quoteId);
-		
-		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
-		$dw->setExistingData($quoteId);
-		
-		$dw->set('quote_state', 'deleted');
-		$dw->save();
-		
-		// regular redirect
-		return $this->responseRedirect(
-			XenForo_ControllerResponse_Redirect::SUCCESS,
-			XenForo_Link::buildPublicLink('quotes')
-		);
-	}
-	
-	/**
-	 */
-	public function actionUndelete()
-	{
-		$quoteModel = $this->_getQuoteModel();
-		
-		$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);		
-		
-		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
-		$quoteHelper->assertCanUndeleteQuote($quoteId);
-		
-		$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
-		$dw->setExistingData($quoteId);
-		
-		$dw->set('quote_state', 'moderated');
-		$dw->save();
-		
-		// regular redirect
-		return $this->responseRedirect(
-			XenForo_ControllerResponse_Redirect::SUCCESS,
-			XenForo_Link::buildPublicLink('quotes')
-		);
 	}
 
 	/**
@@ -534,10 +437,6 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 				}
 			}
 		}
-		else
-		{
-			
-		}
 		
 		// parse the attributedTo field to determine if it
 		// is a forum username.
@@ -577,18 +476,6 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			XenForo_ControllerResponse_Redirect::SUCCESS,
 			XenForo_Link::buildPublicLink('quotes', '', array('posted' => 1)),
 			new XenForo_Phrase('xenquote_your_quotation_has_been_added')
-		);
-	}
-	
-	/**
-	 * Inline moderation.
-	 */
-	public function actionInlineModSwitch()
-	{
-		$viewParams = array();
-		
-		return $this->responseView(
-			'XenQuotation_ViewPublic_Quote_InlineMod_Switch', 'DEFAULT', $viewParams
 		);
 	}
 	

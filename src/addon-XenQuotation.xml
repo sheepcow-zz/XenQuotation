@@ -99,6 +99,7 @@
     <phrase title="xenquote_date_added" version_id="11" version_string="1.0.0"><![CDATA[Date Added]]></phrase>
     <phrase title="xenquote_delete_quotations" version_id="14" version_string="0.1.3"><![CDATA[Delete Quotations]]></phrase>
     <phrase title="xenquote_deselect_quotations" version_id="14" version_string="0.1.3"><![CDATA[Deselect Quotations]]></phrase>
+    <phrase title="xenquote_inline_moderation_delete_quotations" version_id="14" version_string="0.1.3"><![CDATA[Inline Moderation - Delete Quotations]]></phrase>
     <phrase title="xenquote_like_quotation" version_id="11" version_string="1.0.0"><![CDATA[Like Quotation]]></phrase>
     <phrase title="xenquote_list_of_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[This is a list of quotations saved by {username}.]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
@@ -143,6 +144,7 @@
     <phrase title="xenquote_your_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Added By You]]></phrase>
     <phrase title="xenquote_you_may_not_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[You may not add a new quotation]]></phrase>
     <phrase title="xenquote_you_must_enter_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[You must enter a quotation.]]></phrase>
+    <phrase title="xenquote_you_sure_you_want_to_delete_x_quotes" version_id="14" version_string="0.1.3"><![CDATA[Are you sure you want to delete {count} quotation(s)?]]></phrase>
     <phrase title="xenquote_you_sure_you_want_to_like_this_quote" version_id="11" version_string="1.0.0"><![CDATA[Are you sure you want to like this quotation?]]></phrase>
     <phrase title="xenquote_you_sure_you_want_to_unlike_this_quote" version_id="11" version_string="1.0.0"><![CDATA[Are you sure you want to unlike this quotation?]]></phrase>
   </phrases>
@@ -168,6 +170,26 @@
 	<xen:set var="$checkboxTitle">{xen:phrase xenquote_select_deselect_all_quotations_on_this_page}</xen:set>
 	<xen:set var="$selectedItemsPhrase">{xen:phrase xenquote_selected_quotations}</xen:set>
 </xen:include>]]></template>
+    <template title="xenquote_inline_mod_quote_delete" version_id="14" version_string="0.1.3"><![CDATA[<xen:title>{xen:phrase xenquote_inline_moderation_delete_quotations}</xen:title>
+
+<form action="{xen:link 'inline-mod/quotation/delete'}" method="post" class="xenForm formOverlay">
+	<p>{xen:phrase xenquote_you_sure_you_want_to_delete_x_quotes, 'count={$quoteCount}'}</p>
+
+	<xen:include template="helper_deletion_type_unit" />
+
+	<dl class="ctrlUnit submitUnit">
+		<dt></dt>
+		<dd><input type="submit" name="save" value="{xen:phrase xenquote_delete_quotations}" accesskey="s" class="button primary" /></dd>
+	</dl>
+
+	<xen:foreach loop="$quoteIds" value="$quoteId">
+		<input type="hidden" name="quotes[]" value="{$quoteId}" />
+	</xen:foreach>
+
+	<input type="hidden" name="_xfConfirm" value="1" />
+	<input type="hidden" name="redirect" value="{$redirect}" />
+	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
+</form>]]></template>
     <template title="xenquote_list_item_preview" version_id="1" version_string="0.1.0"><![CDATA[<div class="previewTooltip">
 	<xen:avatar user="$quote.author" size="s" />
 
