@@ -6,9 +6,11 @@ var XenQuotation = {};
 XenForo.register('a.LikeCounter', 'XenQuotation.LikeCounter');
 
 /**
- * Handles a like / unlike link being clicked 
- * and a like counter needs to be updated.
+ * Handles a like / unlike link being clicked and a like counter 
+ * needs to be updated. This code is is only a minor change on
+ * XenForo.LikeLink
  *
+ * @see XenForo.LikeLink
  * @param jQuery a.LikeCounter
  */
 XenQuotation.LikeCounter = function($link)

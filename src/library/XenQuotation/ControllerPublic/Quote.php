@@ -581,6 +581,18 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	}
 	
 	/**
+	 * Inline moderation.
+	 */
+	public function actionInlineModSwitch()
+	{
+		$viewParams = array();
+		
+		return $this->responseView(
+			'XenQuotation_ViewPublic_Quote_InlineMod_Switch', 'DEFAULT', $viewParams
+		);
+	}
+	
+	/**
 	 * Create a new quote
 	 */
 	public function actionCreateQuote()
