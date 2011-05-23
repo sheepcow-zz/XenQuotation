@@ -112,39 +112,55 @@ class XenQuotation_Model_InlineMod_Quote extends XenForo_Model
 	 */
 	public function deleteQuotes(array $quoteIds, array $options = array(), &$errorKey = '', array $viewingUser = null)
 	{
+		
+		$options = array_merge(
+			array(
+				'deleteType' => '',
+				'reason' => ''
+			), $options
+		);
+		
+		if (!$options['deleteType'])
+		{
+			throw new XenForo_Exception('No deletion type specified.');
+		}
+		
 		$quoteModel = $this->_getQuoteModel();
 		
 		$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions($viewingUser);
 		$quotes = $quoteModel->getQuotesByIds($quoteIds, $fetchOptions);
-		
-		if (!empty($options['deleteType']) && $options['deleteType'] == 'hard')
-		{
-			$deleteType = 'hard';
-		}
-		else
-		{
-			$deleteType = 'soft';
-		}
 
 		if (!empty($options['skipPermissions']))
 		{
-			foreach ($quotes as $quoteId => $quote)
+			foreach ($quotes as $quote)
 			{
-				if (!$quoteModel->canDeleteQuote($quote, $deleteType, $viewingUser))
+				if (!$quoteModel->canDeleteQuote($quote, $options['deleteType'], $viewingUser))
 				{
 					return false;
 				}
 			}
 		}
 		
-		if ($deleteType == 'soft')
+		foreach ($quotes as $quote)
 		{
-			$this->_updateQuotesState($quotes, 'deleted');
-		}
-		else
-		{
-			// TODO: support hard delete
-			$this->_updateQuotesState($quotes, 'deleted');
+			$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote', XenForo_DataWriter::ERROR_SILENT);
+			$dw->setExistingData($quote);
+				
+			if (!$dw->get('quote_id'))
+			{
+				// may happen if already deleted
+				continue;
+			}
+			
+			if ($options['deleteType'] == 'hard')
+			{
+				$dw->delete();
+			}
+			else
+			{
+				$dw->set('quote_state', 'deleted');
+				$dw->save();
+			}
 		}
 
 		return true;
