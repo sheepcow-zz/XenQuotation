@@ -88,6 +88,7 @@
     <phrase title="xenquote_add_quotation" version_id="11" version_string="1.0.0"><![CDATA[Add Quotation]]></phrase>
     <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
     <phrase title="xenquote_and_user_like_this" version_id="11" version_string="1.0.0"><![CDATA[and {user} like this.]]></phrase>
+    <phrase title="xenquote_approve_quotations" version_id="14" version_string="0.1.3"><![CDATA[Approve Quotations]]></phrase>
     <phrase title="xenquote_attributed_date" version_id="11" version_string="1.0.0"><![CDATA[Attribution Date]]></phrase>
     <phrase title="xenquote_attributed_date_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the date that the quotation was originally said.]]></phrase>
     <phrase title="xenquote_attributed_post" version_id="1" version_string="0.1.0"><![CDATA[Attributed Post]]></phrase>
@@ -96,6 +97,8 @@
     <phrase title="xenquote_context" version_id="11" version_string="1.0.0"><![CDATA[Context]]></phrase>
     <phrase title="xenquote_context_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Add some context to the quotation.]]></phrase>
     <phrase title="xenquote_date_added" version_id="11" version_string="1.0.0"><![CDATA[Date Added]]></phrase>
+    <phrase title="xenquote_delete_quotations" version_id="14" version_string="0.1.3"><![CDATA[Delete Quotations]]></phrase>
+    <phrase title="xenquote_deselect_quotations" version_id="14" version_string="0.1.3"><![CDATA[Deselect Quotations]]></phrase>
     <phrase title="xenquote_like_quotation" version_id="11" version_string="1.0.0"><![CDATA[Like Quotation]]></phrase>
     <phrase title="xenquote_list_of_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[This is a list of quotations saved by {username}.]]></phrase>
     <phrase title="xenquote_list_of_quotations_by_members_of_x" version_id="10" version_string="1.0.0"><![CDATA[This is a list of quotations saved by the members of {board_title}.]]></phrase>
@@ -112,16 +115,23 @@
     <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
     <phrase title="xenquote_quotation_by" version_id="2" version_string="0.1.1"><![CDATA[Quotation By]]></phrase>
     <phrase title="xenquote_quotation_explain" version_id="11" version_string="1.0.0"><![CDATA[Please note that new lines will be removed from the quotation.]]></phrase>
+    <phrase title="xenquote_quotation_moderation" version_id="14" version_string="0.1.3"><![CDATA[Quotation Moderation]]></phrase>
     <phrase title="xenquote_quotation_status" version_id="2" version_string="0.1.1"><![CDATA[Quotation Status]]></phrase>
     <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_save_quotation" version_id="2" version_string="0.1.1"><![CDATA[Save Quotation]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
+    <phrase title="xenquote_selected_quotations" version_id="14" version_string="0.1.3"><![CDATA[Selected quotations]]></phrase>
+    <phrase title="xenquote_select_deselect_all_quotations_on_this_page" version_id="14" version_string="0.1.3"><![CDATA[Select / deselect all quotations on this page]]></phrase>
+    <phrase title="xenquote_select_quotation" version_id="14" version_string="0.1.3"><![CDATA[Select Quotation]]></phrase>
+    <phrase title="xenquote_showing_quotations_x_to_y_of_z" version_id="14" version_string="0.1.3"><![CDATA[Showing quotations {start} to {end} of {total}]]></phrase>
     <phrase title="xenquote_there_are_no_quotations_to_display" version_id="11" version_string="1.0.0"><![CDATA[There are no quotations to display.]]></phrase>
     <phrase title="xenquote_this_quote_has_been_deleted" version_id="11" version_string="1.0.0"><![CDATA[This quotation has been deleted.]]></phrase>
     <phrase title="xenquote_this_quote_waiting_approval" version_id="11" version_string="1.0.0"><![CDATA[This quotation is waiting to be approved by a moderator.]]></phrase>
     <phrase title="xenquote_unapprove" version_id="11" version_string="1.0.0"><![CDATA[Unapprove]]></phrase>
+    <phrase title="xenquote_unapprove_quotations" version_id="14" version_string="0.1.3"><![CDATA[Unapprove Quotations]]></phrase>
     <phrase title="xenquote_undelete" version_id="11" version_string="1.0.0"><![CDATA[Undelete]]></phrase>
+    <phrase title="xenquote_undelete_quotations" version_id="14" version_string="0.1.3"><![CDATA[Undelete Quotations]]></phrase>
     <phrase title="xenquote_unlike_quotation" version_id="11" version_string="1.0.0"><![CDATA[Unlike Quotation]]></phrase>
     <phrase title="xenquote_viewing_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
     <phrase title="xenquote_viewing_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
@@ -146,6 +156,18 @@
     <template title="alert_quote_like" version_id="11" version_string="1.0.0"><![CDATA[{xen:phrase xenquote_x_liked_your_quotation_y,
 	'name={xen:helper username, $user, 'subject'}',
 	'title=<a href="{xen:link quotes, $content}" class="PopupItemLink">{$content.quotation}</a>'}]]></template>
+    <template title="xenquote_inline_mod_controls_quotation" version_id="14" version_string="0.1.3"><![CDATA[<xen:include template="inline_mod_controls">
+	<xen:set var="$text">{xen:phrase xenquote_quotation_moderation}</xen:set>
+	<xen:set var="$options">
+		<xen:if is="{$inlineModOptions.delete}"><option value="delete">{xen:phrase xenquote_delete_quotations}...</option></xen:if>
+		<xen:if is="{$inlineModOptions.undelete}"><option value="undelete">{xen:phrase xenquote_undelete_quotations}</option></xen:if>
+		<xen:if is="{$inlineModOptions.approve}"><option value="approve">{xen:phrase xenquote_approve_quotations}</option></xen:if>
+		<xen:if is="{$inlineModOptions.unapprove}"><option value="unapprove">{xen:phrase xenquote_unapprove_quotations}</option></xen:if>
+		<option value="deselect">{xen:phrase xenquote_deselect_quotations}</option>
+	</xen:set>
+	<xen:set var="$checkboxTitle">{xen:phrase xenquote_select_deselect_all_quotations_on_this_page}</xen:set>
+	<xen:set var="$selectedItemsPhrase">{xen:phrase xenquote_selected_quotations}</xen:set>
+</xen:include>]]></template>
     <template title="xenquote_list_item_preview" version_id="1" version_string="0.1.0"><![CDATA[<div class="previewTooltip">
 	<xen:avatar user="$quote.author" size="s" />
 
@@ -178,14 +200,14 @@
 	<xen:if is="{$canSearch}"><li><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li></xen:if>
 </xen:hook>
 </ul>]]></template>
-    <template title="xenquote_news_feed_item_quotation_list" version_id="11" version_string="1.0.0"><![CDATA[<h3 class="description">
+    <template title="xenquote_news_feed_item_quotation_list" version_id="14" version_string="0.1.3"><![CDATA[<h3 class="description">
 
 	<xen:if is="{$content.user_id} == {$visitor.user_id}">
 	
 		<xen:comment><!-- $user liked your post --></xen:comment>
 		{xen:phrase xenquote_x_liked_your_quotation_y,
 			'name={xen:helper username, $user, 'primaryText'}',
-			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{$content.quotation}</a>'}
+			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{xen:helper wrap, {xen:helper striphtml, $quote.parsedQuotation}, 50}</a>'}
 		
 	<xen:else />
 	
@@ -193,7 +215,7 @@
 		{xen:phrase xenquote_x_liked_ys_quotation_z,
 			'name={xen:helper username, $user, 'primaryText'}',
 			'poster={$content.author_username}',
-			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{$content.quotation}</a>'}
+			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{xen:helper wrap, {xen:helper striphtml, $quote.parsedQuotation}, 50}</a>'}
 		
 	</xen:if>
 
@@ -630,7 +652,7 @@
 	<div class="messageText primaryContent baseHtml">{xen:raw $quote.parsedQuotation}</div>
 </div>]]></template>
     <template title="xenquote_quote_likeconfirmed" version_id="11" version_string="1.0.0"><![CDATA[L{$quote.liked}]]></template>
-    <template title="xenquote_quote_list" version_id="13" version_string="0.1.3"><![CDATA[<xen:if is="{$quotesByUser}">
+    <template title="xenquote_quote_list" version_id="14" version_string="0.1.3"><![CDATA[<xen:if is="{$quotesByUser}">
 	<xen:title>{xen:phrase xenquote_quotations_added_by_x, 'username={$quotesByUser}'}{xen:helper pagenumber, $page}</xen:title>
 	<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
 	<xen:description>{xen:phrase xenquote_list_of_quotations_added_by_x, 'username={$quotesByUser}'}</xen:description>
@@ -662,7 +684,7 @@
 </div>
 
 <div class="quotationList section sectionMain">
-	<form action="#" method="post"
+	<form action="{xen:link inline-mod/quotation/switch}" method="post"
 		class="InlineModForm"
 		data-cookieName="quotes"
 		data-controls="#InlineModControls"
@@ -688,6 +710,16 @@
 		</xen:if>
 		</ol>
 
+		<xen:if is="{$totalQuotations} OR {$inlineModOptions}">
+			<div class="sectionFooter InlineMod SelectionCountContainer">
+				<xen:if is="{$totalQuotations}"><span class="contentSummary">{xen:phrase xenquote_showing_quotations_x_to_y_of_z, 'start={xen:number $quotationStartOffset}', 'end={xen:number $quotationEndOffset}', 'total={xen:number $totalQuotations}'}</span></xen:if>
+	
+				<xen:if is="{$inlineModOptions}">
+					<xen:include template="xenquote_inline_mod_controls_quotation" />
+				</xen:if>
+			</div>
+		</xen:if>
+
 	</form>
 </div>
 
@@ -697,13 +729,14 @@
 
 <xen:require css="xenquote_list_item_preview.css" />
 <xen:include template="preview_tooltip" />]]></template>
-    <template title="xenquote_quote_list_item" version_id="13" version_string="0.1.3"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
+    <template title="xenquote_quote_list_item" version_id="14" version_string="0.1.3"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
 		
 	<div class="listBlock main">
 		<div class="titleText">
 			<h3 class="title">
+				<xen:if is="{$quote.canInlineMod}"><input type="checkbox" name="quotes[]" value="{$quote.quote_id}" class="InlineModCheck" id="inlineModCheck-quote-{$quote.quote_id}" data-target="#quote-{$quote.quote_id}" title="{xen:phrase xenquote_select_quotation}: '{$quote.quotation}'" /></xen:if>
 				<a href="{xen:link 'quotes', $quote}"
 					class="{xen:if $quote.hasPreview, PreviewTooltip}"
 					data-previewUrl="{xen:if $quote.hasPreview, {xen:link quotes/preview, $quote}}">{xen:helper wrap, {xen:helper striphtml, $quote.parsedQuotation}, 50}</a>
@@ -719,10 +752,6 @@
 
 			<div class="secondRow">
 				<div class="controls dimmed">
-					<xen:if is="{$quote.canApprove}"><a href="{xen:link 'quotes/approve', $quote}">{xen:phrase approve}</a></xen:if>
-					<xen:if is="{$quote.canUnapprove}"><a href="{xen:link 'quotes/unapprove', $quote}">{xen:phrase xenquote_unapprove}</a></xen:if>
-					<xen:if is="{$quote.canDelete}"><a href="{xen:link 'quotes/delete', $quote}">{xen:phrase delete}</a></xen:if>
-					<xen:if is="{$quote.canUndelete}"><a href="{xen:link 'quotes/undelete', $quote}">{xen:phrase xenquote_undelete}</a></xen:if>
 					<xen:if is="{$quote.canLike}"><a href="{xen:link 'quotes/like', $quote}" class="LikeCounter {xen:if $quote.like_date, unlike, like}" data-container="#likes-quote-{$quote.quote_id}"><span></span><span class="LikeLabel">{xen:if $quote.like_date, {xen:phrase unlike}, {xen:phrase like}}</span></a></xen:if>
 				</div>
 				<xen:if is="{$quote.isDeleted}">
