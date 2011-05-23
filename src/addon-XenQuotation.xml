@@ -245,7 +245,7 @@
 
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
-    <template title="xenquote_quotation_list.css" version_id="11" version_string="1.0.0"><![CDATA[.quotationList
+    <template title="xenquote_quotation_list.css" version_id="14" version_string="0.1.3"><![CDATA[.quotationList
 {
 	position: relative;
 	zoom: 1;
@@ -551,6 +551,19 @@
 .quotationList .quotationListItem.moderated .listBlock
 {
 	{xen:property primaryContent.background}
+}
+
+/* inline mod selected/checked classes */
+
+.quotationListItem.InlineModChecked,
+.quotationListItem.InlineModChecked .posterAvatar,
+.quotationListItem.InlineModChecked .main,
+.quotationListItem.InlineModChecked .stats,
+.quotationListItem.InlineModChecked .dateAdded,
+.quotationListItem.deleted.InlineModChecked,
+.quotationListItem.moderated.InlineModChecked
+{
+	{xen:property inlineModChecked}
 }
 
 /** bottom summary **/
