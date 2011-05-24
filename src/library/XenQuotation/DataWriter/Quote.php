@@ -76,11 +76,42 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 	 */
 	protected function _postSave()
 	{
-		$this->_addToSearchIndex();
+		$this->_updateSearchIndex();
+		$this->_updateDeletionLog();
+		$this->_updateModerationQueue();
 		
 		if ($this->get('message_state') == 'visible')
 		{
 			/* TODO */
+		}
+	}
+	
+	protected function _updateDeletionLog()
+	{
+	}
+	
+	protected function _updateModerationQueue()
+	{
+		if (!$this->isChanged('quote_state'))
+		{
+			return;
+		}
+
+		if ($this->get('quote_state') == 'moderated')
+		{
+			XenForo_Helper_File::log('xenquotation', 'adding quote #' . $this->get('quote_id') . ' to queue');
+						
+			$this->getModelFromCache('XenForo_Model_ModerationQueue')->insertIntoModerationQueue(
+				'quote', $this->get('quote_id'), $this->get('quote_date')
+			);
+		}
+		else if ($this->getExisting('quote_state') == 'moderated')
+		{
+			XenForo_Helper_File::log('xenquotation', 'deleting quote #' . $this->get('quote_id') . ' from queue');
+			
+			$this->getModelFromCache('XenForo_Model_ModerationQueue')->deleteFromModerationQueue(
+				'quote', $this->get('quote_id')
+			);
 		}
 	}
 	
@@ -99,13 +130,22 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 	
 	/**
 	 */
-	protected function _addToSearchIndex()
+	protected function _updateSearchIndex()
 	{
-		if ($this->isChanged('quotation'))
+		if ($this->isInsert())
 		{
 			$dataHandler = $this->_getSearchDataHandler();
 			$indexer = new XenForo_Search_Indexer();
 
+			$dataHandler->insertIntoIndex($indexer, $this->getMergedData());
+		}
+		else if ($this->isChanged('quotation'))
+		{
+			$dataHandler = $this->_getSearchDataHandler();
+			$indexer = new XenForo_Search_Indexer();
+
+			// TODO: do this properly
+			$dataHandler->deleteFromIndex($indexer, $this->getMergedData());			
 			$dataHandler->insertIntoIndex($indexer, $this->getMergedData());
 		}
 	}

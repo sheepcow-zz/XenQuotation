@@ -495,6 +495,38 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		
 		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'post');
 	}
+
+	/**
+	 * Indicates if the user is able to delete any quotation.
+	 */
+	public function canDeleteAny(&$errorPhraseKey = '', array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		
+		if (!$viewingUser['user_id'])
+		{
+			$errorPhraseKey = '';
+			return false;
+		}
+		
+		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'deleteAny');
+	}
+	
+	/**
+	 * Indicates if the user is able to edit any quotation.
+	 */
+	public function canEditAny(&$errorPhraseKey = '', array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		
+		if (!$viewingUser['user_id'])
+		{
+			$errorPhraseKey = '';
+			return false;
+		}
+		
+		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'editAny');
+	}
 	
 	/**
 	 */
