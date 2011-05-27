@@ -58,6 +58,24 @@ class XenQuotation_Event_TemplateHook
 				
 			}
 		}
+		else if ($hookName == 'post_public_controls' &&
+				 XenForo_Application::get('options')->xenquoteShowSaveAsQuoteLink)
+		{	
+			$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
+			
+			// only way to determine which post this is for is
+			// to do some regex magic!
+			
+			if (preg_match('#href=".*threads/[0-9a-z-]+\.[0-9]+/reply\?quote=([0-9]+)"#iU', $contents, $match))
+			{
+				$params = array(
+					'canSaveQuotation' => $quoteModel->canAddQuotation(),
+					'post' => array('post_id' => $match[1])
+				);
+
+				$contents .= $template->create('xenquote_post_save_quotation', $params)->render();	
+			}
+		}
 	}
 }
 

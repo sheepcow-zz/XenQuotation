@@ -49,7 +49,7 @@ class XenQuotation_BbCode_Formatter_Restricted extends XenForo_BbCode_Formatter_
 
 				foreach ($tags as $tag => $parseInfo)
 				{
-					if (isset($allowedTags['tag_' . $tag]))
+					if (!empty($allowedTags['tag_' . $tag]))
 					{
 						$this->_tags[$tag] = $parseInfo;
 					}

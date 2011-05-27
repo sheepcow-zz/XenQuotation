@@ -32,6 +32,12 @@
       <sub_options></sub_options>
       <relation group_id="xenquotation" display_order="200"/>
     </option>
+    <option option_id="xenquoteShowSaveAsQuoteLink" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>true</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation" display_order="300"/>
+    </option>
   </optiongroups>
   <permissions>
     <permission_groups>
@@ -65,6 +71,8 @@
     <phrase title="option_xenquoteQuotationsPerPage_explain" version_id="11" version_string="1.0.0"><![CDATA[The number of quotations that are displayed per page in the quotation list.]]></phrase>
     <phrase title="option_xenquoteRandomQuote" version_id="11" version_string="1.0.0"><![CDATA[Show Random Quote]]></phrase>
     <phrase title="option_xenquoteRandomQuote_explain" version_id="11" version_string="1.0.0"><![CDATA[Show the random quote. This option enables the add-on to add a random quote to the sidebar.]]></phrase>
+    <phrase title="option_xenquoteShowSaveAsQuoteLink" version_id="16" version_string="0.1.6"><![CDATA[Show "Save Quotation" Link]]></phrase>
+    <phrase title="option_xenquoteShowSaveAsQuoteLink_explain" version_id="16" version_string="0.1.6"><![CDATA[Adds a link on each post to turn it into a quotation.]]></phrase>
     <phrase title="permission_group_quote" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
     <phrase title="permission_interface_xenQuotationModeratorPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Moderator Permissions]]></phrase>
     <phrase title="permission_interface_xenQuotationPermissions" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
@@ -122,6 +130,7 @@
     <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_save_quotation" version_id="2" version_string="0.1.1"><![CDATA[Save Quotation]]></phrase>
+    <phrase title="xenquote_save_this_post_as_a_quotation" version_id="16" version_string="0.1.6"><![CDATA[Save this post as a quotation]]></phrase>
     <phrase title="xenquote_search_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Search Quotations]]></phrase>
     <phrase title="xenquote_selected_quotations" version_id="14" version_string="0.1.3"><![CDATA[Selected quotations]]></phrase>
     <phrase title="xenquote_select_deselect_all_quotations_on_this_page" version_id="14" version_string="0.1.3"><![CDATA[Select / deselect all quotations on this page]]></phrase>
@@ -268,6 +277,9 @@
 
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
+    <template title="xenquote_post_save_quotation" version_id="16" version_string="0.1.6"><![CDATA[				<xen:if is="{$canSaveQuotation}">
+					<a href="{xen:link quotes/create-quote, '', 'post={$post.post_id}'}" class="item control savequotation" title="{xen:phrase xenquote_save_this_post_as_a_quotation}"><span></span>{xen:phrase xenquote_save_quotation}</a>
+				</xen:if>]]></template>
     <template title="xenquote_quotation_list.css" version_id="14" version_string="0.1.3"><![CDATA[.quotationList
 {
 	position: relative;

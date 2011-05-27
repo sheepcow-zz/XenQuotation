@@ -143,6 +143,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		foreach ($quotes as &$quote)
 		{
+			
 			$quoteModOptions = $quoteModel->addInlineModOptionToQuote($quote);
 			$inlineModOptions += $quoteModOptions;
 			
