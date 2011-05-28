@@ -38,28 +38,28 @@ class XenQuotation_BbCode_Formatter_Restricted extends XenForo_BbCode_Formatter_
 				
 			$this->_tags = array();
 			$options = XenForo_Application::get('options');
-			
-			if ($options->xenquoteAllowedBbCode)
-			{
-				/*
-				 * Remove all tags except the ones that
-				 * have been explicitly allowed
-				 */
-				$allowedTags = $options->xenquoteAllowedBbCode;
 
-				foreach ($tags as $tag => $parseInfo)
+			if ($options->xenquoteAllowedBbCode)
+			{	
+				$allowedTags = $options->xenquoteAllowedBbCode;
+			}
+			else
+			{		
+				$allowedTags = array();
+			}
+
+			foreach ($tags as $tag => $parseInfo)
+			{
+				if (empty($allowedTags['tag_' . $tag]))
 				{
-					if (empty($allowedTags['tag_' . $tag]))
-					{
-						// this tag is not allowed, override the renderer
-						unset($parseInfo['replace']);
-						$parseInfo['callback'] = array(
-							$this, 'renderNullTag'
-						);
-					}
-					
-					$this->_tags[$tag] = $parseInfo;
+					// this tag is not allowed, override the renderer
+					unset($parseInfo['replace']);
+					$parseInfo['callback'] = array(
+						$this, 'renderNullTag'
+					);
 				}
+				
+				$this->_tags[$tag] = $parseInfo;
 			}
 		}
 
