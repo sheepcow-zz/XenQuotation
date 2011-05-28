@@ -349,35 +349,43 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			$postModel = $this->getModelFromCache('XenForo_Model_Post');
 			$post = $postModel->getPostById($quote['attributed_post_id']);
 			
+			$gotPostAttrib = false;
+			
 			if ($post)
 			{
 				$thread = $this->getModelFromCache('XenForo_Model_Thread')->getThreadById($post['thread_id']);
 				
-				// TODO: only allow the thread title to be displayed
-				// if they have permission to see the thread
-				
 				if ($thread)
 				{
-					$threadTitle = new XenForo_Phrase(
-						'xenquote_post_x_in_y',
-						array(
-							'position' => $post['position'] + 1,
-							'title' => $thread['title']
-						)
-					);					
+					$forum = $this->getModelFromCache('XenForo_Model_Forum')->getForumById($thread['node_id']);
+					
+					if ($forum && $postModel->canViewPostAndContainer($post, $thread, $forum))
+					{
+						$threadTitle = new XenForo_Phrase(
+							'xenquote_post_x_in_y',
+							array(
+								'position' => $post['position'] + 1,
+								'title' => $thread['title']
+							)
+						);
+						
+						// successfully got the full attribution
+						$gotPostAttrib = true;
+					}
 				}
-				else
-				{
-					$threadTitle = new XenForo_Phrase(
-						'xenquote_post_x', 
-						array('post' => $post['post_id'])
-					);
-				}
-				
-				$attribution[] = '<a href="' .
-				 	XenForo_Link::buildPublicLink('full:posts', array('post_id' => $post['post_id'])) . 
-				'">' . $threadTitle . '</a>';
 			}
+			
+			if (!$gotPostAttrib)
+			{
+				$threadTitle = new XenForo_Phrase(
+					'xenquote_post_x', 
+					array('post' => $post['post_id'])
+				);
+			}
+			
+			$attribution[] = '<a href="' .
+			 	XenForo_Link::buildPublicLink('full:posts', array('post_id' => $post['post_id'])) . 
+			'">' . $threadTitle . '</a>';
 		}
 		
 		if (strlen(trim($quote['attributed_context'])) > 0)

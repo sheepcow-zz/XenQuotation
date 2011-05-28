@@ -126,7 +126,7 @@ moderated=Moderated</edit_format_params>
     <phrase title="xenquote_no_permission_to_view_quotations" version_id="2" version_string="0.1.1"><![CDATA[You do not have permission to view quotations.]]></phrase>
     <phrase title="xenquote_no_permission_to_view_this_quotation" version_id="2" version_string="0.1.1"><![CDATA[You do not have permission to view this quotation.]]></phrase>
     <phrase title="xenquote_option_allowedbbcode_tag" version_id="11" version_string="1.0.0"><![CDATA[[{tag}]]]></phrase>
-    <phrase title="xenquote_post_x" version_id="11" version_string="1.0.0"><![CDATA[Post {post}]]></phrase>
+    <phrase title="xenquote_post_x" version_id="16" version_string="0.1.6"><![CDATA[Post #{post}]]></phrase>
     <phrase title="xenquote_post_x_in_y" version_id="11" version_string="1.0.0"><![CDATA[Post {position} in {title}]]></phrase>
     <phrase title="xenquote_quotation" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
