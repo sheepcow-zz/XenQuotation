@@ -49,15 +49,36 @@ class XenQuotation_BbCode_Formatter_Restricted extends XenForo_BbCode_Formatter_
 
 				foreach ($tags as $tag => $parseInfo)
 				{
-					if (!empty($allowedTags['tag_' . $tag]))
+					if (empty($allowedTags['tag_' . $tag]))
 					{
-						$this->_tags[$tag] = $parseInfo;
+						// this tag is not allowed, override the renderer
+						unset($parseInfo['replace']);
+						$parseInfo['callback'] = array(
+							$this, 'renderNullTag'
+						);
 					}
+					
+					$this->_tags[$tag] = $parseInfo;
 				}
 			}
 		}
 
 		return $this->_tags;
+	}
+	
+	/**
+	 * Renders a null tag, essentially it just renders the
+	 * contents of the tag and not the tag itself.
+	 *
+	 * @param array $tag Information about the tag reference; keys: tag, option, children
+	 * @param array $rendererStates Renderer states to push down
+	 *
+	 * @return string Rendered tag
+	 */
+	public function renderNullTag(array $tag, array $rendererStates)
+	{
+		$text = $this->renderSubTree($tag['children'], $rendererStates);
+		return $text;
 	}
 }
 
