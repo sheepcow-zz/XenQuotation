@@ -14,6 +14,7 @@
   <email_templates/>
   <optiongroups>
     <group group_id="xenquotation" display_order="2000" debug_only="0"/>
+    <group group_id="xenquotation_random" display_order="2010" debug_only="0"/>
     <option option_id="xenquoteAllowedBbCode" edit_format="callback" data_type="array" can_backup="1">
       <default_value>a:10:{s:5:"tag_b";s:1:"1";s:5:"tag_i";s:1:"1";s:5:"tag_u";s:1:"1";s:5:"tag_s";s:1:"1";s:9:"tag_color";s:1:"1";s:8:"tag_font";s:1:"1";s:8:"tag_size";s:1:"1";s:7:"tag_url";s:1:"1";s:9:"tag_email";s:1:"1";s:9:"tag_plain";s:1:"1";}</default_value>
       <edit_format_params>XenQuotation_Option_AllowedBbCode::renderOption</edit_format_params>
@@ -33,11 +34,28 @@ moderated=Moderated</edit_format_params>
       <sub_options></sub_options>
       <relation group_id="xenquotation" display_order="110"/>
     </option>
+    <option option_id="xenquoteRandomPosition" edit_format="radio" data_type="string" can_backup="1">
+      <default_value>above_stats</default_value>
+      <edit_format_params>top=Top of Sidebar
+above_members=Above Online Members
+below_members=Below Online Members
+above_stats=Above Forum Statistics
+below_stats=Below Forum Statistics
+bottom=Bottom of Sidebar</edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation_random" display_order="200"/>
+    </option>
     <option option_id="xenquoteRandomQuote" edit_format="onoff" data_type="boolean" can_backup="1">
       <default_value>false</default_value>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
-      <relation group_id="xenquotation" display_order="200"/>
+      <relation group_id="xenquotation_random" display_order="100"/>
+    </option>
+    <option option_id="xenquoteRandomTitle" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value></default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation_random" display_order="300"/>
     </option>
     <option option_id="xenquoteShowSaveAsQuoteLink" edit_format="onoff" data_type="boolean" can_backup="1">
       <default_value>true</default_value>
@@ -72,14 +90,20 @@ moderated=Moderated</edit_format_params>
   <phrases>
     <phrase title="option_group_xenquotation" version_id="11" version_string="1.0.0"><![CDATA[XenQuotation]]></phrase>
     <phrase title="option_group_xenquotation_description" version_id="11" version_string="1.0.0"><![CDATA[Options for the XenQuotation add-on.]]></phrase>
+    <phrase title="option_group_xenquotation_random" version_id="16" version_string="0.1.6"><![CDATA[XenQuotation: Random Quotation]]></phrase>
+    <phrase title="option_group_xenquotation_random_description" version_id="16" version_string="0.1.6"><![CDATA[Configure the XenQuotation random quotation block.]]></phrase>
     <phrase title="option_xenquoteAllowedBbCode" version_id="11" version_string="1.0.0"><![CDATA[Allowed BB Code]]></phrase>
     <phrase title="option_xenquoteAllowedBbCode_explain" version_id="11" version_string="1.0.0"><![CDATA[Tick the BB code that you wish to allow in quotations.]]></phrase>
     <phrase title="option_xenquoteDefaultQuoteState" version_id="16" version_string="0.1.6"><![CDATA[New Quotation State]]></phrase>
     <phrase title="option_xenquoteDefaultQuoteState_explain" version_id="16" version_string="0.1.6"><![CDATA[Select the default state for newly added quotations.]]></phrase>
     <phrase title="option_xenquoteQuotationsPerPage" version_id="11" version_string="1.0.0"><![CDATA[Quotations Per Page]]></phrase>
     <phrase title="option_xenquoteQuotationsPerPage_explain" version_id="11" version_string="1.0.0"><![CDATA[The number of quotations that are displayed per page in the quotation list.]]></phrase>
+    <phrase title="option_xenquoteRandomPosition" version_id="16" version_string="0.1.6"><![CDATA[Position]]></phrase>
+    <phrase title="option_xenquoteRandomPosition_explain" version_id="16" version_string="0.1.6"><![CDATA[Select where in the sidebar you want the random quotation to appear.]]></phrase>
     <phrase title="option_xenquoteRandomQuote" version_id="11" version_string="1.0.0"><![CDATA[Show Random Quote]]></phrase>
-    <phrase title="option_xenquoteRandomQuote_explain" version_id="11" version_string="1.0.0"><![CDATA[Show the random quote. This option enables the add-on to add a random quote to the sidebar.]]></phrase>
+    <phrase title="option_xenquoteRandomQuote_explain" version_id="16" version_string="0.1.6"><![CDATA[Show the random quote. This option enables the add-on to add a random quote to the sidebar (<em>note</em>: it does not effect the Widget Framework widget or XenPorta module).]]></phrase>
+    <phrase title="option_xenquoteRandomTitle" version_id="16" version_string="0.1.6"><![CDATA[Title]]></phrase>
+    <phrase title="option_xenquoteRandomTitle_explain" version_id="16" version_string="0.1.6"><![CDATA[Title for the random quotation block. Leave empty for default.]]></phrase>
     <phrase title="option_xenquoteShowSaveAsQuoteLink" version_id="16" version_string="0.1.6"><![CDATA[Show "Save Quotation" Link]]></phrase>
     <phrase title="option_xenquoteShowSaveAsQuoteLink_explain" version_id="16" version_string="0.1.6"><![CDATA[Adds a link on each post to turn it into a quotation.]]></phrase>
     <phrase title="permission_group_quote" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
@@ -1023,12 +1047,12 @@ moderated=Moderated</edit_format_params>
 		</div>
 	</div>
 </li>]]></template>
-    <template title="xenquote_sidebar_random_quote" version_id="3" version_string="0.1.2"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
+    <template title="xenquote_sidebar_random_quote" version_id="16" version_string="0.1.6"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
 
 	<!-- block: sidebar_random_quote -->
 	<div class="section randomQuotation">
 		<div class="secondaryContent">
-			<h3><a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical">{xen:phrase xenquote_random_quotation}</a></h3>
+			<h3><a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical">{$title}</a></h3>
 			<xen:include template="xenquote_sidebar_random_quote_content" />
 		</div>
 	</div>

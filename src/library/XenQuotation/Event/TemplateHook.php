@@ -21,6 +21,7 @@
  */
 class XenQuotation_Event_TemplateHook
 {
+	
 	/**
 	 * Adds the Quotations tab to the search form.
 	 */
@@ -38,7 +39,7 @@ class XenQuotation_Event_TemplateHook
 		else if ($hookName == 'forum_list_sidebar' &&
 				 XenForo_Application::get('options')->xenquoteRandomQuote)
 		{
-			
+			$options = XenForo_Application::get('options');
 			$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
 			
 			$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions();
@@ -50,11 +51,41 @@ class XenQuotation_Event_TemplateHook
 				$quoteModel->prepareQuotation($quote);
 				$quoteModel->quotationViewed($quote);
 				
-				$htmlContent = $template->create('xenquote_sidebar_random_quote', array('quote' => $quote))->render();
-				
-				$placeAbove = '<!-- block: forum_stats -->';
-				
-				$contents = str_replace($placeAbove, $htmlContent . $placeAbove, $contents);
+				$htmlContent = $template->create('xenquote_sidebar_random_quote', 
+					array(
+						'title' => ($options->xenquoteRandomTitle == '') ? new XenForo_Phrase('xenquote_random_quotation') : $options->xenquoteRandomTitle,
+						'quote' => $quote
+				))->render();
+					
+				// work out where to place on the sidebar
+				if ($options->xenquoteRandomPosition === 'top')
+				{
+					$contents = $htmlContent . $contents;
+				}
+				else if ($options->xenquoteRandomPosition === 'bottom')
+				{
+					$contents .= $htmlContent;
+				}
+				else if ($options->xenquoteRandomPosition === 'above_members')
+				{
+					$placeAbove = '<!-- block: sidebar_online_users -->';
+					$contents = str_replace($placeAbove, $htmlContent . $placeAbove, $contents);
+				}
+				else if ($options->xenquoteRandomPosition === 'below_members')
+				{
+					$placeBelow = '<!-- end block: sidebar_online_users -->';
+					$contents = str_replace($placeBelow, $placeBelow . $htmlContent, $contents);
+				}
+				else if ($options->xenquoteRandomPosition === 'above_stats')
+				{
+					$placeAbove = '<!-- block: forum_stats -->';
+					$contents = str_replace($placeAbove, $htmlContent . $placeAbove, $contents);
+				}
+				else if ($options->xenquoteRandomPosition === 'below_stats')
+				{
+					$placeBelow = '<!-- end block: forum_stats -->';
+					$contents = str_replace($placeBelow, $placeBelow . $htmlContent, $contents);
+				}
 				
 			}
 		}
