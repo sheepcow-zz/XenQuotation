@@ -59,7 +59,8 @@ class XenQuotation_Installation
 			'like_handler_class' => 'XenQuotation_LikeHandler_Quote',
 			'search_handler_class' => 'XenQuotation_Search_DataHandler_Quote',
 			'alert_handler_class' => 'XenQuotation_AlertHandler_Quote',
-			'moderation_queue_handler_class' => 'XenQuotation_ModerationQueueHandler_Quote'
+			'moderation_queue_handler_class' => 'XenQuotation_ModerationQueueHandler_Quote',
+			'report_handler_class' => 'XenQuotation_ReportHandler_Quote'
 		);
 	
 		$db->query(

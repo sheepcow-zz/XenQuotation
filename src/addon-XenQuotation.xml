@@ -20,11 +20,18 @@
       <sub_options>*</sub_options>
       <relation group_id="xenquotation" display_order="500"/>
     </option>
+    <option option_id="xenquoteDefaultQuoteState" edit_format="radio" data_type="string" can_backup="1">
+      <default_value>moderated</default_value>
+      <edit_format_params>visible=Visible
+moderated=Moderated</edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation" display_order="100"/>
+    </option>
     <option option_id="xenquoteQuotationsPerPage" edit_format="spinbox" data_type="positive_integer" can_backup="1">
       <default_value>25</default_value>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
-      <relation group_id="xenquotation" display_order="100"/>
+      <relation group_id="xenquotation" display_order="110"/>
     </option>
     <option option_id="xenquoteRandomQuote" edit_format="onoff" data_type="boolean" can_backup="1">
       <default_value>false</default_value>
@@ -67,6 +74,8 @@
     <phrase title="option_group_xenquotation_description" version_id="11" version_string="1.0.0"><![CDATA[Options for the XenQuotation add-on.]]></phrase>
     <phrase title="option_xenquoteAllowedBbCode" version_id="11" version_string="1.0.0"><![CDATA[Allowed BB Code]]></phrase>
     <phrase title="option_xenquoteAllowedBbCode_explain" version_id="11" version_string="1.0.0"><![CDATA[Tick the BB code that you wish to allow in quotations.]]></phrase>
+    <phrase title="option_xenquoteDefaultQuoteState" version_id="16" version_string="0.1.6"><![CDATA[New Quotation State]]></phrase>
+    <phrase title="option_xenquoteDefaultQuoteState_explain" version_id="16" version_string="0.1.6"><![CDATA[Select the default state for newly added quotations.]]></phrase>
     <phrase title="option_xenquoteQuotationsPerPage" version_id="11" version_string="1.0.0"><![CDATA[Quotations Per Page]]></phrase>
     <phrase title="option_xenquoteQuotationsPerPage_explain" version_id="11" version_string="1.0.0"><![CDATA[The number of quotations that are displayed per page in the quotation list.]]></phrase>
     <phrase title="option_xenquoteRandomQuote" version_id="11" version_string="1.0.0"><![CDATA[Show Random Quote]]></phrase>

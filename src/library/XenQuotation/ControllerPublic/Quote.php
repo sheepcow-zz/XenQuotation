@@ -471,11 +471,20 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		$dw->save();
 		
 		$quote = $dw->getMergedData();
+		
+		if ($quote['quote_state'] != 'visible')
+		{
+			$params = array('posted' => 1);
+		}
+		else
+		{
+			$params = array();
+		}
 
 		// regular redirect
 		return $this->responseRedirect(
 			XenForo_ControllerResponse_Redirect::SUCCESS,
-			XenForo_Link::buildPublicLink('quotes', '', array('posted' => 1)),
+			XenForo_Link::buildPublicLink('quotes', '', $params),
 			new XenForo_Phrase('xenquote_your_quotation_has_been_added')
 		);
 	}
