@@ -26,7 +26,7 @@ class XenQuotation_Event_WidgetFrameworkReady
 	 */
 	public static function listen(array &$renderers)
 	{
-		$renderers[] = 'XenQuotation_Widget_RandomQuotation';
+		$renderers[] = 'XenQuotation_WidgetRenderer_RandomQuotation';
 	}
 }
 

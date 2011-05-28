@@ -18,10 +18,10 @@
 /**
  * Renderer for the Random Quotation widget.
  */
-class XenQuotation_Widget_RandomQuotation extends WidgetFramework_WidgetRenderer
+class XenQuotation_WidgetRenderer_RandomQuotation extends WidgetFramework_WidgetRenderer
 {
 	protected function _getConfiguration() {
-		return array('name' => new XenForo_Phrase('xenquote_random_quotation'));
+		return array('name' => new XenForo_Phrase('xenquote_random_widget_name'));
 	}
 	
 	protected function _getOptionsTemplate() {

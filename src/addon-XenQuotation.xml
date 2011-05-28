@@ -161,6 +161,7 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_quotation_status" version_id="2" version_string="0.1.1"><![CDATA[Quotation Status]]></phrase>
     <phrase title="xenquote_quotation_x" version_id="15" version_string="0.1.5"><![CDATA[Quotation #{id}]]></phrase>
     <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
+    <phrase title="xenquote_random_widget_name" version_id="16" version_string="0.1.6"><![CDATA[XenQuotation: Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_save_quotation" version_id="2" version_string="0.1.1"><![CDATA[Save Quotation]]></phrase>
     <phrase title="xenquote_save_this_post_as_a_quotation" version_id="16" version_string="0.1.6"><![CDATA[Save this post as a quotation]]></phrase>
