@@ -33,7 +33,7 @@ class XenQuotation_Event_NavigationTabs
 		$visitor = XenForo_Visitor::getInstance();
 		
 		// get the quote model
-		$quoteModel = new XenQuotation_Model_Quote();
+		$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
 		
 		$extraTabs['quotes'] = array(
 			'title' => new XenForo_Phrase('xenquote_navtab_quotes'),
