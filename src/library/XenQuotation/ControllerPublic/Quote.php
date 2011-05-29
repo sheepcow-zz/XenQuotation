@@ -172,6 +172,11 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 				$quote['canLike'] = true;
 			}
 			
+			if ($quoteModel->canEditQuotation($quote))
+			{
+				$quote['canEdit'] = true;
+			}
+			
 			$quoteModel->prepareQuotation($quote);
 
 		}
