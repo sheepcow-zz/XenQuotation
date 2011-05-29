@@ -67,19 +67,26 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 	}
 	
 	protected function _preSave()
-	{		
+	{	
+		$fields = $this->_getFields();
+		$validStates = $fields['xq_quotation']['quote_state']['allowedValues'];
+			
 		if ($this->isInsert())
-		{
-			
-			$fields = $this->_getFields();
-			$validStates = $fields['xq_quotation']['quote_state']['allowedValues'];
-			
+		{	
 			if (in_array(XenForo_Application::get('options')->xenquoteDefaultQuoteState, $validStates))
 			{
 				// set the default state
 				$this->set('quote_state', XenForo_Application::get('options')->xenquoteDefaultQuoteState);
 			}
-
+		}
+		
+		if ($this->isUpdate() && $this->isChanged('quotation'))
+		{
+			if (in_array(XenForo_Application::get('options')->xenquoteDefaultQuoteState, $validStates))
+			{
+				// reset the state!
+				$this->set('quote_state', XenForo_Application::get('options')->xenquoteDefaultQuoteState);
+			}
 		}
 	}
 	

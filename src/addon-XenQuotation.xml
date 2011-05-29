@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.6" version_id="16" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
+<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.7" version_id="17" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -147,6 +147,7 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_navtab_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_no_permission_to_approve_or_unapprove" version_id="11" version_string="1.0.0"><![CDATA[You do not have permission to approve or unapprove this quotation.]]></phrase>
     <phrase title="xenquote_no_permission_to_delete" version_id="11" version_string="1.0.0"><![CDATA[You do not have permission to delete this quotation.]]></phrase>
+    <phrase title="xenquote_no_permission_to_edit_quotation" version_id="16" version_string="0.1.6"><![CDATA[You do not have permission to edit this quotation.]]></phrase>
     <phrase title="xenquote_no_permission_to_view_quotations" version_id="2" version_string="0.1.1"><![CDATA[You do not have permission to view quotations.]]></phrase>
     <phrase title="xenquote_no_permission_to_view_this_quotation" version_id="2" version_string="0.1.1"><![CDATA[You do not have permission to view this quotation.]]></phrase>
     <phrase title="xenquote_option_allowedbbcode_tag" version_id="11" version_string="1.0.0"><![CDATA[[{tag}]]]></phrase>
@@ -185,6 +186,8 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_x_liked_ys_quotation_z" version_id="0" version_string=""><![CDATA[{name} liked {author}'s quotation {title}]]></phrase>
     <phrase title="xenquote_your_quotation_has_been_added" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added.]]></phrase>
     <phrase title="xenquote_your_quotation_has_been_added_moderated" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added, until it is approved by a moderator it will only be visible to you.]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_updated" version_id="16" version_string="0.1.6"><![CDATA[Your quotation has been updated.]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_updated_moderated" version_id="16" version_string="0.1.6"><![CDATA[Your quotation has been updated, until it is approved by a moderator it will only be visible to you.]]></phrase>
     <phrase title="xenquote_your_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Added By You]]></phrase>
     <phrase title="xenquote_you_may_not_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[You may not add a new quotation]]></phrase>
     <phrase title="xenquote_you_must_enter_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[You must enter a quotation.]]></phrase>
@@ -647,7 +650,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 		float: left;
 		display: block;
 	}]]></template>
-    <template title="xenquote_quote_create" version_id="1" version_string="0.1.0"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>
+    <template title="xenquote_quote_create" version_id="16" version_string="0.1.6"><![CDATA[<xen:title>{xen:phrase xenquote_add_a_quotation}</xen:title>
 
 <xen:container var="$head.robots">
 	<meta name="robots" content="noindex" />
@@ -683,7 +686,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 			<xen:if is="{$post}">
 				{$post.username}
 			<xen:else/>
-				<input type="text" name="attributedTo" id="ctrl_attributedTo" value="" class="textCtrl AutoComplete" />
+				<input type="text" name="attributedTo" id="ctrl_attributedTo" value="{$quote.attributed_username}" class="textCtrl AutoComplete" />
 				<p class="explain">{xen:phrase xenquote_attributed_to_explain}</p>
 			</xen:if>
 		</dd>
@@ -695,7 +698,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 			<xen:if is="{$post}">
 				<xen:datetime time="$post.post_date" />
 			<xen:else/>
-				<input type="date" name="attributedDate" value="" class="textCtrl" id="ctrl_attributedDate" />
+				<input type="date" name="attributedDate" value="{xen:if '{$quote.attributed_date} != 0', '{$quote.attributed_date_str}', ''}" class="textCtrl" id="ctrl_attributedDate" />
 				<p class="explain">{xen:phrase xenquote_attributed_date_explain}</p>
 			</xen:if>
 		</dd>
@@ -704,7 +707,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 	<dl class="ctrlUnit">
 		<dt><label for="ctrl_context">{xen:phrase xenquote_context}:</label></dt>
 		<dd>
-			<input type="text" name="context" id="ctrl_context" value="" class="textCtrl" />
+			<input type="text" name="context" id="ctrl_context" value="{$quote.attributed_context}" class="textCtrl" />
 			<p class="explain">{xen:phrase xenquote_context_explain}</p>
 		</dd>
 	</dl>
@@ -722,7 +725,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 	<dl class="ctrlUnit submitUnit">
 		<dt></dt>
 		<dd>
-			<input type="submit" value="{xen:phrase xenquote_add_quotation}" accesskey="s" class="button primary" />
+			<input type="submit" value="<xen:if is="{$quote.quote_id} == 0">{xen:phrase xenquote_add_quotation}<xen:else />{xen:phrase xenquote_save_quotation}</xen:if>" accesskey="s" class="button primary" />
 			<input type="button" value="{xen:phrase preview}..." class="button PreviewButton JsOnly" />
 		</dd>
 	</dl>
@@ -734,7 +737,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 	<div class="messageText primaryContent baseHtml">{xen:raw $quote.parsedQuotation}</div>
 </div>]]></template>
     <template title="xenquote_quote_likeconfirmed" version_id="11" version_string="1.0.0"><![CDATA[L{$quote.liked}]]></template>
-    <template title="xenquote_quote_list" version_id="14" version_string="0.1.3"><![CDATA[<xen:if is="{$quotesByUser}">
+    <template title="xenquote_quote_list" version_id="16" version_string="0.1.6"><![CDATA[<xen:if is="{$quotesByUser}">
 	<xen:title>{xen:phrase xenquote_quotations_added_by_x, 'username={$quotesByUser}'}{xen:helper pagenumber, $page}</xen:title>
 	<xen:h1>{xen:phrase xenquote_quotations}</xen:h1>
 	<xen:description>{xen:phrase xenquote_list_of_quotations_added_by_x, 'username={$quotesByUser}'}</xen:description>
@@ -759,6 +762,9 @@ bottom=Bottom of Sidebar</edit_format_params>
 
 <xen:if is="{$showPostedNotice}">
 	<div class="importantMessage">{xen:phrase xenquote_your_quotation_has_been_added_moderated}</div>
+</xen:if>
+<xen:if is="{$showUpdatedNotice}">
+	<div class="importantMessage">{xen:phrase xenquote_your_quotation_has_been_updated_moderated}</div>
 </xen:if>
 
 <div class="pageNavLinkGroup">

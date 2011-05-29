@@ -198,6 +198,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			'orderParams' => $sortParams,
 			
 			'showPostedNotice' => ($this->_input->filterSingle('posted', XenForo_Input::UINT) == 1),
+			'showUpdatedNotice' => ($this->_input->filterSingle('updated', XenForo_Input::UINT) == 1),
 			
 			'pageNavParams' => array(
 				'order' => ($sortOrder != $defaultSortOrder) ? $sortOrder : '',
@@ -310,8 +311,8 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	 */
 	public function actionEdit()
 	{
-		$viewParams = array();
-		return $this->responseView('XenQuotation_ViewPublic_Quote_List', 'DEFAULT', $viewParams);
+		// redirects to the create quotation action
+		return $this->responseReroute(__CLASS__, 'create-quote');
 	}
 	
 	/**
@@ -363,21 +364,29 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
 		
+		$hintPhrase = 'posted';
+		$quote = false;
+		
 		if ($this->_input->inRequest('quote_id'))
 		{
 			// editing a quote
 			$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);
-			$quoteHelper->assertQuoteValidAndViewable($quoteId);
 			
-			/* TODO */
-			/*
-			$this->_assertCanEditQuote($quoteId)
+			$quoteModel = $this->_getQuoteModel();
+			$quote = $quoteModel->getQuoteById($quoteId);
 			
-			$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
-			$dw->setExistingData($quoteId);
-			*/
+			if ($quote)
+			{
+				$this->_assertCanEditQuotation($quote);
+
+				$dw = XenForo_DataWriter::create('XenQuotation_DataWriter_Quote');
+				$dw->setExistingData($quoteId);
+
+				$hintPhrase = 'updated';	
+			}
 		}
-		else
+		
+		if (!$quote)
 		{
 			$this->_assertCanAddQuotation();
 			
@@ -402,15 +411,6 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		if ($this->_input->inRequest('post'))
 		{
 			$postId = $this->_input->filterSingle('post', XenForo_Input::UINT);
-			
-			$threadFetchOptions = array(
-				'readUserId' => $visitor['user_id'],
-				'watchUserId' => $visitor['user_id'],
-				'join' => XenForo_Model_Thread::FETCH_AVATAR
-			);
-			$forumFetchOptions = array(
-				'readUserId' => $visitor['user_id']
-			);
 			
 			$postModel = $this->_getPostModel();
 			$post = $postModel->getPostById($postId);
@@ -474,7 +474,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		
 		if ($quote['quote_state'] != 'visible')
 		{
-			$params = array('posted' => 1);
+			$params = array($hintPhrase => 1);
 		}
 		else
 		{
@@ -485,7 +485,11 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		return $this->responseRedirect(
 			XenForo_ControllerResponse_Redirect::SUCCESS,
 			XenForo_Link::buildPublicLink('quotes', '', $params),
-			new XenForo_Phrase('xenquote_your_quotation_has_been_added')
+			
+			($hintPhrase == 'posted') ? new XenForo_Phrase('xenquote_your_quotation_has_been_added') :
+									    new XenForo_Phrase('xenquote_your_quotation_has_been_updated')
+			
+			
 		);
 	}
 	
@@ -496,28 +500,59 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	{
 		$this->_assertCanAddQuotation();
 		
-		$defaultMessage = '';
-		$quote = false;
+		$visitor = XenForo_Visitor::getInstance();
+		$postId = false;
 		
-		$viewParams = array(
-			'defaultMessage' => $defaultMessage,
-			'captcha' => XenForo_Captcha_Abstract::createDefault(),
+		$quote = array(
+			'quote_id' => 0,
+			'author_user_id' => $visitor['user_id'],
+			'author_username' => $visitor['username'],
+			'quote_date' => XenForo_Application::$time,
+			'quotation' => '',
+			'quote_state' => 'moderated',
+			'attributed_date' => 0,
+			'attributed_date_str' => '',
+			'attributed_context' => '',
+			'attributed_post_id' => 0,
+			'attributed_user_id' => 0,
+			'attributed_username' => '',
+			'views' => 0,
+			'likes' => 0,
+			'like_users' => serialize(array())
 		);
 		
-		if ($this->_input->inRequest('post'))
+		$viewParams = array(
+			'captcha' => XenForo_Captcha_Abstract::createDefault(),
+			'quote' => $quote
+		);
+		
+		if ($this->_input->inRequest('quote_id'))
 		{
-			$visitor = XenForo_Visitor::getInstance();
-			$postId = $this->_input->filterSingle('post', XenForo_Input::UINT);
+			// editing a quote
+			$quoteId = $this->_input->filterSingle('quote_id', XenForo_Input::UINT);
 			
-			$threadFetchOptions = array(
-				'readUserId' => $visitor['user_id'],
-				'watchUserId' => $visitor['user_id'],
-				'join' => XenForo_Model_Thread::FETCH_AVATAR
-			);
-			$forumFetchOptions = array(
-				'readUserId' => $visitor['user_id']
-			);
+			$quoteModel = $this->_getQuoteModel();
+			$quote = $quoteModel->getQuoteById($quoteId);
 			
+			$this->_assertCanEditQuotation($quote);
+			
+			if ($quote)
+			{
+				$quote['attributed_date_str'] = date('Y-m-d', $quote['attributed_date']);
+				$viewParams['quote'] = $quote;
+			}
+		}
+		else
+		{
+			// creating a new post
+			if ($this->_input->inRequest('post'))
+			{
+				$postId = $this->_input->filterSingle('post', XenForo_Input::UINT);
+			}
+		}
+		
+		if ($postId)
+		{			
 			$postModel = $this->_getPostModel();
 			$post = $postModel->getPostById($postId);
 			
@@ -541,7 +576,11 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 								'post' => $post
 							);
 							
-							$viewParams['defaultMessage'] = XenForo_Helper_String::stripQuotes($post['message'], 0);
+							if ($viewParams['quote']['quotation'] == '')
+							{
+								$viewParams['quote']['quotation'] = 
+									XenForo_Helper_String::stripQuotes($post['message'], 0);	
+							}
 						}
 					}
 				}
@@ -667,6 +706,18 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 	protected function _assertCanAddQuotation()
 	{		
 		if (!$this->_getQuoteModel()->canAddQuotation($errorPhraseKey))
+		{
+			throw $this->getErrorOrNoPermissionResponseException($errorPhraseKey);
+		}
+	}
+	
+	/**
+	 */
+	protected function _assertCanEditQuotation(array $quote)
+	{
+		$errorPhraseKey = '';
+		
+		if (!$this->_getQuoteModel()->canEditQuotation($quote, $errorPhraseKey))
 		{
 			throw $this->getErrorOrNoPermissionResponseException($errorPhraseKey);
 		}

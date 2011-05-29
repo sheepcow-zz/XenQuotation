@@ -520,6 +520,33 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		return XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'deleteAny');
 	}
 	
+	public function canEditQuotation(array $quote, $errorPhraseKey = '', array $viewingUser = null)
+	{
+		$this->standardizeViewingUserReference($viewingUser);
+		$permissions = $viewingUser['permissions'];
+		
+		if (!$viewingUser['user_id'])
+		{
+			$errorPhraseKey = 'xenquote_no_permission_to_edit_quotation';
+			return false;
+		}
+		
+		if ($this->canEditAny())
+		{
+			return true;
+		}
+		
+		if ($quote['author_user_id'] == $viewingUser['user_id'] &&
+		    XenForo_Permission::hasPermission($viewingUser['permissions'], 'quote', 'editOwn'))
+		{
+			return true;
+		}
+		
+		$errorPhraseKey = 'xenquote_no_permission_to_edit_quotation';
+		
+		return false;
+	}
+	
 	/**
 	 * Indicates if the user is able to edit any quotation.
 	 */
