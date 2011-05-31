@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.8" version_id="18" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
+<addon addon_id="XenQuotation" title="XenQuotation" version_string="0.1.9" version_id="19" url="http://www.freddyshouse.com/" install_callback_class="XenQuotation_Installation" install_callback_method="install" uninstall_callback_class="XenQuotation_Installation" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -122,13 +122,13 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="permission_quote_viewDeleted" version_id="10" version_string="1.0.0"><![CDATA[View deleted quotations]]></phrase>
     <phrase title="permission_quote_viewModerated" version_id="11" version_string="1.0.0"><![CDATA[View moderated quotations]]></phrase>
     <phrase title="xenquote_added_by" version_id="0" version_string=""><![CDATA[Added By]]></phrase>
-    <phrase title="xenquote_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[added by {username}]]></phrase>
+    <phrase title="xenquote_added_by_x" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[added by {username}]]></phrase>
     <phrase title="xenquote_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[Add a New Quotation]]></phrase>
     <phrase title="xenquote_add_a_quotation" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Add a Quotation]]></phrase>
     <phrase title="xenquote_add_a_quoteation_now" version_id="11" version_string="1.0.0"><![CDATA[Add a quotation now]]></phrase>
     <phrase title="xenquote_add_quotation" version_id="11" version_string="1.0.0"><![CDATA[Add Quotation]]></phrase>
     <phrase title="xenquote_all_quotations" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[All Quotations]]></phrase>
-    <phrase title="xenquote_and_user_like_this" version_id="11" version_string="1.0.0"><![CDATA[and {user} like this.]]></phrase>
+    <phrase title="xenquote_and_user_like_this" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[and {user} like this.]]></phrase>
     <phrase title="xenquote_approve_quotations" version_id="14" version_string="0.1.3"><![CDATA[Approve Quotations]]></phrase>
     <phrase title="xenquote_attributed_date" version_id="11" version_string="1.0.0"><![CDATA[Attribution Date]]></phrase>
     <phrase title="xenquote_attributed_date_explain" version_id="11" version_string="1.0.0"><![CDATA[(Optional) Enter the date that the quotation was originally said.]]></phrase>
@@ -150,19 +150,19 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_no_permission_to_edit_quotation" version_id="16" version_string="0.1.6"><![CDATA[You do not have permission to edit this quotation.]]></phrase>
     <phrase title="xenquote_no_permission_to_view_quotations" version_id="2" version_string="0.1.1"><![CDATA[You do not have permission to view quotations.]]></phrase>
     <phrase title="xenquote_no_permission_to_view_this_quotation" version_id="2" version_string="0.1.1"><![CDATA[You do not have permission to view this quotation.]]></phrase>
-    <phrase title="xenquote_option_allowedbbcode_tag" version_id="11" version_string="1.0.0"><![CDATA[[{tag}]]]></phrase>
-    <phrase title="xenquote_post_x" version_id="16" version_string="0.1.6"><![CDATA[Post #{post}]]></phrase>
-    <phrase title="xenquote_post_x_in_y" version_id="11" version_string="1.0.0"><![CDATA[Post {position} in {title}]]></phrase>
-    <phrase title="xenquote_quotation" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
+    <phrase title="xenquote_option_allowedbbcode_tag" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[[{tag}]]]></phrase>
+    <phrase title="xenquote_post_x" global_cache="1" version_id="16" version_string="0.1.6"><![CDATA[Post #{post}]]></phrase>
+    <phrase title="xenquote_post_x_in_y" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Post {position} in {title}]]></phrase>
+    <phrase title="xenquote_quotation" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_quotations" version_id="10" version_string="1.0.0"><![CDATA[Quotations]]></phrase>
     <phrase title="xenquote_quotations_added_by_x" version_id="11" version_string="1.0.0"><![CDATA[Quotations by {username}]]></phrase>
     <phrase title="xenquote_quotation_by" version_id="2" version_string="0.1.1"><![CDATA[Quotation By]]></phrase>
     <phrase title="xenquote_quotation_explain" version_id="11" version_string="1.0.0"><![CDATA[Please note that new lines will be removed from the quotation.]]></phrase>
     <phrase title="xenquote_quotation_moderation" version_id="14" version_string="0.1.3"><![CDATA[Quotation Moderation]]></phrase>
     <phrase title="xenquote_quotation_status" version_id="2" version_string="0.1.1"><![CDATA[Quotation Status]]></phrase>
-    <phrase title="xenquote_quotation_x" version_id="15" version_string="0.1.5"><![CDATA[Quotation #{id}]]></phrase>
-    <phrase title="xenquote_random_quotation" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
-    <phrase title="xenquote_random_widget_name" version_id="16" version_string="0.1.6"><![CDATA[XenQuotation: Random Quotation]]></phrase>
+    <phrase title="xenquote_quotation_x" global_cache="1" version_id="15" version_string="0.1.5"><![CDATA[Quotation #{id}]]></phrase>
+    <phrase title="xenquote_random_quotation" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
+    <phrase title="xenquote_random_widget_name" global_cache="1" version_id="16" version_string="0.1.6"><![CDATA[XenQuotation: Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
     <phrase title="xenquote_save_quotation" version_id="2" version_string="0.1.1"><![CDATA[Save Quotation]]></phrase>
     <phrase title="xenquote_save_this_post_as_a_quotation" version_id="16" version_string="0.1.6"><![CDATA[Save this post as a quotation]]></phrase>
@@ -179,15 +179,15 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_undelete" version_id="11" version_string="1.0.0"><![CDATA[Undelete]]></phrase>
     <phrase title="xenquote_undelete_quotations" version_id="14" version_string="0.1.3"><![CDATA[Undelete Quotations]]></phrase>
     <phrase title="xenquote_unlike_quotation" version_id="11" version_string="1.0.0"><![CDATA[Unlike Quotation]]></phrase>
-    <phrase title="xenquote_viewing_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
-    <phrase title="xenquote_viewing_quotation" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
-    <phrase title="xenquote_viewing_quotations" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotations]]></phrase>
+    <phrase title="xenquote_viewing_a_quotation" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
+    <phrase title="xenquote_viewing_quotation" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
+    <phrase title="xenquote_viewing_quotations" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotations]]></phrase>
     <phrase title="xenquote_x_liked_your_quotation_y" version_id="11" version_string="1.0.0"><![CDATA[{name} liked your quotation {title}]]></phrase>
     <phrase title="xenquote_x_liked_ys_quotation_z" version_id="17" version_string="0.1.7"><![CDATA[{name} liked {poster}'s quotation {title}]]></phrase>
-    <phrase title="xenquote_your_quotation_has_been_added" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added.]]></phrase>
-    <phrase title="xenquote_your_quotation_has_been_added_moderated" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added, until it is approved by a moderator it will only be visible to you.]]></phrase>
-    <phrase title="xenquote_your_quotation_has_been_updated" version_id="16" version_string="0.1.6"><![CDATA[Your quotation has been updated.]]></phrase>
-    <phrase title="xenquote_your_quotation_has_been_updated_moderated" version_id="16" version_string="0.1.6"><![CDATA[Your quotation has been updated, until it is approved by a moderator it will only be visible to you.]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_added" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added.]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_added_moderated" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Your quotation has been added, until it is approved by a moderator it will only be visible to you.]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_updated" global_cache="1" version_id="16" version_string="0.1.6"><![CDATA[Your quotation has been updated.]]></phrase>
+    <phrase title="xenquote_your_quotation_has_been_updated_moderated" global_cache="1" version_id="16" version_string="0.1.6"><![CDATA[Your quotation has been updated, until it is approved by a moderator it will only be visible to you.]]></phrase>
     <phrase title="xenquote_your_quotes" global_cache="1" version_id="10" version_string="1.0.0"><![CDATA[Added By You]]></phrase>
     <phrase title="xenquote_you_may_not_add_a_new_quotation" version_id="10" version_string="1.0.0"><![CDATA[You may not add a new quotation]]></phrase>
     <phrase title="xenquote_you_must_enter_a_quotation" version_id="11" version_string="1.0.0"><![CDATA[You must enter a quotation.]]></phrase>
