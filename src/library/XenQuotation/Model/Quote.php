@@ -303,7 +303,7 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		$bbCodeParser = $this->_getBbCodeParser();
 		
 		// bbcode parse the quote
-		$quote['parsedQuotation'] = $this->_bbCodeParser->render(
+		$quote['renderedQuotation'] = $this->_bbCodeParser->render(
 			$quote['quotation'], 
 			array(
 				'stopLineBreakConversion' => true // stops new lines being rendered as <br/>
@@ -379,12 +379,12 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			{
 				$threadTitle = new XenForo_Phrase(
 					'xenquote_post_x', 
-					array('post' => $post['post_id'])
+					array('post' => $quote['attributed_post_id'])
 				);
 			}
 			
 			$attribution[] = '<a href="' .
-			 	XenForo_Link::buildPublicLink('full:posts', array('post_id' => $post['post_id'])) . 
+			 	XenForo_Link::buildPublicLink('full:posts', array('post_id' => $quote['attributed_post_id'])) . 
 			'">' . $threadTitle . '</a>';
 		}
 		

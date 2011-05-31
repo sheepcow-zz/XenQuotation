@@ -92,20 +92,32 @@ class XenQuotation_Event_TemplateHook
 		else if ($hookName == 'post_public_controls' &&
 				 XenForo_Application::get('options')->xenquoteShowSaveAsQuoteLink)
 		{
-			$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
+			$postId = false;
 			
-			// only way to determine which post this is for is
-			// to do some regex magic!
+			if (!empty($hookParams['post']))
+			{
+				// this will work in 1.0.3
+				$postId = $hookParams['post']['post_id'];
+			}
+			else
+			{
+				// this will work in 1.0.2
+				if (preg_match('#data-posturl=".*posts/([0-9]+)/quote"#iU', $contents, $match))
+				{
+					$postId = $match[1];
+				}				
+			}
 			
-			if (preg_match('#data-posturl=".*posts/([0-9]+)/quote"#iU', $contents, $match))
+			if ($postId)
 			{
 				$params = array(
-					'canSaveQuotation' => $quoteModel->canAddQuotation(),
-					'post' => array('post_id' => $match[1])
+					'canSaveQuotation' => XenForo_Model::create('XenQuotation_Model_Quote')->canAddQuotation(),
+					'post' => array('post_id' => $postId)
 				);
 
-				$contents .= $template->create('xenquote_post_save_quotation', $params)->render();	
+				$contents .= $template->create('xenquote_post_save_quotation', $params)->render();
 			}
+
 		}
 	}
 }

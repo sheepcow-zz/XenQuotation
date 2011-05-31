@@ -508,6 +508,8 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		$visitor = XenForo_Visitor::getInstance();
 		$postId = false;
 		
+		$editing = false;
+		
 		$quote = array(
 			'quote_id' => 0,
 			'author_user_id' => $visitor['user_id'],
@@ -543,8 +545,16 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			
 			if ($quote)
 			{
+				$editing = true;
+				
 				$quote['attributed_date_str'] = date('Y-m-d', $quote['attributed_date']);
 				$viewParams['quote'] = $quote;
+				
+				if ($quote['attributed_post_id'] != 0)
+				{
+					// attributed to a post
+					$postId = $quote['attributed_post_id'];
+				}
 			}
 		}
 		else
@@ -557,7 +567,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		}
 		
 		if ($postId)
-		{			
+		{
 			$postModel = $this->_getPostModel();
 			$post = $postModel->getPostById($postId);
 			

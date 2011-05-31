@@ -80,7 +80,10 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 			}
 		}
 		
-		if ($this->isUpdate() && $this->isChanged('quotation'))
+		// if editing a quote and they've changed some text that will be displayed,
+		// reset the state to the default (to allow it to be re-moderated)
+		
+		if ($this->isUpdate() && ($this->isChanged('quotation') || $this->isChanged('attributed_context')))
 		{
 			if (in_array(XenForo_Application::get('options')->xenquoteDefaultQuoteState, $validStates))
 			{
