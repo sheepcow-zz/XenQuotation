@@ -204,9 +204,9 @@ bottom=Bottom of Sidebar</edit_format_params>
   </route_prefixes>
   <style_properties/>
   <templates>
-    <template title="alert_quote_like" version_id="11" version_string="1.0.0"><![CDATA[{xen:phrase xenquote_x_liked_your_quotation_y,
+    <template title="alert_quote_like" version_id="19" version_string="0.1.9"><![CDATA[{xen:phrase xenquote_x_liked_your_quotation_y,
 	'name={xen:helper username, $user, 'subject'}',
-	'title=<a href="{xen:link quotes, $content}" class="PopupItemLink">{$content.quotation}</a>'}]]></template>
+	'title=<a href="{xen:link quotes, $content}" class="PopupItemLink">{xen:helper snippet, $content.quotation, 50}</a>'}]]></template>
     <template title="xenquote_inline_mod_controls_quotation" version_id="14" version_string="0.1.3"><![CDATA[<xen:include template="inline_mod_controls">
 	<xen:set var="$text">{xen:phrase xenquote_quotation_moderation}</xen:set>
 	<xen:set var="$options">
@@ -271,14 +271,14 @@ bottom=Bottom of Sidebar</edit_format_params>
 	<xen:if is="{$canSearch}"><li><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li></xen:if>
 </xen:hook>
 </ul>]]></template>
-    <template title="xenquote_news_feed_item_quotation_list" version_id="17" version_string="0.1.7"><![CDATA[<h3 class="description">
+    <template title="xenquote_news_feed_item_quotation_list" version_id="19" version_string="0.1.9"><![CDATA[<h3 class="description">
 
 	<xen:if is="{$content.author_user_id} == {$visitor.user_id}">
 	
 		<xen:comment><!-- $user liked your post --></xen:comment>
 		{xen:phrase xenquote_x_liked_your_quotation_y,
 			'name={xen:helper username, $user, 'primaryText'}',
-			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{xen:helper wrap, {xen:helper striphtml, $content.renderedQuotation}, 50}</a>'}
+			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{xen:helper snippet, $content.quotation, 50}</a>'}
 		
 	<xen:else />
 	
@@ -286,7 +286,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 		{xen:phrase xenquote_x_liked_ys_quotation_z,
 			'name={xen:helper username, $user, 'primaryText'}',
 			'poster={$content.author_username}',
-			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{xen:helper wrap, {xen:helper striphtml, $content.renderedQuotation}, 50}</a>'}
+			'title=<a href="{xen:link quotes, $content}"{xen:if '{$content.hasPreview}', ' class="PreviewTooltip" data-previewUrl="{xen:link quotes/preview, $content}"'}>{xen:helper snippet, $content.quotation, 50}</a>'}
 		
 	</xen:if>
 
@@ -819,7 +819,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 
 <xen:require css="xenquote_list_item_preview.css" />
 <xen:include template="preview_tooltip" />]]></template>
-    <template title="xenquote_quote_list_item" version_id="17" version_string="0.1.7"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
+    <template title="xenquote_quote_list_item" version_id="19" version_string="0.1.9"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
 		
@@ -829,7 +829,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 				<xen:if is="{$quote.canInlineMod}"><input type="checkbox" name="quotes[]" value="{$quote.quote_id}" class="InlineModCheck" id="inlineModCheck-quote-{$quote.quote_id}" data-target="#quote-{$quote.quote_id}" title="{xen:phrase xenquote_select_quotation}: '{$quote.quotation}'" /></xen:if>
 				<a href="{xen:link 'quotes', $quote}"
 					class="{xen:if $quote.hasPreview, PreviewTooltip}"
-					data-previewUrl="{xen:if $quote.hasPreview, {xen:link quotes/preview, $quote}}">{xen:helper wrap, {xen:helper striphtml, $quote.renderedQuotation}, 50}</a>
+					data-previewUrl="{xen:if $quote.hasPreview, {xen:link quotes/preview, $quote}}">{xen:helper snippet, $quote.quotation, 50}</a>
 			</h3>
 
 			<xen:if hascontent="true">
@@ -872,7 +872,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 	
 </li>]]></template>
     <template title="xenquote_quote_list_likecounter" version_id="13" version_string="0.1.3"><![CDATA[<span class="LikeText">{$quote.likes}</span>]]></template>
-    <template title="xenquote_quote_view" version_id="19" version_string="0.1.9"><![CDATA[<xen:title>{xen:helper wrap, {xen:helper striphtml, $quote.renderedQuotation}, 50}</xen:title>
+    <template title="xenquote_quote_view" version_id="19" version_string="0.1.9"><![CDATA[<xen:title>{xen:helper snippet, $quote.quotation, 50}</xen:title>
 <xen:h1>{xen:phrase xenquote_quotation}</xen:h1>
 
 <xen:require css="xenquote_quote_view.css" />
@@ -1040,20 +1040,20 @@ bottom=Bottom of Sidebar</edit_format_params>
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
     <template title="xenquote_search_form_tabs" version_id="11" version_string="1.0.0"><![CDATA[		<li{xen:if "{$searchType} == 'quote'", ' class="active"'}><a href="{xen:link search, '', 'type=quote'}">{xen:phrase xenquote_search_quotations}</a></li>]]></template>
-    <template title="xenquote_search_result_quote" version_id="17" version_string="0.1.7"><![CDATA[<li id="quote-{$quote.quote_id}" class="searchResult post primaryContent" data-author="{$quote.author.username}">
+    <template title="xenquote_search_result_quote" version_id="19" version_string="0.1.9"><![CDATA[<li id="quote-{$quote.quote_id}" class="searchResult post primaryContent" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>
 
 	<div class="listBlock main">
 		<div class="titleText">
 			<h3 class="title">{$i}
-				<a href="{xen:link 'quotes', $quote}">{xen:helper wrap, {xen:helper striphtml, $quote.renderedQuotation}, 50}</a>
+				<a href="{xen:link 'quotes', $quote}">{xen:helper snippet, $quote.quotation, 50}</a>
 			</h3>
 		</div>
 
 		<div class="meta">
-			{xen:phrase xenquote_quotation_by}: <xen:username user="$quote.author" />,
-			<xen:datetime time="{$quote.quote_date}" />
+			{xen:phrase xenquote_quotation_by}: <xen:username user="$quote.author" />
+			<xen:if is="{$quote.quote_date} > 0">, <xen:datetime time="$quote.quote_date" /></xen:if>
 		</div>
 	</div>
 </li>]]></template>
