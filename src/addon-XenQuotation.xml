@@ -179,6 +179,7 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_unapprove_quotations" version_id="14" version_string="0.1.3"><![CDATA[Unapprove Quotations]]></phrase>
     <phrase title="xenquote_undelete" version_id="11" version_string="1.0.0"><![CDATA[Undelete]]></phrase>
     <phrase title="xenquote_undelete_quotations" version_id="14" version_string="0.1.3"><![CDATA[Undelete Quotations]]></phrase>
+    <phrase title="xenquote_unknown" version_id="19" version_string="0.1.9"><![CDATA[Unknown]]></phrase>
     <phrase title="xenquote_unlike_quotation" version_id="11" version_string="1.0.0"><![CDATA[Unlike Quotation]]></phrase>
     <phrase title="xenquote_viewing_a_quotation" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Viewing a quotation]]></phrase>
     <phrase title="xenquote_viewing_quotation" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Viewing quotation]]></phrase>
@@ -871,7 +872,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 	
 </li>]]></template>
     <template title="xenquote_quote_list_likecounter" version_id="13" version_string="0.1.3"><![CDATA[<span class="LikeText">{$quote.likes}</span>]]></template>
-    <template title="xenquote_quote_view" version_id="17" version_string="0.1.7"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
+    <template title="xenquote_quote_view" version_id="19" version_string="0.1.9"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
 <xen:h1></xen:h1>
 
 <xen:require css="xenquote_quote_view.css" />
@@ -913,7 +914,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 		</dl>
 		<dl>
 			<dt>{xen:phrase xenquote_date_added}:</dt>
-			<dd><xen:datetime time="$quote.quote_date" /></dd>
+			<dd><xen:if is="{$quote.quote_date} > 0"><xen:datetime time="$quote.quote_date" /><xen:else />{xen:phrase xenquote_unknown}</xen:if></dd>
 		</dl>
 	</div>
 	<div class="attributeBlock">
