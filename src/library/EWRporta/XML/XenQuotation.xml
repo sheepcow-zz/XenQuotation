@@ -3,5 +3,5 @@
   <module_name>XenQuotation</module_name>
   <module_cache>now</module_cache>
   <module_settings/>
-  <module_template><![CDATA[<xen:include template="xenquote_sidebar_random_quote"><xen:map from="$XenQuotation" to="$quote" /></xen:include>]]></module_template>
+  <module_template><![CDATA[<xen:include template="xenquote_sidebar_random_quote"><xen:map from="$XenQuotation" to="$quote" /><xen:set var="$title">{xen:phrase xenquote_random_quotation}</xen:set></xen:include>]]></module_template>
 </module>

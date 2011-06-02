@@ -18,7 +18,7 @@
 /**
  * EWRporta random quotation block module.
  */
-class EWRporta_Block_RandomQuotation extends XenForo_Model
+class EWRporta_Block_XenQuotation extends XenForo_Model
 {	
 	public function getModule()
 	{		
@@ -37,6 +37,12 @@ class EWRporta_Block_RandomQuotation extends XenForo_Model
 			// add the random quote to the sidebar
 			$quoteModel->prepareQuotation($quote);
 			$quoteModel->quotationViewed($quote);
+		}
+		else
+		{
+			// no quotations to display, hide the module (makes it a pain
+			// to debug though if you're expecting it to be there)
+			return "killModule";
 		}
 
 		return $quote;

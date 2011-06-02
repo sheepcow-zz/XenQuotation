@@ -57,7 +57,8 @@ class XenQuotation_Event_TemplateHook
 						'quote' => $quote
 				))->render();
 					
-				// work out where to place on the sidebar
+				// work out where to place the quote on the sidebar
+				
 				if ($options->xenquoteRandomPosition === 'top')
 				{
 					$contents = $htmlContent . $contents;
