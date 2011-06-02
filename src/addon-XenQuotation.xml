@@ -872,8 +872,8 @@ bottom=Bottom of Sidebar</edit_format_params>
 	
 </li>]]></template>
     <template title="xenquote_quote_list_likecounter" version_id="13" version_string="0.1.3"><![CDATA[<span class="LikeText">{$quote.likes}</span>]]></template>
-    <template title="xenquote_quote_view" version_id="19" version_string="0.1.9"><![CDATA[<xen:title>{xen:phrase xenquote_quotation}</xen:title>
-<xen:h1></xen:h1>
+    <template title="xenquote_quote_view" version_id="19" version_string="0.1.9"><![CDATA[<xen:title>{xen:helper wrap, {xen:helper striphtml, $quote.renderedQuotation}, 50}</xen:title>
+<xen:h1>{xen:phrase xenquote_quotation}</xen:h1>
 
 <xen:require css="xenquote_quote_view.css" />
 
