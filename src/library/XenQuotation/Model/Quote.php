@@ -137,10 +137,20 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	 * Random Quotation overrides moderator permissions to only display
 	 * visible quotations.
 	 */
-	public function getRandomQuotation(array $fetchOptions = array())
+	public function getRandomQuotation(array $fetchOptions = array(), array $viewingUser = null)
 	{
+		// only visible quotations can be displayed
 		unset($fetchOptions['moderated']);
 		unset($fetchOptions['deleted']);
+		
+		$this->standardizeViewingUserReference($viewingUser);
+		$permissions = $viewingUser['permissions'];
+		
+		// check they can view quotations
+		if (!XenForo_Permission::hasPermission($permissions, 'quote', 'view'))
+		{
+			return false;
+		}
 		
 		$stateLimit = $this->prepareStateLimitFromConditions($fetchOptions, 'quotation', 'quote_state', 'author_user_id');
 		
@@ -158,9 +168,14 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			return false;
 		}
 		
-		$randomId = mt_rand($tableInfo['min_id'], $tableInfo['max_id']);
+		$randomQuote = $this->_getDb()->fetchRow(
+			'SELECT quotation.*
+				FROM `xq_quotation` AS `quotation`
+				WHERE quotation.`quote_id` >= ? AND (' . $stateLimit . ') LIMIT 1',
+			mt_rand($tableInfo['min_id'], $tableInfo['max_id'])
+		);
 
-		return $this->getQuoteById($randomId);
+		return $randomQuote;
 	}
 	
 	/**
