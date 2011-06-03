@@ -130,7 +130,7 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 				'quote', $this->get('quote_id'), $reason
 			);
 		}
-		else if ($this->getExisting('message_state') == 'deleted')
+		else if ($this->getExisting('quote_state') == 'deleted')
 		{
 			$this->getModelFromCache('XenForo_Model_DeletionLog')->removeDeletionLog(
 				'quote', $this->get('quote_id')
