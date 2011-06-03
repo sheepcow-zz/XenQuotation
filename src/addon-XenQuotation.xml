@@ -179,7 +179,7 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_select_quotation" version_id="14" version_string="0.1.3"><![CDATA[Select Quotation]]></phrase>
     <phrase title="xenquote_showing_quotations_x_to_y_of_z" version_id="14" version_string="0.1.3"><![CDATA[Showing quotations {start} to {end} of {total}]]></phrase>
     <phrase title="xenquote_there_are_no_quotations_to_display" version_id="11" version_string="1.0.0"><![CDATA[There are no quotations to display.]]></phrase>
-    <phrase title="xenquote_this_quote_has_been_deleted" version_id="11" version_string="1.0.0"><![CDATA[This quotation has been deleted.]]></phrase>
+    <phrase title="xenquote_this_quote_added_by_x_has_been_deleted" version_id="21" version_string="0.2.1"><![CDATA[This quotation, added by {name}, has been deleted.]]></phrase>
     <phrase title="xenquote_this_quote_waiting_approval" version_id="11" version_string="1.0.0"><![CDATA[This quotation is waiting to be approved by a moderator.]]></phrase>
     <phrase title="xenquote_unapprove" version_id="11" version_string="1.0.0"><![CDATA[Unapprove]]></phrase>
     <phrase title="xenquote_unapprove_quotations" version_id="14" version_string="0.1.3"><![CDATA[Unapprove Quotations]]></phrase>
@@ -832,14 +832,17 @@ bottom=Bottom of Sidebar</edit_format_params>
 
 <xen:require css="xenquote_list_item_preview.css" />
 <xen:include template="preview_tooltip" />]]></template>
-    <template title="xenquote_quote_list_item" version_id="19" version_string="0.1.9"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
+    <template title="xenquote_quote_list_item" version_id="21" version_string="0.2.1"><![CDATA[<xen:if is="{$quote.isDeleted}">
+<xen:include template="xenquote_quote_list_item_deleted" />
+<xen:else />
+<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
 
 	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
 		
 	<div class="listBlock main">
 		<div class="titleText">
 			<h3 class="title">
-				<xen:if is="{$quote.canInlineMod}"><input type="checkbox" name="quotes[]" value="{$quote.quote_id}" class="InlineModCheck" id="inlineModCheck-quote-{$quote.quote_id}" data-target="#quote-{$quote.quote_id}" title="{xen:phrase xenquote_select_quotation}: '{$quote.quotation}'" /></xen:if>
+				<xen:if is="{$quote.canInlineMod}"><input type="checkbox" name="quotes[]" value="{$quote.quote_id}" class="InlineModCheck" id="inlineModCheck-quote-{$quote.quote_id}" data-target="#quote-{$quote.quote_id}" title="{xen:phrase xenquote_select_quotation}: '{xen:helper snippet, $quote.quotation, 50}'" /></xen:if>
 				<a href="{xen:link 'quotes', $quote}"
 					class="{xen:if $quote.hasPreview, PreviewTooltip}"
 					data-previewUrl="{xen:if $quote.hasPreview, {xen:link quotes/preview, $quote}}">{xen:helper snippet, $quote.quotation, 50}</a>
@@ -858,15 +861,55 @@ bottom=Bottom of Sidebar</edit_format_params>
 					<xen:if is="{$quote.canEdit}"><a href="{xen:link 'quotes/edit', $quote}" class=""><span></span>{xen:phrase edit}</span></a></xen:if>
 					<xen:if is="{$quote.canLike}"><a href="{xen:link 'quotes/like', $quote}" class="LikeCounter {xen:if $quote.like_date, unlike, like}" data-container="#likes-quote-{$quote.quote_id}"><span></span><span class="LikeLabel">{xen:if $quote.like_date, {xen:phrase unlike}, {xen:phrase like}}</span></a></xen:if>
 				</div>
-				<xen:if is="{$quote.isDeleted}">
-					<div class="deletionNote">
-						{xen:phrase xenquote_this_quote_has_been_deleted}
-					</div>
-				<xen:else />
-					<div class="attribution muted">
-						{xen:raw $quote.renderedAttribution}
-					</div>
-				</xen:if>
+				<div class="attribution muted">
+					{xen:raw $quote.renderedAttribution}
+				</div>
+			</div>
+		</div>
+	</div>
+		
+	<div class="listBlock stats pairsJustified">
+		<dl class="major"><dt>{xen:phrase likes}:</dt> <dd id="likes-quote-{$quote.quote_id}"><span class="LikeText">{xen:number {$quote.likes}}</span></dd></dl>
+		<dl class="minor"><dt>{xen:phrase views}:</dt> <dd>{xen:number {$quote.views}}</dd></dl>
+	</div>
+
+	<div class="listBlock dateAdded">
+		<dl class="dateAddedInfo">
+			<dt><xen:username user="$quote.author" /></dt>
+			<dd class="muted dateTime"><xen:if is="{$quote.quote_date} > 0"><xen:datetime time="$quote.quote_date" /></xen:if></dd>
+		</dl>
+	</div>
+	
+</li>
+</xen:if>]]></template>
+    <template title="xenquote_quote_list_item_deleted" version_id="21" version_string="0.2.1"><![CDATA[<li id="quote-{$quote.quote_id}" class="quotationListItem {$quote.quote_state}" data-author="{$quote.author.username}">
+
+	<div class="listBlock posterAvatar"><xen:avatar user="$quote.author" size="s" img="true" /></div>			
+		
+	<div class="listBlock main">
+		<div class="titleText">
+			<h3 class="title muted">
+				<xen:if is="{$quote.canInlineMod}"><input type="checkbox" name="quotes[]" value="{$quote.quote_id}" class="InlineModCheck" id="inlineModCheck-quote-{$quote.quote_id}" data-target="#quote-{$quote.quote_id}" title="{xen:phrase xenquote_select_quotation}: '{xen:helper snippet, $quote.quotation, 50}'" /></xen:if>
+				<label for="inlineModCheck-quote-{$quote.quote_id}">{xen:helper snippet, $quote.quotation, 50}</label>
+			</h3>
+
+			<xen:if hascontent="true">
+				<div class="iconKey">
+				<xen:contentcheck>
+					<xen:if is="{$quote.isModerated}"><span class="moderated" title="{xen:phrase moderated}">{xen:phrase moderated}</span></xen:if>
+				</xen:contentcheck>
+				</div>
+			</xen:if>
+
+			<div class="secondRow">
+				<div class="controls faint">
+					<a href="{xen:link 'quotes', $quote}" class=""><span></span>{xen:phrase view}</span></a>
+					<xen:if is="{$quote.canEdit}"><a href="{xen:link 'quotes/edit', $quote}" class=""><span></span>{xen:phrase edit}</span></a></xen:if>
+				</div>
+				<div class="deletionNote">
+					{xen:phrase xenquote_this_quote_added_by_x_has_been_deleted, 'name={xen:helper username, $quote.author}'}
+					{xen:phrase deleted_by_x, 'name={xen:helper username, $quote.deleteInfo}'}, <xen:datetime time="{$quote.delete_date}" /><xen:if is="{$quote.delete_reason}">, {xen:phrase reason}: {$quote.delete_reason}</xen:if>.
+				</div>
 			</div>
 		</div>
 	</div>

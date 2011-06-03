@@ -23,6 +23,13 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 {
 	protected $_existingDataErrorPhrase = 'xenquote_requested_quotation_not_found';
 	
+	/**
+	 * Holds the reason for soft deletion.
+	 *
+	 * @var string
+	 */
+	const DATA_DELETE_REASON = 'deleteReason';
+	
 	protected function _getFields()
 	{
 		return array(
@@ -111,6 +118,24 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 	
 	protected function _updateDeletionLog()
 	{
+		if (!$this->isChanged('quote_state'))
+		{
+			return;
+		}
+
+		if ($this->get('quote_state') == 'deleted')
+		{
+			$reason = $this->getExtraData(self::DATA_DELETE_REASON);
+			$this->getModelFromCache('XenForo_Model_DeletionLog')->logDeletion(
+				'quote', $this->get('quote_id'), $reason
+			);
+		}
+		else if ($this->getExisting('message_state') == 'deleted')
+		{
+			$this->getModelFromCache('XenForo_Model_DeletionLog')->removeDeletionLog(
+				'quote', $this->get('quote_id')
+			);
+		}
 	}
 	
 	protected function _updateModerationQueue()

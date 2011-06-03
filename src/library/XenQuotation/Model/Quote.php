@@ -21,7 +21,8 @@
  */
 class XenQuotation_Model_Quote extends XenForo_Model
 {
-
+	const FETCH_DELETION_LOG = 0x01;
+	
 	protected $_bbCodeParser = null;
 
 	/**
@@ -36,6 +37,7 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		$limitOptions = $this->prepareLimitFetchOptions($fetchOptions);
 		$stateLimit = $this->prepareStateLimitFromConditions($fetchOptions, 'quotation', 'quote_state', 'author_user_id');
 		$orderBy = $this->prepareQuoteOrderOptions($fetchOptions);
+		$joinOptions = $this->prepareQuoteJoinOptions($fetchOptions);
 		
 		$whereConditions = array();
 
@@ -53,8 +55,8 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		$whereClause = $this->getConditionsForClause($whereConditions);
 				
 		return $this->fetchAllKeyed($this->limitQueryResults('
-				SELECT quotation.*
-				FROM xq_quotation AS quotation
+				SELECT quotation.* ' . $joinOptions['selectFields'] . '
+				FROM xq_quotation AS quotation ' . $joinOptions['joinTables'] . '
 				WHERE (' . $stateLimit . ') AND (' . $whereClause . ')
 				' . $orderBy . '
 			', $limitOptions['limit'], $limitOptions['offset']), 
@@ -103,8 +105,11 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			return false;
 		}
 		
+		$joinOptions = $this->prepareQuoteJoinOptions($fetchOptions);
+		
 		return $this->_getDb()->fetchRow('
-			SELECT quotation.* FROM xq_quotation AS quotation
+			SELECT quotation.* ' . $joinOptions['selectFields'] . '
+			FROM xq_quotation AS quotation ' . $joinOptions['joinTables'] . '
 			 WHERE quotation.`quote_id` = ?
 		', $quoteId);
 	}
@@ -124,9 +129,11 @@ class XenQuotation_Model_Quote extends XenForo_Model
 		
 		$orderClause = $this->prepareQuoteOrderOptions($fetchOptions, 'quotation.quote_date');
 		$stateLimit = $this->prepareStateLimitFromConditions($fetchOptions, 'quotation', 'quote_state', 'author_user_id');
+		$joinOptions = $this->prepareQuoteJoinOptions($fetchOptions);
 		
 		return $this->fetchAllKeyed(
-			'SELECT quotation.* FROM xq_quotation AS quotation
+			'SELECT quotation.* ' . $joinOptions['selectFields'] . '
+			FROM xq_quotation AS quotation ' . $joinOptions['joinTables'] . '
 			 WHERE quotation.`quote_id` IN (' . $this->_getDb()->quote($quoteIds) . ')
 			 AND (' . $stateLimit . ')
 			' . $orderClause . '
@@ -315,6 +322,16 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			$quote['isDeleted'] = true;
 		}
 		
+		if (!empty($quote['delete_date']))
+		{
+			$quote['deleteInfo'] = array(
+				'user_id' => $quote['delete_user_id'],
+				'username' => $quote['delete_username'],
+				'date' => $quote['delete_date'],
+				'reason' => $quote['delete_reason'],
+			);
+		}
+		
 		$bbCodeParser = $this->_getBbCodeParser();
 		
 		// bbcode parse the quote
@@ -337,7 +354,6 @@ class XenQuotation_Model_Quote extends XenForo_Model
 				if ($u['user_id'] == $visitor['user_id'])
 				{
 					$quote['isLiked'] = true;
-					$quote['like_date'] = 1;
 					break;
 				}
 			}
@@ -667,6 +683,60 @@ class XenQuotation_Model_Quote extends XenForo_Model
 			'likes' => 'quotation.likes'
 		);
 		return $this->getOrderByClause($choices, $fetchOptions, $defaultOrderSql);
+	}
+	
+	/**
+	 * Checks the 'join' key of the incoming array for the presence of the FETCH_x bitfields in this class
+	 * and returns SQL snippets to join the specified tables if required
+	 *
+	 * @param array $fetchOptions containing a 'join' integer key build from this class's FETCH_x bitfields
+	 *
+	 * @return array Containing 'selectFields' and 'joinTables' keys. Example: selectFields = ', user.*, foo.title'; joinTables = ' INNER JOIN foo ON (foo.id = other.id) '
+	 */
+	public function prepareQuoteJoinOptions(array $fetchOptions)
+	{
+		$selectFields = '';
+		$joinTables = '';
+
+		$db = $this->_getDb();
+
+		if (!empty($fetchOptions['join']))
+		{
+
+			if ($fetchOptions['join'] & self::FETCH_DELETION_LOG)
+			{
+				$selectFields .= ',
+					deletion_log.delete_date, deletion_log.delete_reason,
+					deletion_log.delete_user_id, deletion_log.delete_username';
+				$joinTables .= '
+					LEFT JOIN xf_deletion_log AS deletion_log ON
+						(deletion_log.content_type = \'quote\' AND deletion_log.content_id = quotation.quote_id)';
+			}
+		}
+
+		if (isset($fetchOptions['likeUserId']))
+		{
+			if (empty($fetchOptions['likeUserId']))
+			{
+				$selectFields .= ',
+					0 AS like_date';
+			}
+			else
+			{
+				$selectFields .= ',
+					liked_content.like_date';
+				$joinTables .= '
+					LEFT JOIN xf_liked_content AS liked_content
+						ON (liked_content.content_type = \'quote\'
+							AND liked_content.content_id = quotation.quote_id
+							AND liked_content.like_user_id = ' .$db->quote($fetchOptions['likeUserId']) . ')';
+			}
+		}
+
+		return array(
+			'selectFields' => $selectFields,
+			'joinTables'   => $joinTables
+		);
 	}
 
 	/**

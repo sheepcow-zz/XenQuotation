@@ -111,7 +111,8 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			'page' => $page,
 			'order' => $sortOrder,
 			'direction' => $sortDirection,
-			'likeUserId' => $visitor['user_id']
+			'likeUserId' => $visitor['user_id'],
+			'join' => XenQuotation_Model_Quote::FETCH_DELETION_LOG
 		);
 		
 		if (!empty($quotesByUser))

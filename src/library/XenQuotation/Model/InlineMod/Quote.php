@@ -158,6 +158,7 @@ class XenQuotation_Model_InlineMod_Quote extends XenForo_Model
 			}
 			else
 			{
+				$dw->setExtraData(XenQuotation_DataWriter_Quote::DATA_DELETE_REASON, $options['reason']);
 				$dw->set('quote_state', 'deleted');
 				$dw->save();
 			}
