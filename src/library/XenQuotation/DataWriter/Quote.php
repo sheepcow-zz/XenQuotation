@@ -149,6 +149,14 @@ class XenQuotation_DataWriter_Quote extends XenForo_DataWriter
 		{
 			$this->getModelFromCache('XenForo_Model_Alert')->deleteAlerts('quote', $this->get('quote_id'));
 		}
+		
+		$this->getModelFromCache('XenForo_Model_DeletionLog')->removeDeletionLog(
+			'quote', $this->get('quote_id')
+		);
+		
+		$this->getModelFromCache('XenForo_Model_ModerationQueue')->deleteFromModerationQueue(
+			'quote', $this->get('quote_id')
+		);
 	}
 	
 	/**

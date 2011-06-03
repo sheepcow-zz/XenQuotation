@@ -121,6 +121,12 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="permission_quote_view" version_id="10" version_string="1.0.0"><![CDATA[View quotations]]></phrase>
     <phrase title="permission_quote_viewDeleted" version_id="10" version_string="1.0.0"><![CDATA[View deleted quotations]]></phrase>
     <phrase title="permission_quote_viewModerated" version_id="11" version_string="1.0.0"><![CDATA[View moderated quotations]]></phrase>
+    <phrase title="style_property_group_xenquoteRandomBlock_master" version_id="21" version_string="0.2.1"><![CDATA[XenQuotation: Random Quotation]]></phrase>
+    <phrase title="style_property_group_xenquoteRandomBlock_master_desc" version_id="21" version_string="0.2.1"><![CDATA[Style options for the Random Quotation block.]]></phrase>
+    <phrase title="style_property_xenquoteRandomAttribution_description_master" version_id="21" version_string="0.2.1"><![CDATA[The attribution text.]]></phrase>
+    <phrase title="style_property_xenquoteRandomAttribution_master" version_id="21" version_string="0.2.1"><![CDATA[Attribution]]></phrase>
+    <phrase title="style_property_xenquoteRandomQuote_description_master" version_id="21" version_string="0.2.1"><![CDATA[The text of the quotation.]]></phrase>
+    <phrase title="style_property_xenquoteRandomQuote_master" version_id="21" version_string="0.2.1"><![CDATA[Quotation]]></phrase>
     <phrase title="xenquote_added_by" version_id="0" version_string=""><![CDATA[Added By]]></phrase>
     <phrase title="xenquote_added_by_x" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[added by {username}]]></phrase>
     <phrase title="xenquote_added_this_quotation" version_id="19" version_string="0.1.9"><![CDATA[added this quote]]></phrase>
@@ -202,7 +208,14 @@ bottom=Bottom of Sidebar</edit_format_params>
       <prefix original_prefix="quotes" class="XenQuotation_Routes_Prefix_Quotes" build_link="data_only"/>
     </route_type>
   </route_prefixes>
-  <style_properties/>
+  <style_properties>
+    <property property_name="xenquoteRandomQuote" property_type="css" definition="1" group_name="xenquoteRandomBlock" title="Quotation" description="The text of the quotation." css_components="text" scalar_type="" scalar_parameters="" display_order="10" sub_group=""><![CDATA[{"font-size":"11pt"}]]></property>
+    <property property_name="xenquoteRandomAttribution" property_type="css" definition="1" group_name="xenquoteRandomBlock" title="Attribution" description="The attribution text." css_components="text,background,border,layout,extra" scalar_type="" scalar_parameters="" display_order="20" sub_group=""><![CDATA[{"color":"@dimmedTextColor","padding-bottom":"0","padding-left":"0","padding-right":"0","padding-top":"6px"}]]></property>
+    <group group_name="xenquoteRandomBlock" display_order="1500">
+      <title>XenQuotation: Random Quotation</title>
+      <description>Style options for the Random Quotation block.</description>
+    </group>
+  </style_properties>
   <templates>
     <template title="alert_quote_like" version_id="19" version_string="0.1.9"><![CDATA[{xen:phrase xenquote_x_liked_your_quotation_y,
 	'name={xen:helper username, $user, 'subject'}',
@@ -1057,36 +1070,38 @@ bottom=Bottom of Sidebar</edit_format_params>
 		</div>
 	</div>
 </li>]]></template>
-    <template title="xenquote_sidebar_random_quote" version_id="19" version_string="0.1.9"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
+    <template title="xenquote_sidebar_random_quote" version_id="21" version_string="0.2.1"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
 
 	<!-- block: sidebar_random_quote -->
-	<div class="section randomQuotation">
+	<div class="section">
 		<div class="secondaryContent">
 			<h3>{$title}</h3>
 			<xen:include template="xenquote_sidebar_random_quote_content" />
 		</div>
 	</div>
 	<!-- end block: sidebar_random_quote -->]]></template>
-    <template title="xenquote_sidebar_random_quote.css" version_id="3" version_string="0.1.2"><![CDATA[.sidebar .section .quotation
+    <template title="xenquote_sidebar_random_quote.css" version_id="21" version_string="0.2.1"><![CDATA[.sidebar .randomQuotation .quotation
 {
-	font-size: 11pt;
+	{xen:property xenquoteRandomQuote}
 }
 
-.sidebar .section .quotationAttribution
+.sidebar .randomQuotation .attribution
 {
-	padding: 6px 0 0 0;
+	{xen:property xenquoteRandomAttribution}
 }]]></template>
-    <template title="xenquote_sidebar_random_quote_content" version_id="19" version_string="0.1.9"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
+    <template title="xenquote_sidebar_random_quote_content" version_id="21" version_string="0.2.1"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
 
 <xen:if is="{$quote}">
-	<div class="quotation">
-		{xen:raw $quote.renderedQuotation}
-	</div>
-	<div class="quotationAttribution">
-		<span class="muted"><a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical" class="dimmed">#{$quote.quote_id}</a></span> <span class="dimmed">{xen:raw $quote.renderedAttribution}</span>
-	</div>
-	<div class="footnote">
-		<xen:username user="$quote.author" /> {xen:phrase xenquote_added_this_quotation} <xen:if is="{$quote.quote_date} > 0"><xen:datetime time="$quote.quote_date" /></xen:if>
+	<div class="randomQuotation">
+		<span class="quotation">
+			{xen:raw $quote.renderedQuotation}
+		</span>
+		<div class="attribution">
+			<span class="muted"><a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical" class="dimmed">#{$quote.quote_id}</a></span> {xen:raw $quote.renderedAttribution}
+		</div>
+		<div class="footnote">
+			<xen:username user="$quote.author" /> {xen:phrase xenquote_added_this_quotation} <xen:if is="{$quote.quote_date} > 0"><xen:datetime time="$quote.quote_date" /></xen:if>
+		</div>
 	</div>
 <xen:else />
 	{xen:phrase xenquote_there_are_no_quotations_to_display}
