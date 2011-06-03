@@ -3,7 +3,32 @@
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
-  <admin_templates/>
+  <admin_templates>
+    <template title="xenquote_import_quoteit_config"><![CDATA[<xen:title>{xen:phrase configure_importer}: {$name}</xen:title>
+
+<xen:form action="{xen:adminlink import/config}">
+	<xen:textboxunit label="{xen:phrase mysql_server}:" name="config[db][host]"
+		value="{$input.MasterServer.servername}" placeholder="$config['MasterServer']['servername']" />
+	<xen:textboxunit label="{xen:phrase mysql_port}:" name="config[db][port]"
+		value="{$input.MasterServer.port}" placeholder="$config['MasterServer']['port']" />
+	<xen:textboxunit label="{xen:phrase mysql_user_name}:" name="config[db][username]"
+		value="{$input.MasterServer.username}" placeholder="$config['MasterServer']['username']" />
+	<xen:textboxunit label="{xen:phrase mysql_password}:" name="config[db][password]"
+		value="{$input.MasterServer.password}" placeholder="$config['MasterServer']['password']" autocomplete="off" />
+	<xen:textboxunit label="{xen:phrase mysql_database_name}:" name="config[db][dbname]"
+		value="{$input.Database.dbname}" placeholder="$config['Database']['dbname']" />
+		<xen:textboxunit label="{xen:phrase table_prefix}:" name="config[db][prefix]"
+			value="{$input.Database.tableprefix}" placeholder="$config['Database']['tableprefix']" />
+	<xen:textboxunit label="{xen:phrase force_character_set}:" name="config[db][charset]"
+		value="{$input.Mysqli.charset}" placeholder="$config['Mysqli']['charset']">
+		<xen:explain>{xen:phrase if_setting_character_set_in_vbulletin_via_config_enter_here}</xen:explain>
+	</xen:textboxunit>
+	
+	<xen:submitunit save="{xen:phrase validate_configuration}" />
+		
+	<input type="hidden" name="importer" value="{$importer}" />
+</xen:form>]]></template>
+  </admin_templates>
   <code_events/>
   <code_event_listeners>
     <listener event_id="navigation_tabs" execute_order="10" callback_class="XenQuotation_Event_NavigationTabs" callback_method="listen" active="1" description="Adds the quotes navigation tab."/>
@@ -168,6 +193,7 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_quotation_moderation" version_id="14" version_string="0.1.3"><![CDATA[Quotation Moderation]]></phrase>
     <phrase title="xenquote_quotation_status" version_id="2" version_string="0.1.1"><![CDATA[Quotation Status]]></phrase>
     <phrase title="xenquote_quotation_x" global_cache="1" version_id="15" version_string="0.1.5"><![CDATA[Quotation #{id}]]></phrase>
+    <phrase title="xenquote_quoteit_table_name" version_id="21" version_string="0.2.1"><![CDATA[QuoteIt! Table Name]]></phrase>
     <phrase title="xenquote_random_quotation" global_cache="1" version_id="11" version_string="1.0.0"><![CDATA[Random Quotation]]></phrase>
     <phrase title="xenquote_random_widget_name" global_cache="1" version_id="16" version_string="0.1.6"><![CDATA[XenQuotation: Random Quotation]]></phrase>
     <phrase title="xenquote_requested_quotation_not_found" version_id="11" version_string="1.0.0"><![CDATA[The requested quotation could not be found.]]></phrase>
@@ -178,6 +204,7 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="xenquote_select_deselect_all_quotations_on_this_page" version_id="14" version_string="0.1.3"><![CDATA[Select / deselect all quotations on this page]]></phrase>
     <phrase title="xenquote_select_quotation" version_id="14" version_string="0.1.3"><![CDATA[Select Quotation]]></phrase>
     <phrase title="xenquote_showing_quotations_x_to_y_of_z" version_id="14" version_string="0.1.3"><![CDATA[Showing quotations {start} to {end} of {total}]]></phrase>
+    <phrase title="xenquote_table_or_database_name_is_not_correct" version_id="21" version_string="0.2.1"><![CDATA[The table or database name is not correct.]]></phrase>
     <phrase title="xenquote_there_are_no_quotations_to_display" version_id="11" version_string="1.0.0"><![CDATA[There are no quotations to display.]]></phrase>
     <phrase title="xenquote_this_quote_added_by_x_has_been_deleted" version_id="21" version_string="0.2.1"><![CDATA[This quotation, added by {name}, has been deleted.]]></phrase>
     <phrase title="xenquote_this_quote_waiting_approval" version_id="11" version_string="1.0.0"><![CDATA[This quotation is waiting to be approved by a moderator.]]></phrase>
