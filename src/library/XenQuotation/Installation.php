@@ -43,13 +43,34 @@ class XenQuotation_Installation
 			  `attributed_context` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
 			  `attributed_post_id` int(10) unsigned NOT NULL DEFAULT '0',
 			  `attributed_user_id` int(10) unsigned NOT NULL DEFAULT '0',
-			  `attributed_username` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+			  `attributed_username` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
 			  `views` int(10) unsigned NOT NULL DEFAULT '0',
 			  `likes` int(10) unsigned NOT NULL DEFAULT '0',
 			  `like_users` blob NOT NULL,
 			  PRIMARY KEY (`quote_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1"
 		);
+		
+		/*
+		 * Upgrades
+		 */
+		
+		if ($existingAddon)
+		{
+			
+			/*
+			 * UPDATE TO VERSION 0.2.2
+			 */
+			
+			if ($addon['version_id'] < 22)
+			{
+				$db->query(
+					"ALTER TABLE `xq_quotation` 
+					 CHANGE  `author_username`
+						`author_username` varchar(100) CHARSET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+				);	
+			}
+		}
 		
 		/*
 		 * Set up the quotes content type

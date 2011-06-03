@@ -16,7 +16,10 @@
  */
 
 /**
- * Allows the importing of QuoteIt! vBulletin add-on.
+ * Allows the importing of QuoteIt! vBulletin add-on. Currently requires
+ * that the database provided contains the QuoteIt! add-on "quotes" table
+ * and the vBulletin "users" table (so it can map users -> quotes). 
+ * Eventually this may extend the vBulletin importer ...
  */
 class XenForo_Importer_QuoteIt extends XenForo_Importer_Abstract
 {
@@ -231,9 +234,9 @@ class XenForo_Importer_QuoteIt extends XenForo_Importer_Abstract
 			{
 				$name = $this->_convertToUtf8($quote['author']);
 				
-				if (strlen($name) > 50)
+				if (strlen($name) > 100)
 				{
-					$name = substr($name, 0, 47).'...';
+					$name = substr($name, 0, 97).'...';
 				}
 				
 				$import['attributed_username'] = $name;
