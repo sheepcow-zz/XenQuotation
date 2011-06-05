@@ -308,7 +308,7 @@ class XenForo_Importer_QuoteIt extends XenForo_Importer_Abstract
 		try
 		{
 			$data = $sDb->fetchAll(
-				'SELECT users.`userid`, users.`username` FROM ' . $prefix . 'users AS users'
+				'SELECT user.`userid`, user.`username` FROM ' . $prefix . 'user AS user'
 			);
 		}
 		catch (Zend_Db_Exception $e)
