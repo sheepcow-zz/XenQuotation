@@ -318,9 +318,12 @@ class XenForo_Importer_QuoteIt extends XenForo_Importer_Abstract
 		
 		if ($data)
 		{
+			$im = $this->_importModel;
+			
 			foreach ($data as $user)
 			{
 				$userId = $im->getUserIdByUserName($user['username']);
+				
 				if ($userId)
 				{
 					$map[$user['userid']] = $userId;
