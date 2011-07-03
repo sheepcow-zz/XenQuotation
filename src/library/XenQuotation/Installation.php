@@ -66,7 +66,7 @@ class XenQuotation_Installation
 			 * UPDATE TO VERSION 0.2.2
 			 */
 			
-			if ($addon['version_id'] < 22)
+			if ($existingAddon['version_id'] < 22)
 			{
 				$db->query(
 					"ALTER TABLE `xq_quotation` 
