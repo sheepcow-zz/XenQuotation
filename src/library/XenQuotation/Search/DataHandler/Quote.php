@@ -117,7 +117,9 @@ class XenQuotation_Search_DataHandler_Quote extends XenForo_Search_DataHandler_A
 	 */
 	public function getDataForResults(array $ids, array $viewingUser, array $resultsGrouped)
 	{
-		return $this->_getQuoteModel()->getQuotesByIds($ids);
+		return $this->_getQuoteModel()->getQuotesByIds($ids, array(
+			'join' => XenQuotation_Model_Quote::FETCH_AVATARS
+		));
 	}
 	
 	/**

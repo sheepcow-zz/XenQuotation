@@ -112,7 +112,8 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 			'order' => $sortOrder,
 			'direction' => $sortDirection,
 			'likeUserId' => $visitor['user_id'],
-			'join' => XenQuotation_Model_Quote::FETCH_DELETION_LOG
+			'join' => XenQuotation_Model_Quote::FETCH_DELETION_LOG |
+					  XenQuotation_Model_Quote::FETCH_AVATARS
 		);
 		
 		if (!empty($quotesByUser))
@@ -302,7 +303,9 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 		$quoteHelper = $this->getHelper('XenQuotation_ControllerHelper_Quote');
 		$quoteHelper->assertQuoteValidAndViewable($quoteId);
 
-		$quote = $quoteModel->getQuoteById($quoteId);
+		$quote = $quoteModel->getQuoteById($quoteId, array(
+			'join' => XenQuotation_Model_Quote::FETCH_AVATARS
+		));
 		$quoteModel->prepareQuotation($quote);	
 		
 		$viewParams = array(
@@ -461,6 +464,7 @@ class XenQuotation_ControllerPublic_Quote extends XenForo_ControllerPublic_Abstr
 				}
 				else
 				{
+					$dw->set('attributed_user_id', 0);
 					$dw->set('attributed_username', $match[1]);
 				}
 			}

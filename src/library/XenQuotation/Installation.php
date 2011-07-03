@@ -47,7 +47,11 @@ class XenQuotation_Installation
 			  `views` int(10) unsigned NOT NULL DEFAULT '0',
 			  `likes` int(10) unsigned NOT NULL DEFAULT '0',
 			  `like_users` blob NOT NULL,
-			  PRIMARY KEY (`quote_id`)
+			  PRIMARY KEY (`quote_id`),
+			  KEY `quote_date` (`quote_date`),
+			  KEY `author_user_id` (`author_user_id`),
+			  KEY `views` (`views`),
+			  KEY `likes` (`likes`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1"
 		);
 		

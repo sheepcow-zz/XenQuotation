@@ -23,6 +23,12 @@ class XenQuotation_Model_Quote extends XenForo_Model
 {
 	const FETCH_DELETION_LOG = 0x01;
 	
+	const FETCH_ATTRIBUTED_USER = 0x02;
+	
+	const FETCH_AUTHOR = 0x04;
+	
+	const FETCH_AVATARS = 0x08;
+	
 	protected $_bbCodeParser = null;
 
 	/**
@@ -283,32 +289,37 @@ class XenQuotation_Model_Quote extends XenForo_Model
 	 */
 	public function prepareQuotation(array &$quote)
 	{
-		$userIds = array($quote['author_user_id'], $quote['attributed_user_id']);
 		
-		$userModel = $this->_getUserModel();
-		$users = $userModel->getUsersByIds($userIds);
-
-		if (!empty($users[$quote['author_user_id']])) 
+		if (!empty($quote['real_author_username']))
 		{
-			$quote['author'] = $users[$quote['author_user_id']];
+			$quote['author'] = array(
+				'user_id' => $quote['author_user_id'],
+				'username' => $quote['real_author_username']
+			);
 		}
 		else
 		{
 			$quote['author'] = array(
-				'username' => $quote['author_username'],
-				'user_id' => $quote['author_user_id']
+				'user_id' => $quote['author_user_id'],
+				'username' => $quote['author_username']
 			);
 		}
 		
-		if (!empty($users[$quote['attributed_user_id']])) 
+		$quote['author']['gravatar'] = empty($quote['author_gravatar']) ? '' : $quote['author_gravatar'];
+		$quote['author']['avatar_date'] = empty($quote['author_avatar_date']) ? 0 : $quote['author_avatar_date'];
+
+		if (!empty($quote['real_attributed_username']))
 		{
-			$quote['attributed_user'] = $users[$quote['attributed_user_id']];
+			$quote['attributed_user'] = array(
+				'user_id' => $quote['attributed_user_id'],
+				'username' => $quote['real_attributed_username']
+			);
 		}
 		else
 		{
 			$quote['attributed_user'] = array(
-				'username' => $quote['attributed_username'],
-				'user_id' => $quote['attributed_user_id']
+				'user_id' => $quote['attributed_user_id'],
+				'username' => $quote['attributed_username']
 			);
 		}
 		
@@ -711,6 +722,30 @@ class XenQuotation_Model_Quote extends XenForo_Model
 				$joinTables .= '
 					LEFT JOIN xf_deletion_log AS deletion_log ON
 						(deletion_log.content_type = \'quote\' AND deletion_log.content_id = quotation.quote_id)';
+			}
+			
+			if ($fetchOptions['join'] & self::FETCH_ATTRIBUTED_USER)
+			{
+				$selectFields .= ', attribuser.username AS real_attributed_username';
+				$joinTables .= '
+					LEFT OUTER JOIN xf_user AS attribuser ON
+						(quotation.attributed_user_id = attribuser.user_id)';
+			}
+			
+			if ($fetchOptions['join'] & self::FETCH_AUTHOR)
+			{
+				$selectFields .= ', authoruser.username AS real_author_username';
+				$joinTables .= '
+					LEFT OUTER JOIN xf_user AS authoruser ON
+						(quotation.author_user_id = authoruser.user_id)';
+			}
+			
+			if ($fetchOptions['join'] & self::FETCH_AVATARS)
+			{
+				$selectFields .= ', avataruser.gravatar AS author_gravatar, avataruser.avatar_date AS author_avatar_date';
+				$joinTables .= '
+					LEFT OUTER JOIN xf_user AS avataruser ON
+						(quotation.author_user_id = avataruser.user_id)';
 			}
 		}
 
