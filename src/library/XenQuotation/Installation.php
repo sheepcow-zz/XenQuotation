@@ -70,8 +70,7 @@ class XenQuotation_Installation
 			{
 				$db->query(
 					"ALTER TABLE `xq_quotation` 
-					 CHANGE  `author_username`
-						`author_username` varchar(100) CHARSET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+					 CHANGE `author_username` `author_username` varchar(100) CHARSET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
 				);	
 			}
 		}
