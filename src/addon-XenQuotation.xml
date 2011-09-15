@@ -60,13 +60,15 @@ moderated=Moderated</edit_format_params>
       <relation group_id="xenquotation" display_order="110"/>
     </option>
     <option option_id="xenquoteRandomPosition" edit_format="radio" data_type="string" can_backup="1">
-      <default_value>above_stats</default_value>
-      <edit_format_params>top=Top of Sidebar
-above_members=Above Online Members
-below_members=Below Online Members
-above_stats=Above Forum Statistics
-below_stats=Below Forum Statistics
-bottom=Bottom of Sidebar</edit_format_params>
+      <default_value>sidebar_above_stats</default_value>
+      <edit_format_params>sidebar_top=Top of Sidebar
+sidebar_above_members=Above Online Members
+sidebar_below_members=Below Online Members
+sidebar_above_stats=Above Forum Statistics
+sidebar_below_stats=Below Forum Statistics
+sidebar_bottom=Bottom of Sidebar
+forumlist_top=Above the Node List
+forumlist_bottom=Below the Node List</edit_format_params>
       <sub_options></sub_options>
       <relation group_id="xenquotation_random" display_order="200"/>
     </option>
@@ -81,6 +83,12 @@ bottom=Bottom of Sidebar</edit_format_params>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
       <relation group_id="xenquotation_random" display_order="300"/>
+    </option>
+    <option option_id="xenquoteShowOnNav" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>1</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="xenquotation" display_order="90"/>
     </option>
     <option option_id="xenquoteShowSaveAsQuoteLink" edit_format="onoff" data_type="boolean" can_backup="1">
       <default_value>true</default_value>
@@ -129,6 +137,8 @@ bottom=Bottom of Sidebar</edit_format_params>
     <phrase title="option_xenquoteRandomQuote_explain" version_id="16" version_string="0.1.6"><![CDATA[Show the random quote. This option enables the add-on to add a random quote to the sidebar (<em>note</em>: it does not effect the Widget Framework widget or XenPorta module).]]></phrase>
     <phrase title="option_xenquoteRandomTitle" version_id="16" version_string="0.1.6"><![CDATA[Title]]></phrase>
     <phrase title="option_xenquoteRandomTitle_explain" version_id="16" version_string="0.1.6"><![CDATA[Title for the random quotation block. Leave empty for default.]]></phrase>
+    <phrase title="option_xenquoteShowOnNav" version_id="23" version_string="0.2.3"><![CDATA[Show in Navigation Bar]]></phrase>
+    <phrase title="option_xenquoteShowOnNav_explain" version_id="23" version_string="0.2.3"><![CDATA[Should the "Quotations" item be shown on the navigation bar.]]></phrase>
     <phrase title="option_xenquoteShowSaveAsQuoteLink" version_id="16" version_string="0.1.6"><![CDATA[Show "Save Quotation" Link]]></phrase>
     <phrase title="option_xenquoteShowSaveAsQuoteLink_explain" version_id="16" version_string="0.1.6"><![CDATA[Adds a link on each post to turn it into a quotation.]]></phrase>
     <phrase title="permission_group_quote" version_id="10" version_string="1.0.0"><![CDATA[Quotation Permissions]]></phrase>
@@ -247,6 +257,42 @@ bottom=Bottom of Sidebar</edit_format_params>
     <template title="alert_quote_like" version_id="19" version_string="0.1.9"><![CDATA[{xen:phrase xenquote_x_liked_your_quotation_y,
 	'name={xen:helper username, $user, 'subject'}',
 	'title=<a href="{xen:link quotes, $content}" class="PopupItemLink">{xen:helper snippet, $content.quotation, 50}</a>'}]]></template>
+    <template title="xenquote_forumlist_random_quote" version_id="23" version_string="0.2.3"><![CDATA[<xen:require css="xenquote_forumlist_random_quote.css" />
+
+	<!-- block: forumlist_random_quote -->
+	<div class="sectionMain">
+		<div class="">
+			<h3>{$title}</h3>
+			<xen:include template="xenquote_forumlist_random_quote_content" />
+		</div>
+	</div>
+	<!-- end block: forumlist_random_quote -->]]></template>
+    <template title="xenquote_forumlist_random_quote.css" version_id="23" version_string="0.2.3"><![CDATA[.randomQuotation .quotation
+{
+	{xen:property xenquoteRandomQuote}
+}
+
+.randomQuotation .attribution
+{
+	{xen:property xenquoteRandomAttribution}
+}]]></template>
+    <template title="xenquote_forumlist_random_quote_content" version_id="23" version_string="0.2.3"><![CDATA[<xen:require css="xenquote_forumlist_random_quote.css" />
+
+<xen:if is="{$quote}">
+	<div class="randomQuotation">
+		<span class="quotation">
+			{xen:raw $quote.renderedQuotation}
+		</span>
+		<div class="attribution">
+			{xen:raw $quote.renderedAttribution} <span class="muted">(<a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical" class="dimmed">#{$quote.quote_id}</a>)</span>
+		</div>
+		<div class="author">
+			<xen:username user="$quote.author" /> {xen:phrase xenquote_added_this_quotation} <xen:if is="{$quote.quote_date} > 0"><xen:datetime time="$quote.quote_date" /></xen:if>
+		</div>
+	</div>
+<xen:else />
+	{xen:phrase xenquote_there_are_no_quotations_to_display}
+</xen:if>]]></template>
     <template title="xenquote_inline_mod_controls_quotation" version_id="14" version_string="0.1.3"><![CDATA[<xen:include template="inline_mod_controls">
 	<xen:set var="$text">{xen:phrase xenquote_quotation_moderation}</xen:set>
 	<xen:set var="$options">
@@ -1159,7 +1205,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 {
 	{xen:property xenquoteRandomAttribution}
 }]]></template>
-    <template title="xenquote_sidebar_random_quote_content" version_id="21" version_string="0.2.1"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
+    <template title="xenquote_sidebar_random_quote_content" version_id="23" version_string="0.2.3"><![CDATA[<xen:require css="xenquote_sidebar_random_quote.css" />
 
 <xen:if is="{$quote}">
 	<div class="randomQuotation">
@@ -1167,7 +1213,7 @@ bottom=Bottom of Sidebar</edit_format_params>
 			{xen:raw $quote.renderedQuotation}
 		</span>
 		<div class="attribution">
-			<span class="muted"><a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical" class="dimmed">#{$quote.quote_id}</a></span> {xen:raw $quote.renderedAttribution}
+			{xen:raw $quote.renderedAttribution} <span class="muted">(<a href="{xen:link 'canonical:quotes/', $quote}" rel="canonical" class="dimmed">#{$quote.quote_id}</a>)</span>
 		</div>
 		<div class="footnote">
 			<xen:username user="$quote.author" /> {xen:phrase xenquote_added_this_quotation} <xen:if is="{$quote.quote_date} > 0"><xen:datetime time="$quote.quote_date" /></xen:if>

@@ -36,10 +36,59 @@ class XenQuotation_Event_TemplateHook
 			// append the xenquote_search_form_tabs template
 			$contents .= $template->create('xenquote_search_form_tabs', $viewParams)->render();
 		}
+		else if ($hookName == 'forum_list_nodes' &&
+				 XenForo_Application::get('options')->xenquoteRandomQuote)
+		{
+			$options = XenForo_Application::get('options');
+			
+			$pos = explode('_', $options->xenquoteRandomPosition);	
+			if (!isset($pos[0]) || $pos[0] != 'forumlist')
+			{
+				// not required.
+				return;
+			}
+			
+			$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
+			
+			$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions();
+			$quote = $quoteModel->getRandomQuotation($fetchOptions);
+			
+			if ($quote)
+			{
+				// add the random quote to the sidebar
+				$quoteModel->prepareQuotation($quote);
+				$quoteModel->quotationViewed($quote);
+				
+				$htmlContent = $template->create('xenquote_forumlist_random_quote', 
+					array(
+						'title' => ($options->xenquoteRandomTitle == '') ? new XenForo_Phrase('xenquote_random_quotation') : $options->xenquoteRandomTitle,
+						'quote' => $quote
+				))->render();
+					
+				// work out where to place the quote on the sidebar
+				
+				if ($options->xenquoteRandomPosition === 'forumlist_top')
+				{
+					$contents = $htmlContent . $contents;
+				}
+				else if ($options->xenquoteRandomPosition === 'forumlist_bottom')
+				{
+					$contents = $contents . $htmlContent;
+				}
+			}
+		}
 		else if ($hookName == 'forum_list_sidebar' &&
 				 XenForo_Application::get('options')->xenquoteRandomQuote)
 		{
 			$options = XenForo_Application::get('options');
+			
+			$pos = explode('_', $options->xenquoteRandomPosition);	
+			if (!isset($pos[0]) || $pos[0] != 'sidebar')
+			{
+				// not required.
+				return;
+			}
+			
 			$quoteModel = XenForo_Model::create('XenQuotation_Model_Quote');
 			
 			$fetchOptions = $quoteModel->getPermissionBasedQuoteFetchOptions();
@@ -59,30 +108,30 @@ class XenQuotation_Event_TemplateHook
 					
 				// work out where to place the quote on the sidebar
 				
-				if ($options->xenquoteRandomPosition === 'top')
+				if ($options->xenquoteRandomPosition === 'sidebar_top')
 				{
 					$contents = $htmlContent . $contents;
 				}
-				else if ($options->xenquoteRandomPosition === 'bottom')
+				else if ($options->xenquoteRandomPosition === 'sidebar_bottom')
 				{
 					$contents .= $htmlContent;
 				}
-				else if ($options->xenquoteRandomPosition === 'above_members')
+				else if ($options->xenquoteRandomPosition === 'sidebar_above_members')
 				{
 					$placeAbove = '<!-- block: sidebar_online_users -->';
 					$contents = str_replace($placeAbove, $htmlContent . $placeAbove, $contents);
 				}
-				else if ($options->xenquoteRandomPosition === 'below_members')
+				else if ($options->xenquoteRandomPosition === 'sidebar_below_members')
 				{
 					$placeBelow = '<!-- end block: sidebar_online_users -->';
 					$contents = str_replace($placeBelow, $placeBelow . $htmlContent, $contents);
 				}
-				else if ($options->xenquoteRandomPosition === 'above_stats')
+				else if ($options->xenquoteRandomPosition === 'sidebar_above_stats')
 				{
 					$placeAbove = '<!-- block: forum_stats -->';
 					$contents = str_replace($placeAbove, $htmlContent . $placeAbove, $contents);
 				}
-				else if ($options->xenquoteRandomPosition === 'below_stats')
+				else if ($options->xenquoteRandomPosition === 'sidebar_below_stats')
 				{
 					$placeBelow = '<!-- end block: forum_stats -->';
 					$contents = str_replace($placeBelow, $placeBelow . $htmlContent, $contents);
