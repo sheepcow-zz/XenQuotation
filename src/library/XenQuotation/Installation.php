@@ -101,7 +101,7 @@ class XenQuotation_Installation
 					    VALUES(?, ?, ?)", array('quote', $name, $value));
 		}
 		
-		// force a content type cache rebuild, (TODO: probably not needed)
+		// force a content type cache rebuild
 		XenForo_Model::create('XenForo_Model_ContentType')->rebuildContentTypeCache();
 
 	}
@@ -120,6 +120,9 @@ class XenQuotation_Installation
 		// remove the content type handlers
 		$db->query('DELETE FROM `xf_content_type` WHERE `addon_id` = ?', array('XenQuotation'));
 		$db->query('DELETE FROM `xf_content_type_field` WHERE `content_type` = ?', array('quote'));
+		
+		// force a content type cache rebuild
+		XenForo_Model::create('XenForo_Model_ContentType')->rebuildContentTypeCache();
 		
 		// TODO: tidy up the search index
 	}
