@@ -21,7 +21,8 @@
 class EWRporta_Block_XenQuotation extends XenForo_Model
 {	
 	public function getModule()
-	{		
+	{
+			
 		if (!$addon = $this->getModelFromCache('XenForo_Model_AddOn')->getAddOnById('XenQuotation') || empty($addon['active']))
 		{
 			return "killModule";
