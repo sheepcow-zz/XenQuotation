@@ -28,7 +28,7 @@ class XenQuotation_WidgetRenderer_RandomQuotation extends WidgetFramework_Widget
 		return false;
 	}
 	
-	protected function _getRenderTemplate($templateName, array $params) {
+	protected function _getRenderTemplate(array $widget, $positionCode, array $params) {
 		return 'xenquote_sidebar_random_quote_content';
 	}
 	
