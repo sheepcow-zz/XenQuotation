@@ -40,7 +40,7 @@ class XenQuotation_Installation
 			  `quotation` text COLLATE utf8_unicode_ci NOT NULL,
 			  `quote_state` enum('visible','moderated','deleted') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'moderated',
 			  `attributed_date` int(10) unsigned NOT NULL DEFAULT '0',
-			  `attributed_context` varchar(150) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+			  `attributed_context` text COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
 			  `attributed_post_id` int(10) unsigned NOT NULL DEFAULT '0',
 			  `attributed_user_id` int(10) unsigned NOT NULL DEFAULT '0',
 			  `attributed_username` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
