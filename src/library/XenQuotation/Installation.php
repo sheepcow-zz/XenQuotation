@@ -73,6 +73,14 @@ class XenQuotation_Installation
 					 CHANGE `author_username` `author_username` varchar(100) CHARSET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
 				);	
 			}
+
+			if ($existingAddon['version_id'] < 103)
+			{
+				$db->query(
+					"ALTER TABLE `xq_quotation` 
+					 CHANGE `attributed_context` `attributed_context` text COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+				);	
+			}
 		}
 		
 		/*
